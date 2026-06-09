@@ -1,0 +1,6 @@
+seed,clusters,bits_per_cover,stable_images,stable_fraction,minimum_bucket,median_bucket,maximum_bucket,feasible
+11,16,4,2823,0.352875,92,164.0,280,True
+29,16,4,2430,0.30375,61,153.5,243,True
+47,8,3,3898,0.48725,177,510.0,749,True
+71,16,4,2687,0.335875,80,154.5,317,True
+101,16,4,2846,0.35575,99,146.0,373,True

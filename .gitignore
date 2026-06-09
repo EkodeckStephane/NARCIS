@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.venv/
+venv/
+
+# External datasets and downloaded archives
+dataset/
+dataset_external/
+*.zip
+*.tar
+*.tar.gz
+
+# Model checkpoints and transient artifacts
+artifacts/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+.benchmarks/
+
+# Experimental outputs: keep only the consolidated paper evidence
+bossbase_results/
+bossbase_results_128d/
+bossbase_results_128d_seed29/
+bossbase_results_rs128/
+bossbase_results_rs128_seed101/
+bossbase_results_rs128_tail/
+bossbase_smoke/
+bossbase_smoke2/
+experimental_results/
+experimental_results_v2/
+experimental_results_v3/
+final_results/
+large_scale_results/
+large_scale_results_rs128/
+qualification_results/
+qualification_smoke/
+smoke_quantile/
+smoke_results/
+smoke_rs/
+stealth_smoke/
+STAGE2_REPORT.md
+run_stage2.py
+evaluate_stage2.py
+
+# LaTeX build products and local previews
+paper/*.abs
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/rendered/
+paper/thumbnails/
+paper/*_preview.png
+paper/rapport_critique_q1_narcis.md
+paper/rapport_fact_check_narcis.md
+paper/figures/attack_symbol_accuracy.*
+paper/figures/capacity_stability.*
+paper/figures/stability_ablation.*
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

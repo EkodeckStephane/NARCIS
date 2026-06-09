@@ -1,0 +1,50 @@
+{
+  "dataset": "BOSSBase 1.01",
+  "images": 10000,
+  "native_channel_resolution": [
+    512,
+    512
+  ],
+  "model_input_resolution": [
+    128,
+    128
+  ],
+  "seeds": [
+    11,
+    29,
+    47,
+    71,
+    101
+  ],
+  "messages_per_seed": 10,
+  "conditions": 21,
+  "total_message_condition_trials": 1050,
+  "successful_trials": 1050,
+  "message_success_rate": 1.0,
+  "mean_symbol_accuracy": 0.9873679529282977,
+  "worst_symbol_accuracy": 0.8160919540229885,
+  "selected_bits_per_cover": {
+    "11": 4,
+    "29": 4,
+    "47": 3,
+    "71": 4,
+    "101": 4
+  },
+  "security": {
+    "global_logistic_auc": {
+      "mean": 0.5183825962294801,
+      "ci95_low": 0.4894357921642986,
+      "ci95_high": 0.5473294002946617,
+      "minimum": 0.4896472116008946,
+      "maximum": 0.5449519048701053
+    },
+    "srm_lite_extratrees_auc": {
+      "mean": 0.5143543379022639,
+      "ci95_low": 0.48608607021212663,
+      "ci95_high": 0.5426226055924013,
+      "minimum": 0.4851953267615917,
+      "maximum": 0.5450276452321442
+    }
+  },
+  "reed_solomon_parity_bytes": 128
+}

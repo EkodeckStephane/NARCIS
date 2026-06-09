@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=1.8cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{flushright}
+9 June 2026
+\end{flushright}
+
+Editor-in-Chief\\
+\textit{Computers \& Security}
+
+\textbf{Re: Submission of ``NARCIS: Authenticated Neural Coverless Image
+Signaling with Attack-Qualified Codebooks and Error Correction''}
+
+Dear Editor,
+
+Please consider the enclosed manuscript for publication as a Research Paper
+in \textit{Computers \& Security}.
+
+The manuscript addresses an operational limitation of selection-based
+coverless communication. A stable image descriptor alone does not ensure that
+a finite image index can realise every protected message symbol, survive
+channel processing, and recover an authenticated plaintext. NARCIS integrates
+a self-supervised image descriptor, balanced quantile codebooks,
+multi-attack cover qualification, keyed symbol assignment, AES-GCM protection,
+replay rejection, and Reed--Solomon correction into one end-to-end protocol
+that transmits unchanged natural images.
+
+The principal evaluation uses five deterministic partitions of 10,000
+native-resolution BOSSBase images, ten encrypted messages per partition, and
+21 clean, calibrated, and holdout conditions. All 1,050 message-condition
+trials were recovered. Mean symbol accuracy was 98.74\%, and the worst
+individual accuracy was 81.61\% under an unseen crop. A global detector and a
+non-linear residual-feature detector produced mean AUCs of 0.518 and 0.514,
+respectively. Removing attack-based cover qualification in a controlled
+ablation reduced complete-message success from 100\% to 43.65\%.
+
+The manuscript does not claim the highest published nominal capacity or
+universal resistance to steganalysis. It positions the contribution as a
+security-aware coverless protocol with measured robust operating points,
+explicit finite-index feasibility, authenticated recovery, and reproducible
+failure criteria. We believe this focus is aligned with the journal's scope in
+secure multimedia communication, active-channel robustness, and empirical
+security evaluation.
+
+The manuscript is original, is not under consideration elsewhere, and has
+been approved by all authors. The authors declare no competing interests. The
+project archive contains the source code, deterministic seeds, trained
+checkpoints, raw results, and attack definitions used in the manuscript.
+
+Thank you for considering this submission.
+
+Sincerely,
+
+\textbf{St\'ephane Ga\"el R. Ekodeck}\\
+Corresponding author\\
+University of Yaound\'e I, LIRIMA, Team GRIMCAPE\\
+\href{mailto:stephane-gael.ekodeck@facsciences-uy1.cm}
+{stephane-gael.ekodeck@facsciences-uy1.cm}
+
+\end{document}

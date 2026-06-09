@@ -1,0 +1,10 @@
+cryptography>=45
+numpy>=2.2
+Pillow>=11
+psutil>=7
+pytest>=8
+reedsolo>=1.7
+scikit-learn>=1.6
+scipy>=1.15
+torch>=2.6
+torchvision>=0.21

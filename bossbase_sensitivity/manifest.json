@@ -1,0 +1,24 @@
+{
+  "dataset": "BOSSBase 1.01",
+  "seed": 11,
+  "train_images": 500,
+  "index_images": 1500,
+  "epochs": 3,
+  "channel_resolution": [
+    512,
+    512
+  ],
+  "model_input_resolution": [
+    96,
+    96
+  ],
+  "calibration_attacks": [
+    "jpeg_50",
+    "gaussian_12",
+    "blur_1.5",
+    "resize_050",
+    "crop_10",
+    "rotate_7"
+  ],
+  "scope": "targeted sensitivity analysis; not the principal campaign"
+}
