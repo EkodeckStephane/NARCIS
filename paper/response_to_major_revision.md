@@ -2,9 +2,9 @@
 
 ## Summary
 
-The manuscript was revised around a new principal BOSSBase evaluation. The
-earlier CIFAR-100 study is retained only as a controlled ablation and local
-descriptor comparison.
+The manuscript now reports principal BOSSBase and cross-dataset Caltech-101
+evaluations. The earlier CIFAR-100 study is retained only as a controlled
+ablation and local descriptor comparison.
 
 ## Critical points
 
@@ -40,9 +40,11 @@ descriptor comparison.
 5. **Stronger detectability analysis**
 
    Added a non-linear ExtraTrees detector using 52 high-pass residual
-   co-occurrence summaries, alongside the seven-feature logistic detector.
-   Mean AUCs are 0.514 and 0.518. Both five-seed confidence intervals contain
-   0.5. The manuscript does not infer universal undetectability.
+   co-occurrence summaries and a learned three-stage selection CNN alongside
+   the seven-feature logistic detector. The three detectors are evaluated on
+   both BOSSBase and Caltech-101. The manuscript reports the small classical
+   detector shift on Caltech-101 rather than inferring universal
+   undetectability.
 
 6. **Statistical scope**
 
@@ -65,10 +67,16 @@ descriptor comparison.
 - Global logistic AUC: 0.518, 95% CI [0.489, 0.547].
 - Residual ExtraTrees AUC: 0.514, 95% CI [0.486, 0.543].
 
+## Additional cross-dataset revision
+
+Caltech-101 adds 9,144 variable-resolution RGB natural images. Five
+deterministic train/index partitions produce 525 further message-condition
+trials, all recovered. Every partition supports 4 bits per cover. The combined
+evidence is 1,575/1,575 authenticated recoveries.
+
 ## Residual limitations
 
-The evidence is substantially stronger but remains bounded to one
-high-resolution grayscale dataset, the declared attacks, and two targeted
-selection detectors. A faithful executable comparison with a recent complete
-coverless protocol and end-to-end SRNet training would further reduce reviewer
-risk, but neither is required to interpret the reported operating point.
+The evidence remains bounded to the declared attacks, two image corpora, and
+three targeted selection detectors. A faithful executable comparison with a
+recent complete coverless protocol and traffic-level sequence analysis would
+further reduce reviewer risk.

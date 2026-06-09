@@ -107,19 +107,19 @@ multi-attack qualification stage retains covers whose labels remain stable.
 Payloads and session metadata are protected with AES-GCM, symbols are assigned
 through a keyed locality-preserving permutation, and Reed--Solomon coding
 converts residual classification errors into complete-message recovery.
-The principal evaluation uses five deterministic partitions of 10,000
-native-resolution BOSSBase images, ten encrypted messages per partition, and
-21 clean, calibration, and holdout channel conditions. \method recovered all
-1,050 message-condition trials. Mean symbol accuracy was 98.74\%, while the
-worst individual accuracy was 81.61\% under an unseen crop. Four partitions
-supported 4 bits per cover and one supported 3 bits per cover. A global
-logistic detector and a non-linear residual-feature detector produced mean
-AUCs of 0.518 and 0.514, respectively; both confidence intervals included
-0.5. A controlled CIFAR-100 ablation reduced complete-message success from
-100\% to 43.65\% when attack-based qualification was removed. The principal
-contribution is a measurable feasible operating point for authenticated
-coverless communication, defined by finite-index stability, protected-message
-demand, and exact end-to-end recovery.
+Evaluation uses five deterministic partitions of BOSSBase and five of
+Caltech-101, covering grayscale $512\times512$ photographs and variable-size
+RGB images. Across 1,575 clean, calibration, and holdout message-condition
+trials, \method recovered every authenticated plaintext. Mean symbol accuracy
+was 98.74\% on BOSSBase and 98.59\% on Caltech-101; the worst individual
+accuracies were 81.61\% and 79.89\%. BOSSBase supported 3--4 bits per cover,
+whereas all Caltech-101 partitions supported 4 bits per cover. A lightweight
+selection CNN produced mean AUCs of 0.515 and 0.530, with both 95\% confidence
+intervals including 0.5. A controlled CIFAR-100 ablation reduced
+complete-message success from 100\% to 43.65\% when attack qualification was
+removed. The contribution is a measurable feasible operating point for
+authenticated coverless communication, defined by finite-index stability,
+protected-message demand, and exact end-to-end recovery.
 \end{abstract}
 
 \begin{keywords}
@@ -185,9 +185,9 @@ error correction and authenticated decryption.
 \item A validation protocol that separates calibration attacks from holdout
 attack strengths and reports both symbol accuracy and complete-message
 success.
-\item A five-seed evaluation on 10,000 native-resolution BOSSBase images,
-covering 1,050 end-to-end trials, holdout attacks, convergence, parameter
-sensitivity, and linear and non-linear selection-bias tests.
+\item Five-seed evaluations on BOSSBase and RGB Caltech-101, covering 1,575
+end-to-end trials, holdout attacks, convergence, parameter sensitivity, and
+linear, ensemble, and CNN selection-bias tests.
 \end{itemize}
 
 Accordingly, the contribution concerns verified protected-message recovery at
@@ -217,14 +217,26 @@ contains every required symbol with sufficient multiplicity.
 \subsection{Learned, joint, and stability-aware methods}
 
 Neural feature mapping and generation can provide semantic representations or
-larger message spaces \cite{qin2020gan,meng2024review}. Ren and Wu
-\cite{ren2024joint} combined selection and generation modules to address
-mapping completeness and reconstruction. Guo et al. \cite{guo2025diverse}
-studied robustness and diversity against passive and active analysis. Guo and
-Ping \cite{guo2026capacity} used pseudo-Zernike moments, stability-aware
-quantisation, and stability-regularised clustering. They reported average
-robustness of 99.54\%, 98.64\%, and 97.19\% at 10, 14, and 15 bits on
-Holidays, VOC, and ImageNet, respectively.
+larger message spaces \cite{qin2020gan,meng2024review}. Selection and
+generation have been combined with StarGAN \cite{chen2022stargan}, while
+information-driven adversarial generation has been used to control the
+mapping from messages to synthetic content \cite{zhang2023idgan}. Recent
+semantic approaches derive symbols from neglected objects, human poses, or
+object detections \cite{zou2023neglected,tan2024pose,meng2024object}. Other
+systems use semantic-controlled text-to-image generation or latent diffusion
+to enlarge the generative cover space
+\cite{li2025semantic,guo2026diffusion}. These methods strengthen semantic
+capacity or cover generation, but they do not make finite-index feasibility,
+authenticated framing, and complete protected-message recovery interchangeable
+evaluation criteria.
+
+Ren and Wu \cite{ren2024joint} combined selection and generation modules to
+address mapping completeness and reconstruction. Guo et al.
+\cite{guo2025diverse} studied robustness and diversity against passive and
+active analysis. Guo and Ping \cite{guo2026capacity} used pseudo-Zernike
+moments, stability-aware quantisation, and stability-regularised clustering.
+They reported average robustness of 99.54\%, 98.64\%, and 97.19\% at 10, 14,
+and 15 bits on Holidays, VOC, and ImageNet, respectively.
 
 \method shares the stability-aware objective but differs in scope. Its
 primary unit of evaluation is the recovered protected message after
@@ -258,6 +270,61 @@ Accordingly, \method separates
 cryptographic security mechanisms from empirical selection detectability.
 The latter is treated as a measured property of a specified detector, not as
 an unconditional security guarantee.
+
+Table~\ref{tab:related_taxonomy} separates these families by cover formation,
+mapping mechanism, and protocol-level protection.
+
+\begin{table*}[t]
+\centering
+\caption{Structural comparison of recent coverless image-steganography
+families. ``Protocol protection'' denotes integrated authenticated payload
+handling and error correction rather than image-level robustness alone.}
+\label{tab:related_taxonomy}
+\begin{tabularx}{\textwidth}{p{2.7cm}p{2.6cm}YYY}
+\toprule
+Family & Representative works & Cover formation & Mapping or descriptor &
+Protocol protection\\
+\midrule
+Block/hash mapping &
+Abdulsattar \cite{abdulsattar2021}; WYSAWIS \cite{wysawis2025} &
+Existing natural images &
+Block comparisons or category hashes &
+Not central to the cited mapping mechanism\\
+Retrieval and local features &
+Li et al. \cite{li2024surf} &
+Selected natural images &
+SURF-based retrieval &
+Not central to the cited retrieval mechanism\\
+Adversarial generation &
+Qin et al. \cite{qin2020gan}; Chen et al. \cite{chen2022stargan};
+Zhang et al. \cite{zhang2023idgan} &
+Generated or selected/generated images &
+Latent or information-driven neural mapping &
+Varies by system; evaluated mainly at image/message mapping level\\
+Semantic mapping &
+Zou et al. \cite{zou2023neglected}; Tan et al. \cite{tan2024pose};
+Meng et al. \cite{meng2024object} &
+Existing natural images &
+Objects, poses, or detector outputs &
+Not the primary contribution of the cited methods\\
+Text-to-image and diffusion &
+Li et al. \cite{li2025semantic}; Guo et al. \cite{guo2026diffusion} &
+Generated images &
+Semantic prompts or latent transformations &
+Not directly comparable to finite-index retrieval\\
+Stability-aware selection &
+Guo et al. \cite{guo2025diverse}; Guo--Ping \cite{guo2026capacity} &
+Selected natural images &
+Stable handcrafted features and clustering &
+Image-level robustness and diversity\\
+\method &
+This work &
+Selected unchanged natural images &
+Invariant neural descriptor and qualified quantile codebook &
+AES-GCM, replay control, Reed--Solomon, and exact recovery\\
+\bottomrule
+\end{tabularx}
+\end{table*}
 
 \section{System and Threat Model}
 \label{sec:model}
@@ -293,14 +360,16 @@ the configured Reed--Solomon budget.
 
 \subsection{Channel-invariant neural descriptor}
 
-Input images remain at native resolution while channel transformations are
-applied, and are then resized to $128\times128$ for descriptor inference.
-The encoder contains four convolutional blocks with 24, 48, 96, and 144
+Channel transformations are applied at the declared channel resolution, and
+the resulting images are resized to $128\times128$ for descriptor inference.
+The encoder contains four convolutional blocks with 16, 32, 64, and 96
 channels. Each block uses two $3\times3$ convolutions, batch normalisation,
 and SiLU activations; the last three blocks downsample by a factor of two.
-Global average pooling and a two-layer $144\rightarrow128\rightarrow64$
+Global average pooling and a two-layer $96\rightarrow128\rightarrow64$
 projection head produce a 64-dimensional unit-normalised descriptor
-$z=f_\theta(x)$. The network has 231,312 trainable parameters.
+$z=f_\theta(x)$. The grayscale and RGB instances have 231,312 and 231,600
+trainable parameters, respectively; only the first convolution differs.
+Figure~\ref{fig:encoder} gives the implemented dimensions.
 
 Training uses two independently distorted views $x^{(1)}$ and $x^{(2)}$ of
 the same image. Each view is generated by randomly selecting JPEG compression,
@@ -350,11 +419,11 @@ implementation.
     minimum width=21mm, fill=green!8},
   arrow/.style={-{Latex[length=2mm]}, thick}
 ]
-\node[layer] (input) {Grayscale\\$128\times128\times1$};
-\node[layer, right=of input] (b1) {Block 1\\$128\times128\times24$};
-\node[layer, right=of b1] (b2) {Block 2\\$64\times64\times48$};
-\node[layer, right=of b2] (b3) {Block 3\\$32\times32\times96$};
-\node[layer, right=of b3] (b4) {Block 4\\$16\times16\times144$};
+\node[layer] (input) {Gray/RGB\\$128\times128\times C$};
+\node[layer, right=of input] (b1) {Block 1\\$128\times128\times16$};
+\node[layer, right=of b1] (b2) {Block 2\\$64\times64\times32$};
+\node[layer, right=of b2] (b3) {Block 3\\$32\times32\times64$};
+\node[layer, right=of b3] (b4) {Block 4\\$16\times16\times96$};
 \node[head, right=of b4] (gap) {Global average\\pooling};
 \node[head, right=of gap] (proj) {Linear 128\\SiLU, linear 64};
 \node[head, right=of proj] (norm) {$\ell_2$ normalisation\\$z\in\mathbb{R}^{64}$};
@@ -367,10 +436,10 @@ implementation.
 \draw[arrow] (proj)--(norm);
 \end{tikzpicture}%
 }
-\caption{Descriptor encoder used in the BOSSBase experiments. Each
+\caption{Descriptor encoder used in both principal evaluations, with $C=1$
+for BOSSBase and $C=3$ for Caltech-101. Each
 convolutional block contains two $3\times3$ convolution--batch
-normalisation--SiLU stages. Channel transformations act on the native
-$512\times512$ image before model resizing.}
+normalisation--SiLU stages. Channel transformations precede model resizing.}
 \label{fig:encoder}
 \end{figure*}
 
@@ -573,14 +642,24 @@ resulting image is resized to $128\times128$ only at the encoder boundary.
 For each seed in $\{11,29,47,71,101\}$, a deterministic permutation provides
 2,000 training images and a disjoint 8,000-image cover index.
 
-The encoder is trained for five epochs with AdamW, batch size 64, learning
-rate $10^{-3}$, and weight decay $10^{-5}$. Ten independently generated
-eight-byte plaintexts are evaluated per seed. Reed--Solomon coding uses 128
+Cross-dataset validation uses Caltech-101 \cite{fei2004caltech}: 9,144 natural
+RGB images from 101 object categories with variable source resolutions. The
+channel input is centre-fitted to $256\times256$ in RGB, and the transformed
+image is resized to $128\times128$ only at the encoder boundary. Each of the
+same five seeds assigns 1,500 images to descriptor training and 7,000
+disjoint images to the shared index. Semantic labels are neither used in
+training nor in codebook construction.
+
+The encoder is trained separately on each partition for five epochs with
+AdamW, batch size 16, learning rate $10^{-3}$, and weight decay $10^{-5}$.
+The BOSSBase experiment evaluates ten independently generated eight-byte
+plaintexts per seed; Caltech-101 evaluates five. Reed--Solomon coding uses 128
 parity bytes. Symbol repetition is set to one; redundancy is instead provided
 by byte-level Reed--Solomon parity, which avoids multiplying the required
 348--464-cover sequences. For longer payloads, fixed framing and parity
-overheads would be amortised, but that regime is not inferred here. This
-yields 50 protected messages and 1,050 message-condition trials.
+overheads would be amortised, but that regime is not inferred here. The two
+principal evaluations comprise 75 protected messages and 1,575
+message-condition trials.
 
 CIFAR-100 \cite{krizhevsky2009cifar} is retained only for the controlled
 qualification ablation and the matched local-descriptor comparison reported
@@ -627,14 +706,18 @@ of one.
 A deliberately interpretable detector uses seven global image statistics:
 mean, standard deviation, two gradient magnitudes, entropy, and two intensity
 quantiles. Logistic regression distinguishes selected covers from an equal
-number of non-selected index images using five-fold stratified
-cross-validation. A second detector extracts 52 high-pass residual
-co-occurrence summaries inspired by rich-model steganalysis
-\cite{fridrich2012rich} and applies an ExtraTrees ensemble. The area under the
-ROC curve (AUC) measures detectability. These tests probe qualification-induced
-selection bias and are stronger than a single linear detector, but they do not
-replace dedicated CNN steganalysis such as XuNet or SRNet
-\cite{xu2016steganalysis,boroumand2018srnet}.
+number of non-selected index images using a stratified 65/35 train/test split.
+A second detector extracts 52 high-pass residual co-occurrence summaries
+inspired by rich-model steganalysis \cite{fridrich2012rich} and applies an
+ExtraTrees ensemble. A third detector is a lightweight selection CNN with
+three convolutional stages (16, 32, and 64 channels), batch normalisation,
+spatial averaging, and a binary output. It is trained for eight epochs on
+$64\times64$ views using the same split. The area under the ROC curve (AUC)
+measures detectability. These tests probe qualification-induced selection
+bias at increasing model flexibility. The CNN is not presented as a
+reproduction of XuNet or SRNet \cite{xu2016steganalysis,boroumand2018srnet},
+whose original task is detecting pixel embedding rather than unchanged-image
+selection.
 
 \subsection{Sensitivity and computational measurements}
 \label{sec:sensitivity}
@@ -707,6 +790,46 @@ mean symbol accuracy. Message success is not inferred from these averages; it
 is verified after Reed--Solomon decoding, CRC checking, and authenticated
 decryption.
 
+\subsection{Cross-dataset validation}
+
+All five Caltech-101 partitions selected $K=16$, corresponding to 4 bits per
+cover. Table~\ref{tab:caltech} reports the retained-cover statistics. Stable
+fractions ranged from 22.00\% to 34.74\%, and every minimum bucket supported
+the five protected messages evaluated for its partition.
+
+\begin{table}[t]
+\centering
+\caption{Selected Caltech-101 operating points on 7,000-image RGB indices.}
+\label{tab:caltech}
+\begin{tabular}{rrrr}
+\toprule
+Seed & Bits/cover & Stable covers & Min. bucket\\
+\midrule
+11  & 4 & 1,678 (23.97\%) & 38\\
+29  & 4 & 1,540 (22.00\%) & 31\\
+47  & 4 & 2,432 (34.74\%) & 76\\
+71  & 4 & 2,289 (32.70\%) & 45\\
+101 & 4 & 1,895 (27.07\%) & 35\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All 525 Caltech-101 message-condition trials recovered the authenticated
+plaintext. Mean symbol accuracy was 98.59\%, the worst individual accuracy
+was 79.89\% under the unseen 12\% crop, and Reed--Solomon corrected at most
+63 byte positions. Figure~\ref{fig:crossrobustness} compares the two datasets
+condition by condition. The same holdout crop and rotation remain the hardest
+conditions, while dataset-specific differences appear for strong blur.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/cross_dataset_robustness.pdf}
+\caption{Mean symbol accuracy across the five BOSSBase and five Caltech-101
+partitions. Calibration and holdout conditions use the same declared
+strengths; all 1,575 complete-message trials succeeded.}
+\label{fig:crossrobustness}
+\end{figure*}
+
 \subsection{Training convergence}
 
 Figure~\ref{fig:convergence} reports the complete five-epoch histories. Loss
@@ -725,18 +848,24 @@ convergence.
 
 \subsection{Selection detectability}
 
-The global detector produced mean AUC 0.518 with a 95\% interval
-[0.489, 0.547]. The non-linear residual detector produced mean AUC 0.514 with
-interval [0.486, 0.543]. Figure~\ref{fig:detectability} reports seed-level
-values. Both intervals include 0.5, and neither detector provided consistent
-evidence of selection above chance. These results are detector- and
-dataset-specific.
+On BOSSBase, the global, residual-ensemble, and CNN detectors produced mean
+AUCs of 0.518, 0.514, and 0.515, with 95\% intervals [0.489, 0.547],
+[0.486, 0.543], and [0.463, 0.566]. On Caltech-101, the corresponding means
+were 0.531, 0.533, and 0.530, with intervals [0.504, 0.557],
+[0.504, 0.562], and [0.481, 0.579]. Figure~\ref{fig:detectability} summarises
+these results.
+
+The BOSSBase intervals and both CNN intervals include 0.5. The two classical
+Caltech-101 detectors show a small but measurable dataset-specific selection
+shift, while the more flexible CNN result is less precise and does not exclude
+chance. These outcomes motivate reporting selection detectability by dataset
+and detector rather than inferring a general undetectability property.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/bossbase_detectability.pdf}
-\caption{Selection-detection AUC by BOSSBase partition. The dashed line is
-chance performance.}
+\includegraphics[width=\linewidth]{figures/cross_dataset_detectability.pdf}
+\caption{Mean selection-detection AUC and 95\% Student-$t$ intervals over five
+partitions per dataset. The dashed line denotes chance performance.}
 \label{fig:detectability}
 \end{figure}
 
@@ -825,7 +954,7 @@ Learned invariant descriptors with quantile codebook\\
 Primary capacity statement & High nominal single-cover location capacity &
 High nominal block/category capacity &
 10, 14, and 15 bits on Holidays, VOC, and ImageNet &
-3--4 bits on 8,000-image BOSSBase indices\\
+3--4 bits on BOSSBase; 4 bits on Caltech-101\\
 Explicit multi-attack cover qualification & Not evaluated here &
 Not evaluated here & Yes & Yes\\
 Message-level error correction & Not part of the compared mechanism &
@@ -837,7 +966,7 @@ AES-GCM with sequence-bound data and replay guard\\
 Holdout attack strengths & Not evaluated here & Not evaluated here &
 Not established from the cited summary & Eight holdout strengths\\
 Measured complete protected-message recovery & Not evaluated here &
-Not evaluated here & Not directly comparable & 1,050/1,050 trials\\
+Not evaluated here & Not directly comparable & 1,575/1,575 trials\\
 \bottomrule
 \end{tabularx}
 \end{table*}
@@ -862,10 +991,11 @@ message recovery at symbol accuracies substantially below 100\%. Fourth,
 cryptographic verification changes the evaluation criterion: a trial is
 successful only when the exact plaintext is authenticated and recovered.
 
-The five-seed result also quantifies finite-index variability. The same
-training and selection rules yield a feasible 16-symbol alphabet on four
-partitions and an eight-symbol alphabet on one. Reporting this lower operating
-point avoids selecting only favourable partitions.
+The five-seed results also quantify finite-index and cross-corpus variability.
+The same rules yield a feasible 16-symbol alphabet on four BOSSBase
+partitions and an eight-symbol alphabet on one, while all five Caltech-101
+partitions support 16 symbols. Reporting the lower BOSSBase operating point
+avoids selecting only favourable partitions.
 
 \subsection{Security interpretation}
 
@@ -876,20 +1006,24 @@ image semantics. Distributional detectability is therefore evaluated
 separately from cryptographic payload security. The AUC experiment addresses
 a different question: whether
 the current selection policy creates detectable shifts in seven global
-statistics and residual summaries. These results do not support a general
-undetectability claim.
+statistics, residual summaries, or a learned CNN representation. The small
+classical-detector shift on Caltech-101 and the wider CNN intervals show why
+these measurements must remain tied to a dataset, selection policy, and
+detector. They do not support a general undetectability claim.
 
 \subsection{Limitations}
 
 The evaluation has four main limitations.
 
 \begin{enumerate}
-\item BOSSBase provides native $512\times512$ images, but it is one grayscale
-photographic corpus. Cross-dataset validation remains necessary.
+\item Caltech-101 adds variable-resolution RGB content, but its channel input
+is centre-fitted to $256\times256$ for batching. Evaluation on larger
+native-resolution colour corpora would test a broader operating regime.
 \item The local baselines isolate descriptor feasibility; they are not faithful
 reimplementations of complete published systems.
-\item The selection tests include a non-linear residual detector but not an
-end-to-end trained SRNet. Traffic-level analysis is also outside this study.
+\item The learned selection detector is a lightweight CNN designed for the
+selected-versus-non-selected task, not an SRNet reproduction. Traffic-level
+sequence analysis is also outside this study.
 \item PC1 is reproducible and variance-maximising, but the sensitivity study
 shows that attack-aware projection selection may retain more stable covers.
 \end{enumerate}
@@ -905,12 +1039,12 @@ Longer-block efficiency was not measured and is not inferred.
 NARCIS integrates learned image descriptors, balanced codebooks, attack-based
 cover qualification, keyed assignment, authenticated encryption, replay
 control, and Reed--Solomon correction into one selection-based coverless
-protocol. On five BOSSBase partitions, it recovered 1,050 of 1,050 protected
-message-condition trials, including eight holdout attack strengths. Four
-partitions supported 4 bits per cover and one supported 3 bits per cover.
-Mean symbol accuracy was 98.74\%, and the worst individual accuracy was
-81.61\%. Removing qualification in the controlled ablation reduced
-complete-message success to 43.65\%.
+protocol. It recovered 1,050 of 1,050 protected message-condition trials on
+BOSSBase and 525 of 525 on RGB Caltech-101, including eight holdout attack
+strengths. BOSSBase supported 3--4 bits per cover; every Caltech-101 partition
+supported 4 bits per cover. Mean symbol accuracies were 98.74\% and 98.59\%.
+Removing qualification in the controlled ablation reduced complete-message
+success to 43.65\%.
 
 These results support a precise position: NARCIS provides measured robust
 operating points and complete protected-message recovery with unchanged
@@ -921,12 +1055,13 @@ does not support a global capacity or universal steganalysis claim.
 
 Three extensions follow directly from the observed limits. First,
 attack-aware projection selection should be trained on calibration data while
-being locked before holdout evaluation. Second, cross-dataset experiments
-should retain native colour and resolution through channel simulation to test
-domain transfer. Third, selection security should be evaluated with
-end-to-end CNN detectors and traffic-level features. These extensions target
-capacity, generalisation, and detectability separately, preserving the
-feasible-operating-point criterion as the common evaluation unit.
+being locked before holdout evaluation. Second, executable recent-protocol
+baselines should be evaluated under the same payload protection, attacks, and
+finite-index demand. Third, larger native-resolution colour corpora and
+traffic-level sequence detectors should extend the present image-level
+analysis. These directions target capacity, comparative attribution, and
+detectability separately while preserving the feasible-operating-point
+criterion as the common evaluation unit.
 
 \section*{Acknowledgements}
 This work was supported by the authors' institutions. No external financial
@@ -956,9 +1091,11 @@ This research received no external funding.
 \medskip
 \noindent\textbf{Data availability.}
 BOSSBase 1.01 is publicly available from its original distributor at
-\url{https://agents.fel.cvut.cz/boss/}, and CIFAR-100 is available at
-\url{https://www.cs.toronto.edu/~kriz/cifar.html}, subject to their respective
-terms. The datasets are not redistributed in the project repository.
+\url{https://agents.fel.cvut.cz/boss/}; Caltech-101 is available from
+CaltechDATA at \url{https://data.caltech.edu/records/mzrjq-6wc02}; and
+CIFAR-100 is available at
+\url{https://www.cs.toronto.edu/~kriz/cifar.html}. The datasets are not
+redistributed in the project repository.
 Deterministic partition seeds and consolidated CSV/JSON results accompany the
 reproducibility package.
 

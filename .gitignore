@@ -29,6 +29,9 @@ bossbase_results_rs128_seed101/
 bossbase_results_rs128_tail/
 bossbase_smoke/
 bossbase_smoke2/
+bossbase_cnn_results/
+caltech101_results/
+caltech101_smoke/
 experimental_results/
 experimental_results_v2/
 experimental_results_v3/

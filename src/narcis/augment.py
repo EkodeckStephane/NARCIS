@@ -24,7 +24,7 @@ class ChannelAugment:
             buffer = io.BytesIO()
             image.save(buffer, format="JPEG", quality=self.random.randint(55, 90))
             buffer.seek(0)
-            image = Image.open(buffer).convert("L")
+            image = Image.open(buffer).convert(image.mode)
         elif operation == "noise":
             array = np.asarray(image, dtype=np.float32)
             sigma = self.random.uniform(2.0, 15.0)
@@ -49,7 +49,7 @@ class ChannelAugment:
             image = image.rotate(
                 self.random.uniform(-8.0, 8.0),
                 resample=Image.Resampling.BILINEAR,
-                fillcolor=0,
+                fillcolor=(0, 0, 0) if image.mode == "RGB" else 0,
             )
 
         image = image.resize(

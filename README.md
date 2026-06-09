@@ -5,17 +5,16 @@ It is an authenticated selection-based coverless protocol that communicates
 through unchanged natural images selected from a shared, attack-qualified
 index.
 
-## Main Result
+## Main Results
 
-The principal experiment uses BOSSBase 1.01 at native `512 x 512` resolution:
+The evaluation uses five partitions each of BOSSBase and RGB Caltech-101:
 
-- five deterministic train/index partitions;
-- ten encrypted messages per partition;
-- 21 clean, calibration, and holdout channel conditions;
-- `1,050 / 1,050` complete authenticated message recoveries;
-- 98.74% mean symbol accuracy;
-- 81.61% worst individual symbol accuracy;
-- feasible capacity of 4 bits/cover on four partitions and 3 bits/cover on one.
+- 1,575 clean, calibration, and holdout message-condition trials;
+- `1,575 / 1,575` complete authenticated message recoveries;
+- 98.74% and 98.59% mean symbol accuracy;
+- 3-4 bits/cover on BOSSBase and 4 bits/cover on every Caltech-101 partition;
+- selection-CNN AUCs of 0.515 and 0.530, with both 95% intervals including
+  0.5.
 
 These results are bounded to the released protocol, datasets, attack suite,
 parameters, and detector classes. They do not establish universal
@@ -32,16 +31,19 @@ undetectability or maximum nominal capacity.
 - replay rejection and CRC framing;
 - configurable Hamming and Reed-Solomon correction;
 - calibrated and holdout JPEG, noise, blur, resize, crop, and rotation tests;
-- global-statistic and residual-feature selection detectors.
+- global-statistic, residual-feature, and CNN selection detectors.
 
 ## Repository Layout
 
 - `src/narcis/`: protocol implementation;
 - `tests/`: unit tests;
 - `run_bossbase_campaign.py`: principal BOSSBase campaign;
+- `download_caltech101.py`: resumable Caltech-101 preparation;
+- `consolidate_q1_extension.py`: cross-dataset evidence and figures;
 - `run_bossbase_sensitivity.py`: dimension, loss-weight, and projection study;
 - `bossbase_results_rs128_final/`: consolidated principal results;
 - `bossbase_sensitivity/`: consolidated sensitivity results;
+- `q1_extension_results/`: consolidated cross-dataset and CNN evidence;
 - `paper/`: Elsevier manuscript, figures, cover letter, and review reports.
 
 External datasets and trained checkpoints are intentionally not committed.
@@ -77,6 +79,9 @@ python run_bossbase_campaign.py `
 
 The full campaign is CPU-intensive because 12 calibration attacks are applied
 to each 8,000-image index at native resolution.
+
+For Caltech-101, run `download_caltech101.py`, then invoke the campaign with
+`--input-mode RGB --channel-size 256 --train-count 1500 --index-count 7000`.
 
 ## Manuscript
 

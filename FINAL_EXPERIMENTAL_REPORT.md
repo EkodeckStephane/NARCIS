@@ -1,72 +1,60 @@
 # Final Experimental Report
 
-## Principal Protocol
+## Evaluation Scope
 
-The principal NARCIS campaign uses BOSSBase 1.01:
+NARCIS is evaluated on two natural-image corpora with five deterministic
+partitions each:
 
-- 10,000 grayscale images at native `512 x 512` resolution;
-- five deterministic partitions;
-- 2,000 descriptor-training images and 8,000 index images per partition;
-- five training epochs;
-- ten encrypted eight-byte messages per partition;
-- 12 calibration attacks and eight holdout strengths plus the clean channel;
-- Reed-Solomon coding with 128 parity bytes.
+| Dataset | Channel representation | Train/index | Messages/seed | Trials |
+|---|---|---:|---:|---:|
+| BOSSBase 1.01 | Native 512 x 512 grayscale | 2,000 / 8,000 | 10 | 1,050 |
+| Caltech-101 | Centre-fitted 256 x 256 RGB | 1,500 / 7,000 | 5 | 525 |
 
-Channel transformations are applied at native resolution. Images are resized
-to `128 x 128` only at the encoder boundary.
+Both campaigns use five training epochs, 12 calibration attacks, eight
+holdout strengths, the clean channel, eight-byte plaintexts, and 128
+Reed-Solomon parity bytes.
 
 ## End-to-End Results
 
-| Metric | Result |
-|---|---:|
-| Message-condition trials | 1,050 |
-| Successful authenticated recoveries | 1,050 |
-| Message success | 100% |
-| Mean symbol accuracy | 98.7368% |
-| Worst individual symbol accuracy | 81.6092% |
-| Maximum corrected byte positions | 61 |
+| Metric | BOSSBase | Caltech-101 |
+|---|---:|---:|
+| Authenticated recoveries | 1,050 / 1,050 | 525 / 525 |
+| Mean symbol accuracy | 98.7368% | 98.5857% |
+| Worst symbol accuracy | 81.6092% | 79.8851% |
+| Maximum corrected byte positions | 61 | 63 |
+| Feasible bits/cover | 3-4 | 4 on every seed |
 
-The most difficult condition was the unseen 12% central crop, with 84.37%
-mean symbol accuracy. The unseen 9-degree rotation produced 91.75%.
-
-## Feasible Operating Points
-
-| Seed | Alphabet | Bits/cover | Stable fraction | Minimum bucket |
-|---:|---:|---:|---:|---:|
-| 11 | 16 | 4 | 35.29% | 92 |
-| 29 | 16 | 4 | 30.38% | 61 |
-| 47 | 8 | 3 | 48.73% | 177 |
-| 71 | 16 | 4 | 33.59% | 80 |
-| 101 | 16 | 4 | 35.58% | 99 |
-
-The net plaintext rate is 0.184 bits/cover at four bits/cover and 0.138
-bits/cover at three bits/cover for the tested short messages.
+The unseen 12% crop was the hardest condition on both datasets. The unseen
+9-degree rotation was the second most difficult condition.
 
 ## Selection Detectability
 
-| Detector | Mean AUC | 95% interval |
-|---|---:|---:|
-| Seven-feature logistic regression | 0.518 | [0.489, 0.547] |
-| 52-feature residual ExtraTrees | 0.514 | [0.486, 0.543] |
+| Dataset | Global logistic | Residual ExtraTrees | Selection CNN |
+|---|---:|---:|---:|
+| BOSSBase | 0.518 [0.489, 0.547] | 0.514 [0.486, 0.543] | 0.515 [0.463, 0.566] |
+| Caltech-101 | 0.531 [0.504, 0.557] | 0.533 [0.504, 0.562] | 0.530 [0.481, 0.579] |
 
-Both intervals include chance performance. This result is specific to the
-tested selection detectors and is not a universal steganalysis claim.
+The two classical Caltech-101 detectors identify a small dataset-specific
+selection shift. The CNN intervals include 0.5 on both datasets. These are
+bounded detector results, not a universal undetectability claim.
 
-## Sensitivity
+## Ablation and Sensitivity
 
-The targeted reduced experiment supports stronger invariance and variance
-weights over equal weighting. A 128-dimensional descriptor retained more
-stable covers in the reduced subset but did not improve capacity or reliability
-in a two-seed full-protocol check. Alternative scalar projection directions
-occasionally retained more covers than PC1; PC1 is therefore a deterministic
-maximum-variance choice, not a stability optimum.
+Removing attack qualification reduced controlled CIFAR-100 message success
+from 100% to 43.65%. Equal VICReg-style loss weights retained fewer stable
+covers than the 25/25/1 configuration. A 128-dimensional descriptor retained
+more covers in the reduced study but did not improve full-protocol capacity or
+reliability. Alternative projection directions can outperform PC1 in retained
+cover fraction; PC1 is used as a deterministic variance-maximising choice.
 
 ## Reproducibility
 
-The consolidated evidence is stored in:
+Consolidated evidence is stored in:
 
 - `bossbase_results_rs128_final/`;
 - `bossbase_sensitivity/`;
+- `q1_extension_results/`;
 - `paper/figures/`.
 
-Unit-test status at publication: `18 passed`.
+The graphical abstract is available as
+`paper/figures/graphical_abstract.pdf` and `.png`.

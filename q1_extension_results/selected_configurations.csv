@@ -1,0 +1,11 @@
+dataset,seed,clusters,bits_per_cover,stable_images,stable_fraction,minimum_bucket,median_bucket,maximum_bucket,feasible
+BOSSBase,11,16,4,2823,0.352875,92,164.0,280,True
+BOSSBase,29,16,4,2430,0.30375,61,153.5,243,True
+BOSSBase,47,8,3,3898,0.48725,177,510.0,749,True
+BOSSBase,71,16,4,2687,0.335875,80,154.5,317,True
+BOSSBase,101,16,4,2846,0.35575,99,146.0,373,True
+Caltech-101,11,16,4,1678,0.2397142857142857,38,104.0,203,True
+Caltech-101,29,16,4,1540,0.22,31,81.5,185,True
+Caltech-101,47,16,4,2432,0.3474285714285714,76,160.0,218,True
+Caltech-101,71,16,4,2289,0.327,45,109.5,284,True
+Caltech-101,101,16,4,1895,0.2707142857142857,35,88.5,214,True

@@ -11,22 +11,25 @@ Attack = Callable[[torch.Tensor], torch.Tensor]
 
 
 def _pil(tensor: torch.Tensor) -> Image.Image:
-    return TF.to_pil_image(tensor).convert("L")
+    return TF.to_pil_image(tensor)
 
 
-def _tensor(image: Image.Image, size: int) -> torch.Tensor:
+def _tensor(image: Image.Image, size: int, mode: str) -> torch.Tensor:
     return TF.to_tensor(
-        image.resize((size, size), Image.Resampling.BICUBIC)
+        image.convert(mode).resize((size, size), Image.Resampling.BICUBIC)
     )
 
 
 def attack_suite(image_size: int, seed: int = 20260608) -> dict[str, Attack]:
+    def mode(tensor: torch.Tensor) -> str:
+        return "RGB" if tensor.shape[0] == 3 else "L"
+
     def jpeg(quality: int) -> Attack:
         def apply(tensor: torch.Tensor) -> torch.Tensor:
             buffer = io.BytesIO()
             _pil(tensor).save(buffer, format="JPEG", quality=quality)
             buffer.seek(0)
-            return _tensor(Image.open(buffer).convert("L"), image_size)
+            return _tensor(Image.open(buffer), image_size, mode(tensor))
 
         return apply
 
@@ -34,19 +37,24 @@ def attack_suite(image_size: int, seed: int = 20260608) -> dict[str, Attack]:
         rng = np.random.default_rng(local_seed)
 
         def apply(tensor: torch.Tensor) -> torch.Tensor:
-            array = np.asarray(_pil(tensor), dtype=np.float32)
+            image = _pil(tensor)
+            array = np.asarray(image, dtype=np.float32)
             damaged = np.clip(
                 array + rng.normal(0.0, sigma, array.shape), 0, 255
             )
             return _tensor(
-                Image.fromarray(damaged.astype(np.uint8)), image_size
+                Image.fromarray(damaged.astype(np.uint8)),
+                image_size,
+                mode(tensor),
             )
 
         return apply
 
     def blur(radius: float) -> Attack:
         return lambda tensor: _tensor(
-            _pil(tensor).filter(ImageFilter.GaussianBlur(radius)), image_size
+            _pil(tensor).filter(ImageFilter.GaussianBlur(radius)),
+            image_size,
+            mode(tensor),
         )
 
     def rotate(angle: float) -> Attack:
@@ -54,9 +62,10 @@ def attack_suite(image_size: int, seed: int = 20260608) -> dict[str, Attack]:
             _pil(tensor).rotate(
                 angle,
                 resample=Image.Resampling.BILINEAR,
-                fillcolor=0,
+                fillcolor=(0, 0, 0) if tensor.shape[0] == 3 else 0,
             ),
             image_size,
+            mode(tensor),
         )
 
     def crop(fraction: float) -> Attack:
@@ -73,6 +82,7 @@ def attack_suite(image_size: int, seed: int = 20260608) -> dict[str, Attack]:
                     )
                 ),
                 image_size,
+                mode(tensor),
             )
 
         return apply
@@ -84,7 +94,7 @@ def attack_suite(image_size: int, seed: int = 20260608) -> dict[str, Attack]:
             reduced = image.resize(
                 (side, side), Image.Resampling.BILINEAR
             )
-            return _tensor(reduced, image_size)
+            return _tensor(reduced, image_size, mode(tensor))
 
         return apply
 

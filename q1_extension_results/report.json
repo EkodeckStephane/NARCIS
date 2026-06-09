@@ -1,0 +1,82 @@
+{
+  "datasets": {
+    "BOSSBase": {
+      "trials": 1050,
+      "successful_trials": 1050,
+      "message_success": 1.0,
+      "mean_symbol_accuracy": 0.9873679529282977,
+      "worst_symbol_accuracy": 0.8160919540229885,
+      "maximum_rs_corrections": 61,
+      "selected_bits_per_cover": {
+        "11": 4,
+        "29": 4,
+        "47": 3,
+        "71": 4,
+        "101": 4
+      },
+      "detectors": {
+        "global_logistic_auc": {
+          "mean": 0.5183825962294801,
+          "ci95_low": 0.4894357921642986,
+          "ci95_high": 0.5473294002946617,
+          "minimum": 0.4896472116008946,
+          "maximum": 0.5449519048701053
+        },
+        "srm_lite_extratrees_auc": {
+          "mean": 0.5143543379022639,
+          "ci95_low": 0.48608607021212663,
+          "ci95_high": 0.5426226055924013,
+          "minimum": 0.4851953267615917,
+          "maximum": 0.5450276452321442
+        },
+        "selection_cnn_auc": {
+          "mean": 0.514734727276162,
+          "ci95_low": 0.46319438072138464,
+          "ci95_high": 0.5662750738309393,
+          "minimum": 0.4762082896902588,
+          "maximum": 0.5766492463833978
+        }
+      }
+    },
+    "Caltech-101": {
+      "trials": 525,
+      "successful_trials": 525,
+      "message_success": 1.0,
+      "mean_symbol_accuracy": 0.9858565955117679,
+      "worst_symbol_accuracy": 0.7988505747126436,
+      "maximum_rs_corrections": 63,
+      "selected_bits_per_cover": {
+        "11": 4,
+        "29": 4,
+        "47": 4,
+        "71": 4,
+        "101": 4
+      },
+      "detectors": {
+        "global_logistic_auc": {
+          "mean": 0.5305127426645033,
+          "ci95_low": 0.5044215123990694,
+          "ci95_high": 0.5566039729299372,
+          "minimum": 0.507635146170178,
+          "maximum": 0.5589508310249308
+        },
+        "srm_lite_extratrees_auc": {
+          "mean": 0.5329867397239679,
+          "ci95_low": 0.5037839506920225,
+          "ci95_high": 0.5621895287559133,
+          "minimum": 0.502568374288491,
+          "maximum": 0.5659577362597498
+        },
+        "selection_cnn_auc": {
+          "mean": 0.5301151032203276,
+          "ci95_low": 0.4809115026438462,
+          "ci95_high": 0.579318703796809,
+          "minimum": 0.4868039180119717,
+          "maximum": 0.5811004673978435
+        }
+      }
+    }
+  },
+  "combined_trials": 1575,
+  "combined_successful_trials": 1575
+}

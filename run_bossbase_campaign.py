@@ -11,14 +11,15 @@ import sys
 import numpy as np
 import pandas as pd
 import torch
-from PIL import Image
+from PIL import Image, ImageOps
 from scipy.ndimage import convolve
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
+from torch import nn
 from torch.nn import functional as F
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader, Dataset, TensorDataset
 
 sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
@@ -51,16 +52,34 @@ CANDIDATES = (64, 32, 16, 8)
 
 
 class NativeImageDataset(Dataset):
-    def __init__(self, paths: list[Path]):
+    def __init__(
+        self,
+        paths: list[Path],
+        mode: str = "L",
+        channel_size: int | None = None,
+    ):
         self.paths = paths
+        self.mode = mode
+        self.channel_size = channel_size
 
     def __len__(self) -> int:
         return len(self.paths)
 
     def __getitem__(self, index: int):
         path = self.paths[index]
-        array = np.asarray(Image.open(path).convert("L"), dtype=np.float32) / 255.0
-        return torch.from_numpy(array).unsqueeze(0), str(path)
+        image = Image.open(path).convert(self.mode)
+        if self.channel_size is not None:
+            image = ImageOps.fit(
+                image,
+                (self.channel_size, self.channel_size),
+                method=Image.Resampling.BICUBIC,
+            )
+        array = np.asarray(image, dtype=np.float32) / 255.0
+        if array.ndim == 2:
+            array = array[None, :, :]
+        else:
+            array = np.transpose(array, (2, 0, 1))
+        return torch.from_numpy(array), str(path)
 
 
 def seed_everything(seed: int) -> None:
@@ -90,9 +109,15 @@ def train_encoder(
     invariance_weight: float = 25.0,
     variance_weight: float = 25.0,
     covariance_weight: float = 1.0,
+    input_mode: str = "L",
+    channel_size: int | None = None,
 ) -> tuple[RobustImageEncoder, list[dict]]:
     seed_everything(seed)
-    model = RobustImageEncoder(embedding_dim=embedding_dim, base_channels=16)
+    model = RobustImageEncoder(
+        embedding_dim=embedding_dim,
+        base_channels=16,
+        in_channels=3 if input_mode == "RGB" else 1,
+    )
     checkpoint = (checkpoint_root or output) / f"encoder_seed_{seed}.pt"
     if epochs == 0:
         model.load_state_dict(
@@ -100,7 +125,7 @@ def train_encoder(
         )
         return model.eval(), []
 
-    dataset = NativeImageDataset(paths)
+    dataset = NativeImageDataset(paths, input_mode, channel_size)
     loader = DataLoader(dataset, batch_size=16, shuffle=True, drop_last=True)
     augment = ChannelAugment(model_size, seed)
     config = replace(
@@ -161,7 +186,7 @@ def embed_dataset(
 
 
 def native_statistics(images: torch.Tensor) -> np.ndarray:
-    array = images.squeeze(1).numpy()
+    array = images.mean(dim=1).numpy()
     rows = []
     for image in array:
         gx = np.diff(image, axis=1)
@@ -246,6 +271,8 @@ def residual_features(image: np.ndarray) -> np.ndarray:
         np.array([[1, -1], [-1, 1]], dtype=np.float32),
     )
     features = []
+    if image.ndim == 3:
+        image = image.mean(axis=0)
     scaled = image * 255.0
     for kernel in kernels:
         residual = convolve(scaled, kernel, mode="reflect")
@@ -267,12 +294,74 @@ def residual_features(image: np.ndarray) -> np.ndarray:
     return np.asarray(features, dtype=np.float32)
 
 
+class SelectionCNN(nn.Module):
+    def __init__(self, in_channels: int):
+        super().__init__()
+        self.network = nn.Sequential(
+            nn.Conv2d(in_channels, 16, 5, padding=2, bias=False),
+            nn.BatchNorm2d(16),
+            nn.Tanh(),
+            nn.AvgPool2d(2),
+            nn.Conv2d(16, 32, 3, padding=1, bias=False),
+            nn.BatchNorm2d(32),
+            nn.SiLU(),
+            nn.AvgPool2d(2),
+            nn.Conv2d(32, 64, 3, padding=1, bias=False),
+            nn.BatchNorm2d(64),
+            nn.SiLU(),
+            nn.AdaptiveAvgPool2d(1),
+            nn.Flatten(),
+            nn.Linear(64, 1),
+        )
+
+    def forward(self, images: torch.Tensor) -> torch.Tensor:
+        return self.network(images).squeeze(1)
+
+
+def cnn_selection_auc(
+    images: torch.Tensor,
+    labels: np.ndarray,
+    train: np.ndarray,
+    test: np.ndarray,
+    seed: int,
+    epochs: int,
+) -> float:
+    seed_everything(seed)
+    model = SelectionCNN(images.shape[1])
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=1e-3,
+        weight_decay=1e-4,
+    )
+    loss_function = nn.BCEWithLogitsLoss()
+    train_loader = DataLoader(
+        TensorDataset(
+            images[train],
+            torch.from_numpy(labels[train]).float(),
+        ),
+        batch_size=32,
+        shuffle=True,
+    )
+    model.train()
+    for _ in range(epochs):
+        for batch, targets in train_loader:
+            optimizer.zero_grad(set_to_none=True)
+            loss = loss_function(model(batch), targets)
+            loss.backward()
+            optimizer.step()
+    model.eval()
+    with torch.no_grad():
+        probabilities = torch.sigmoid(model(images[test])).numpy()
+    return float(roc_auc_score(labels[test], probabilities))
+
+
 def selection_auc(
     dataset: NativeImageDataset,
     identifiers: list[str],
     selected_ids: list[str],
     seed: int,
     maximum_per_class: int = 500,
+    cnn_epochs: int = 8,
 ) -> dict:
     positions = {name: index for index, name in enumerate(identifiers)}
     selected = np.asarray(
@@ -289,12 +378,23 @@ def selection_auc(
 
     global_rows = []
     residual_rows = []
+    detector_images = []
     for position in chosen:
         image, _ = dataset[int(position)]
         global_rows.append(native_statistics(image.unsqueeze(0))[0])
-        residual_rows.append(residual_features(image.squeeze(0).numpy()))
+        residual_rows.append(residual_features(image.numpy()))
+        detector_images.append(
+            F.interpolate(
+                image.unsqueeze(0),
+                size=(64, 64),
+                mode="bilinear",
+                align_corners=False,
+                antialias=True,
+            ).squeeze(0)
+        )
     global_x = np.asarray(global_rows)
     residual_x = np.asarray(residual_rows)
+    cnn_x = torch.stack(detector_images)
     train, test = train_test_split(
         np.arange(len(chosen)),
         test_size=0.35,
@@ -319,7 +419,16 @@ def selection_auc(
         "srm_lite_extratrees_auc": float(
             roc_auc_score(labels[test], forest.predict_proba(residual_x[test])[:, 1])
         ),
+        "selection_cnn_auc": cnn_selection_auc(
+            cnn_x,
+            labels,
+            train,
+            test,
+            seed,
+            cnn_epochs,
+        ),
         "srm_lite_features": int(residual_x.shape[1]),
+        "cnn_epochs": cnn_epochs,
     }
 
 
@@ -331,7 +440,11 @@ def run_seed(args, paths: list[Path], seed: int):
         paths[index]
         for index in order[args.train_count : args.train_count + args.index_count]
     ]
-    dataset = NativeImageDataset(index_paths)
+    dataset = NativeImageDataset(
+        index_paths,
+        args.input_mode,
+        args.channel_size,
+    )
     model, history = train_encoder(
         train_paths,
         seed,
@@ -343,6 +456,8 @@ def run_seed(args, paths: list[Path], seed: int):
         args.invariance_weight,
         args.variance_weight,
         args.covariance_weight,
+        args.input_mode,
+        args.channel_size,
     )
     clean, identifiers, clean_seconds = embed_dataset(
         model, dataset, args.model_size
@@ -356,7 +471,7 @@ def run_seed(args, paths: list[Path], seed: int):
     stable = {
         size: np.ones(len(dataset), dtype=bool) for size in codebooks
     }
-    suite = attack_suite(512, seed)
+    suite = attack_suite(args.channel_size, seed)
     calibration_seconds = {}
     for attack_name in CALIBRATION_ATTACKS:
         attacked, _, seconds = embed_dataset(
@@ -465,7 +580,12 @@ def run_seed(args, paths: list[Path], seed: int):
             )
     end_to_end_seconds = perf_counter() - end_to_end_started
     detectability = selection_auc(
-        dataset, identifiers, selected_ids, seed, args.detector_samples
+        dataset,
+        identifiers,
+        selected_ids,
+        seed,
+        args.detector_samples,
+        args.detector_epochs,
     )
     return {
         "history": history,
@@ -500,6 +620,10 @@ def main():
     parser.add_argument("--model-size", type=int, default=128)
     parser.add_argument("--embedding-dim", type=int, default=64)
     parser.add_argument("--detector-samples", type=int, default=500)
+    parser.add_argument("--detector-epochs", type=int, default=8)
+    parser.add_argument("--dataset-name", default="BOSSBase 1.01")
+    parser.add_argument("--input-mode", choices=("L", "RGB"), default="L")
+    parser.add_argument("--channel-size", type=int, default=512)
     parser.add_argument("--checkpoint-root", type=Path)
     parser.add_argument("--invariance-weight", type=float, default=25.0)
     parser.add_argument("--variance-weight", type=float, default=25.0)
@@ -513,8 +637,9 @@ def main():
     manifest = {
         "dataset_root": str(args.dataset_root.resolve()),
         "images": len(paths),
-        "source_resolution": [512, 512],
-        "channel_resolution": [512, 512],
+        "dataset": args.dataset_name,
+        "source_resolution": "variable" if args.input_mode == "RGB" else [512, 512],
+        "channel_resolution": [args.channel_size, args.channel_size],
         "model_input_resolution": [args.model_size, args.model_size],
         "configuration": {
             key: str(value) if isinstance(value, Path) else value

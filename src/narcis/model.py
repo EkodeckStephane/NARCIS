@@ -29,11 +29,16 @@ class ConvBlock(nn.Sequential):
 
 
 class RobustImageEncoder(nn.Module):
-    def __init__(self, embedding_dim: int = 64, base_channels: int = 24):
+    def __init__(
+        self,
+        embedding_dim: int = 64,
+        base_channels: int = 24,
+        in_channels: int = 1,
+    ):
         super().__init__()
         c = base_channels
         self.backbone = nn.Sequential(
-            ConvBlock(1, c),
+            ConvBlock(in_channels, c),
             ConvBlock(c, 2 * c, stride=2),
             ConvBlock(2 * c, 4 * c, stride=2),
             ConvBlock(4 * c, 6 * c, stride=2),
