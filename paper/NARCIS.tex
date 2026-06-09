@@ -34,50 +34,64 @@
 \def\textpagefraction{.001}
 
 \shorttitle{Authenticated Neural Coverless Image Signaling}
-\shortauthors{Ekodeck et al.}
+\shortauthors{Ekodeck \textit{et al.}}
 
 \title[mode=title]{NARCIS: Authenticated Neural Coverless Image Signaling with Attack-Qualified Codebooks and Error Correction}
 
-\author[1,2,3]{St\'ephane Ga\"el R. Ekodeck}[orcid=0000-0002-8094-8832]
+\author[1,2,3]{St\'ephane Ga\"el R. Ekodeck}[
+  orcid=0000-0002-8094-8832]
 \cormark[1]
 \ead{stephane-gael.ekodeck@facsciences-uy1.cm}
-\credit{Conceptualization, methodology, software, validation, formal analysis, writing -- original draft, writing -- review and editing}
+\credit{Conceptualization, Methodology, Software, Validation, Formal analysis,
+Investigation, Data curation, Visualization, Writing -- original draft}
 
-\author[1]{Prosper Rosaire Mama Assandje}[orcid=0000-0001-6106-6677]
-\credit{Methodology, formal analysis, validation, writing -- review and editing}
+\author[4,5]{Vivien Beyala Kamgang}[
+  orcid=0000-0002-3644-1866]
+\ead{vivsxx@univ-bertoua.cm}
+\credit{Conceptualization, Methodology, Writing -- review and editing}
 
-\author[1,2,3]{Serge Alain Eb\'el\'e}[orcid=0000-0001-7036-7068]
-\credit{Conceptualization, methodology, validation, writing -- review and editing}
+\author[1,2,3]{Serge Alain Eb\'el\'e}[
+  orcid=0000-0001-7036-7068]
+\ead{serge-alain.ebele@facsciences-uy1.cm}
+\credit{Conceptualization, Methodology, Validation, Writing -- review and
+editing}
 
-\author[1,2]{St\'ephane Willy Mossebo Tcheunteu}[orcid=0009-0004-2165-7949]
-\credit{Investigation, experimental analysis, writing -- review and editing}
-
-\author[1]{Arthur Ulrich Ewane}[orcid=0009-0001-6722-2842]
-\credit{Software, data curation, visualization, writing -- review and editing}
-
-\author[1,2]{Damaris Belle M. Fotso}[orcid=0009-0001-8736-0644]
-\credit{Resources, data curation, literature review, writing -- review and editing}
-
-\author[1,2,3]{Ren\'e Ndoundam}[orcid=0000-0003-1105-762X]
-\credit{Supervision, methodology, validation, project administration, writing -- review and editing}
+\author[5,4]{Julius Marcellin Nkenlifack}[
+  orcid=0000-0003-3322-4687]
+\ead{marcellin.nkenlifack@gmail.com}
+\credit{Supervision, Project administration, Writing -- review and editing}
 
 \affiliation[1]{
-  organization={University of Yaound\'e I, LIRIMA, Team GRIMCAPE},
+  organization={Department of Computer Science, LIRIMA, TEAM GRIMCAPE,
+  University of Yaound\'e I},
   addressline={P.O. Box 812},
   city={Yaound\'e},
   country={Cameroon}
 }
 \affiliation[2]{
-  organization={IRD, UMI UMMISCO, IRD France Nord},
-  postcode={F-93143},
+  organization={IRD, UMI 209 UMMISCO, IRD France Nord},
   city={Bondy},
+  postcode={F-93143},
   country={France}
 }
 \affiliation[3]{
-  organization={UMI 209 UMMISCO, Sorbonne Universit\'e},
-  postcode={75005},
+  organization={Sorbonne Universit\'e, UMI 209 UMMISCO},
   city={Paris},
+  postcode={F-75005},
   country={France}
+}
+\affiliation[4]{
+  organization={RTU Mathematics and Computer Science, The University of
+  Bertoua},
+  addressline={P.O. Box 416},
+  city={Bertoua},
+  country={Cameroon}
+}
+\affiliation[5]{
+  organization={RUFCEA (UR-IFIA), University of Dschang},
+  addressline={P.O. Box 96},
+  city={Dschang},
+  country={Cameroon}
 }
 \cortext[1]{Corresponding author}
 
@@ -913,18 +927,48 @@ end-to-end CNN detectors and traffic-level features. These extensions target
 capacity, generalisation, and detectability separately, preserving the
 feasible-operating-point criterion as the common evaluation unit.
 
-\section*{Data and Code Availability}
+\section*{Acknowledgements}
+This work was supported by the authors' institutions. No external financial
+support was received.
 
-The experiments use the public BOSSBase 1.01 and CIFAR-100 datasets. Source
-code, deterministic partition seeds, raw CSV files, trained checkpoints,
-attack definitions, and consolidated JSON reports are included in the
-accompanying project archive.
+\printcredits
 
-\section*{Declaration of Competing Interest}
+\section*{Declarations}
+\noindent\textbf{Ethics approval.}
+This study does not involve human participants, animals, personal data, or
+clinical interventions. It uses publicly available image datasets and offline
+computational experiments.
 
+\medskip
+\noindent\textbf{Competing interests.}
 The authors declare that they have no known competing financial interests or
 personal relationships that could have appeared to influence the work
-reported in this paper.
+reported in this paper. WYSAWIS, cited in the related work, shares authors
+with this study and is identified explicitly. It is used as qualitative
+published context, not as an experimental baseline or as evidence for the
+numerical claims reported here.
+
+\medskip
+\noindent\textbf{Funding.}
+This research received no external funding.
+
+\medskip
+\noindent\textbf{Data availability.}
+BOSSBase 1.01 is publicly available from its original distributor at
+\url{https://agents.fel.cvut.cz/boss/}, and CIFAR-100 is available at
+\url{https://www.cs.toronto.edu/~kriz/cifar.html}, subject to their respective
+terms. The datasets are not redistributed in the project repository.
+Deterministic partition seeds and consolidated CSV/JSON results accompany the
+reproducibility package.
+
+\medskip
+\noindent\textbf{Code availability.}
+The NARCIS implementation, attack definitions, evaluation scripts, tests,
+consolidated result tables, plotting code, manuscript sources, and exact
+random seeds are publicly available at
+\url{https://github.com/EkodeckStephane/NARCIS}. Trained checkpoints are not
+redistributed; the repository provides the commands required to retrain the
+models.
 
 \FloatBarrier
 \bibliographystyle{cas-model1-num-names}
