@@ -115,10 +115,14 @@ was 98.74\% on BOSSBase and 98.59\% on Caltech-101; the worst individual
 accuracies were 81.61\% and 79.89\%. BOSSBase supported 3--4 bits per cover,
 whereas all Caltech-101 partitions supported 4 bits per cover. A lightweight
 selection CNN produced mean AUCs of 0.515 and 0.530, with both 95\% confidence
-intervals including 0.5. A controlled CIFAR-100 ablation reduced
-complete-message success from 100\% to 43.65\% when attack qualification was
-removed. The contribution is a measurable feasible operating point for
-authenticated coverless communication, defined by finite-index stability,
+intervals including 0.5; however, 20 repeated CNN fits on Caltech-101 seed 47
+confirmed a weak partition-specific selection signal (mean AUC 0.533,
+95\% interval [0.517, 0.548]). On a matched BOSSBase seed-11 ablation,
+removing attack qualification reduced complete-message success from 100\% to
+67.62\%. Net plaintext rate increased from 0.184 to 1.213 bits per cover when
+the plaintext grew from 8 to 128 bytes at a 16-symbol operating point. The
+contribution is a measurable feasible operating point for authenticated
+coverless communication, defined by finite-index stability,
 protected-message demand, and exact end-to-end recovery.
 \end{abstract}
 
@@ -188,6 +192,10 @@ success.
 \item Five-seed evaluations on BOSSBase and RGB Caltech-101, covering 1,575
 end-to-end trials, holdout attacks, convergence, parameter sensitivity, and
 linear, ensemble, and CNN selection-bias tests.
+\item Targeted validations that measure payload-overhead scaling, repeat the
+qualification ablation on BOSSBase, test calibration-locked projection
+selection, and quantify partition-specific selection leakage over repeated
+CNN fits.
 \end{itemize}
 
 Accordingly, the contribution concerns verified protected-message recovery at
@@ -465,7 +473,13 @@ the largest descriptor variance with one scalar. In the reduced sensitivity
 subset it explained 72.90\% of the variance; the first two directions jointly
 explained 96.83\%. Alternative directions occasionally retained more stable
 covers, so $v_1$ is treated as a reproducible design choice rather than a
-stability optimum.
+stability optimum. A targeted full-index study therefore evaluates a
+calibration-locked attack-aware alternative. Its candidate set contains the
+first 16 principal directions and 32 deterministic random unit directions.
+For each candidate, quantile boundaries and stable buckets are computed using
+clean images and calibration attacks only. Selection lexicographically
+maximises the minimum stable bucket and retained-cover count, then minimises
+occupancy variation. The chosen direction is fixed before holdout evaluation.
 
 \subsection{Attack-qualified cover index}
 
@@ -656,8 +670,9 @@ The BOSSBase experiment evaluates ten independently generated eight-byte
 plaintexts per seed; Caltech-101 evaluates five. Reed--Solomon coding uses 128
 parity bytes. Symbol repetition is set to one; redundancy is instead provided
 by byte-level Reed--Solomon parity, which avoids multiplying the required
-348--464-cover sequences. For longer payloads, fixed framing and parity
-overheads would be amortised, but that regime is not inferred here. The two
+348--464-cover sequences. A separate deterministic scaling analysis encodes
+8-, 32-, and 128-byte plaintexts with the implemented AES-GCM envelope,
+10-byte frame, and 128 parity symbols per Reed--Solomon block. The two
 principal evaluations comprise 75 protected messages and 1,575
 message-condition trials.
 
@@ -695,11 +710,12 @@ quantile partition, calibration attacks, candidate codebook sizes, and
 protected-message feasibility rule as \method. This is a controlled descriptor
 comparison, not a reproduction of a published complete protocol.
 
-The main ablation removes attack-based cover qualification while retaining
-the same neural descriptor, codebook size, protected messages, and decoder.
-It is run on the smaller CIFAR-100 protocol to isolate the mechanism at lower
-computational cost. A second check confirms the configured repetition factor
-of one.
+The principal-corpus ablation removes attack-based cover qualification on
+BOSSBase seed 11 while retaining the trained descriptor, 16-symbol PC1
+codebook, ten protected messages, 128 parity bytes, and all 21 channel
+conditions. A smaller three-seed CIFAR-100 ablation provides an independent
+controlled replication. A second check confirms the configured repetition
+factor of one.
 
 \subsection{Selection detectability}
 
@@ -717,7 +733,11 @@ measures detectability. These tests probe qualification-induced selection
 bias at increasing model flexibility. The CNN is not presented as a
 reproduction of XuNet or SRNet \cite{xu2016steganalysis,boroumand2018srnet},
 whose original task is detecting pixel embedding rather than unchanged-image
-selection.
+selection. Because the initial Caltech-101 CNN result varied across
+partitions, seed 47 is analysed with 20 independent balanced subsamples,
+train/test splits, and CNN initialisations. Standardised differences in the
+seven image statistics and category-frequency shifts are also reported to
+identify plausible sources of selection leakage.
 
 \subsection{Sensitivity and computational measurements}
 \label{sec:sensitivity}
@@ -728,6 +748,13 @@ descriptor dimensions 32, 64, and 128; loss weights $(25,25,1)$, $(1,1,1)$,
 and $(25,10,1)$; and projections on the first three principal directions and
 a fixed random direction. This experiment diagnoses design choices and is not
 used to replace the five-seed operating point.
+
+A second projection study uses the complete 8,000-image BOSSBase seed-11
+index and its released checkpoint. It evaluates the 48 predeclared candidate
+directions described in Section~4.2 under all 12 calibration attacks, locks
+the selected direction, and then executes ten messages under the complete
+21-condition suite. Explained-variance--stability correlation is computed
+only across the 16 principal directions.
 
 Wall-clock measurements include native-image descriptor extraction,
 calibration, and complete transmission and recovery. Parameter counts are
@@ -765,6 +792,41 @@ and 464 covers at 3 bits per cover. The measured net plaintext rates were
 therefore 0.184 and 0.138 bits per transmitted cover. These values include
 encryption, framing, and error correction and must not be confused with the
 nominal alphabet.
+
+\subsection{Payload-overhead scaling}
+
+Table~\ref{tab:payloadscale} and Figure~\ref{fig:payloadscale} report the
+implemented coding path at three plaintext sizes. AES-GCM adds 28 bytes and
+the protocol frame adds 10. The 128-byte payload exceeds the 127-byte data
+capacity of one RS(255,127) block after encryption and framing; the library
+therefore emits two blocks and 256 effective parity bytes. Despite this block
+transition, the fixed overhead is increasingly amortised: at $K=16$, net rate
+rises from 0.184 to 0.646 and 1.213 bits per cover.
+
+\begin{table}[t]
+\centering
+\caption{Implemented payload scaling with 128 RS parity symbols per block.}
+\label{tab:payloadscale}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{rrrrr}
+\toprule
+Plaintext & RS blocks & Coded bytes & Covers ($K=16$) & Net b/cover\\
+\midrule
+8 bytes   & 1 & 174 & 348 & 0.184\\
+32 bytes  & 1 & 198 & 396 & 0.646\\
+128 bytes & 2 & 422 & 844 & 1.213\\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/payload_scalability.pdf}
+\caption{Net plaintext rate for the implemented protected frame. The
+three-bit and four-bit operating points correspond to $K=8$ and $K=16$.}
+\label{fig:payloadscale}
+\end{figure}
 
 \subsection{End-to-end robustness}
 
@@ -861,12 +923,33 @@ shift, while the more flexible CNN result is less precise and does not exclude
 chance. These outcomes motivate reporting selection detectability by dataset
 and detector rather than inferring a general undetectability property.
 
+The targeted seed-47 analysis resolves part of that uncertainty.
+Twenty independent CNN subsamples, splits, and initialisations yielded mean
+AUC 0.533, 95\% interval [0.517, 0.548], and range 0.445--0.580
+(Figure~\ref{fig:seed47cnn}). Thus, an adversary trained on a matched
+Caltech-101 index can exploit a weak selection signal on this partition.
+No individual global statistic had a standardised mean difference above
+0.088. Category proportions shifted more strongly: motorbikes and
+\texttt{faces\_easy} were under-represented by 0.022 and 0.020, whereas
+\texttt{background\_google} and anchor were over-represented by 0.017 and
+0.015. These observations indicate a mixture of weak visual and semantic
+composition effects rather than one dominant low-level feature.
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/cross_dataset_detectability.pdf}
 \caption{Mean selection-detection AUC and 95\% Student-$t$ intervals over five
 partitions per dataset. The dashed line denotes chance performance.}
 \label{fig:detectability}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/caltech_seed47_cnn_repetitions.pdf}
+\caption{Selection-CNN AUC over 20 independent balanced subsamples, splits,
+and initialisations on Caltech-101 seed 47. The shaded band is the 95\%
+Student-$t$ interval for the repeated fits.}
+\label{fig:seed47cnn}
 \end{figure}
 
 \subsection{Sensitivity and complexity}
@@ -901,8 +984,28 @@ Configuration & Stable fraction & Min. bucket\\
 
 PC1 explained 72.90\% of descriptor variance and retained 33.47\% of covers.
 PC2 retained 34.93\%, PC3 31.40\%, and a fixed random direction 41.27\%.
-This result rules out a claim that PC1 is stability-optimal. It instead
-motivates attack-aware direction selection as a subsequent extension.
+This result rules out a claim that PC1 is stability-optimal.
+
+The full-index attack-aware study selected fixed random direction 15 using
+calibration data only. Relative to PC1, it increased the stable fraction from
+35.29\% to 45.55\% and the minimum stable bucket from 92 to 161.
+Figure~\ref{fig:projection} shows all 48 candidates. Across the 16 principal
+directions, explained variance and stable fraction were positively correlated
+($\rho=0.640$, $p=0.0076$). High variance therefore did not imply greater
+instability in this experiment; PC1 was suboptimal because variance
+maximisation and minimum qualified-bucket occupancy are different objectives.
+After the direction was locked, the attack-aware variant recovered 210/210
+messages across all channel conditions, with 99.24\% mean and 87.64\% worst
+symbol accuracy.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/boss_projection_selection.pdf}
+\caption{Calibration-only projection candidates on the full BOSSBase seed-11
+index. The selected direction maximises minimum stable-bucket occupancy under
+the declared lexicographic rule; holdout attacks are not used for selection.}
+\label{fig:projection}
+\end{figure}
 
 Native-image descriptor extraction averaged 87.83 seconds for 8,000 covers,
 or 99.85 images/s. Calibration averaged 1,246.10 seconds per partition.
@@ -914,12 +1017,17 @@ times confirm that the convolutional backbone dominates cost.
 \subsection{Secondary ablation and descriptor comparison}
 \label{sec:secondary}
 
-The controlled CIFAR-100 experiment recovered 189/189 protected
-message-condition trials at $K=16$, with mean symbol accuracy 98.47\%.
-Removing attack qualification reduced complete-message success from 100\% to
-43.65\% over the matched ablation trials. This identifies qualification as a
-necessary robustness component rather than treating invariant training alone
-as sufficient.
+On BOSSBase seed 11, the matched PC1 protocol without qualification recovered
+142/210 messages (67.62\%), compared with 210/210 for the qualified PC1
+protocol. Success was zero under crops 0.05, 0.08, 0.10, and
+0.12 and rotations $7^\circ$ and $9^\circ$; only 2/10 messages survived the
+$5^\circ$ rotation. The remaining 14 conditions recovered 140/140 messages.
+The released condition-level table reports all 21 matched outcomes.
+The controlled CIFAR-100 experiment independently recovered 189/189 qualified
+trials and fell to 43.65\% without qualification. Agreement across the
+principal corpus and the smaller controlled experiment identifies
+qualification as a necessary robustness component rather than treating
+invariant training alone as sufficient.
 
 Under the same quantile partition, attack set, candidate sizes, and
 protected-message demand, neither the $16\times16$ DCT descriptor nor the
@@ -983,13 +1091,15 @@ and holdout distortions.
 
 \subsection{What the experiments establish}
 
-The experiments support four conclusions. First, stable descriptor averages
+The experiments support five conclusions. First, stable descriptor averages
 are insufficient for communication: the multiplicity of every required
 symbol must be checked. Second, cover qualification is the dominant robustness
 component in the tested pipeline. Third, forward-error correction allows
 message recovery at symbol accuracies substantially below 100\%. Fourth,
 cryptographic verification changes the evaluation criterion: a trial is
 successful only when the exact plaintext is authenticated and recovered.
+Fifth, short-message overhead is substantial but is measurably amortised as
+payload length increases, subject to Reed--Solomon block boundaries.
 
 The five-seed results also quantify finite-index and cross-corpus variability.
 The same rules yield a feasible 16-symbol alphabet on four BOSSBase
@@ -1006,14 +1116,17 @@ image semantics. Distributional detectability is therefore evaluated
 separately from cryptographic payload security. The AUC experiment addresses
 a different question: whether
 the current selection policy creates detectable shifts in seven global
-statistics, residual summaries, or a learned CNN representation. The small
-classical-detector shift on Caltech-101 and the wider CNN intervals show why
-these measurements must remain tied to a dataset, selection policy, and
-detector. They do not support a general undetectability claim.
+statistics, residual summaries, or a learned CNN representation. The
+classical-detector shift on Caltech-101 and the repeated seed-47 CNN analysis
+establish a weak but measurable selection leak on that partition. An
+adversary with access to a similarly distributed index and labelled selection
+traces can therefore exceed chance detection. These measurements must remain
+tied to a dataset, partition, selection policy, and detector; they do not
+support a general undetectability claim.
 
 \subsection{Limitations}
 
-The evaluation has four main limitations.
+The evaluation has five main limitations.
 
 \begin{enumerate}
 \item Caltech-101 adds variable-resolution RGB content, but its channel input
@@ -1024,14 +1137,19 @@ reimplementations of complete published systems.
 \item The learned selection detector is a lightweight CNN designed for the
 selected-versus-non-selected task, not an SRNet reproduction. Traffic-level
 sequence analysis is also outside this study.
-\item PC1 is reproducible and variance-maximising, but the sensitivity study
-shows that attack-aware projection selection may retain more stable covers.
+\item The attack-aware projection result is a full-index single-partition
+validation. Applying the same calibration-locked rule across all partitions
+would be required before replacing PC1 in the principal five-seed results.
+\item Caltech-101 seed 47 exhibits measurable selection leakage. The present
+inverse-propensity ordering reduces deterministic preference but does not
+equalise category composition or provide traffic-level indistinguishability.
 \end{enumerate}
 
 The measured net plaintext rates, 0.184 and 0.138 bits per transmitted cover,
 are lower than the nominal symbol capacities because the experiments use
-short payloads and 128 parity bytes. This overhead is reported explicitly.
-Longer-block efficiency was not measured and is not inferred.
+short payloads and 128 parity symbols per RS block. The measured scaling curve
+reaches 1.213 bits per cover for a 128-byte plaintext at $K=16$, while also
+showing the second-block overhead introduced beyond 127 framed bytes.
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -1044,7 +1162,8 @@ BOSSBase and 525 of 525 on RGB Caltech-101, including eight holdout attack
 strengths. BOSSBase supported 3--4 bits per cover; every Caltech-101 partition
 supported 4 bits per cover. Mean symbol accuracies were 98.74\% and 98.59\%.
 Removing qualification in the controlled ablation reduced complete-message
-success to 43.65\%.
+success to 67.62\% on BOSSBase seed 11 and 43.65\% in the independent
+CIFAR-100 experiment.
 
 These results support a precise position: NARCIS provides measured robust
 operating points and complete protected-message recovery with unchanged
@@ -1053,13 +1172,15 @@ and byte-level correction can convert imperfect label stability into exact,
 authenticated recovery without modifying transmitted images. The evidence
 does not support a global capacity or universal steganalysis claim.
 
-Three extensions follow directly from the observed limits. First,
-attack-aware projection selection should be trained on calibration data while
-being locked before holdout evaluation. Second, executable recent-protocol
+Three extensions follow directly from the observed limits. First, the
+calibration-locked attack-aware projection rule should be evaluated across
+all partitions before replacing PC1 in the principal operating points.
+Second, executable recent-protocol
 baselines should be evaluated under the same payload protection, attacks, and
 finite-index demand. Third, larger native-resolution colour corpora and
 traffic-level sequence detectors should extend the present image-level
-analysis. These directions target capacity, comparative attribution, and
+analysis; selection should additionally be balanced against semantic
+composition. These directions target capacity, comparative attribution, and
 detectability separately while preserving the feasible-operating-point
 criterion as the common evaluation unit.
 

@@ -1,0 +1,17 @@
+{
+  "seed": 11,
+  "candidate_pool": {
+    "principal_components": 16,
+    "fixed_random_directions": 32
+  },
+  "selection_data": "calibration attacks only",
+  "selection_rule": "lexicographic maximum of minimum stable bucket and stable-image count, followed by minimum occupancy CV",
+  "selected_direction": "random_15",
+  "selected_family": "fixed_random",
+  "selected_stable_fraction": 0.4555,
+  "selected_minimum_bucket": 161,
+  "pc1_stable_fraction": 0.352875,
+  "pc1_minimum_bucket": 92,
+  "spearman_explained_variance_vs_stability": 0.6401767737544705,
+  "spearman_p_value": 0.007557496016380804
+}

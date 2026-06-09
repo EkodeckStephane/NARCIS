@@ -35,17 +35,22 @@ The unseen 12% crop was the hardest condition on both datasets. The unseen
 | Caltech-101 | 0.531 [0.504, 0.557] | 0.533 [0.504, 0.562] | 0.530 [0.481, 0.579] |
 
 The two classical Caltech-101 detectors identify a small dataset-specific
-selection shift. The CNN intervals include 0.5 on both datasets. These are
-bounded detector results, not a universal undetectability claim.
+selection shift. The five-partition CNN interval includes 0.5, but 20 repeated
+fits on seed 47 give 0.533 [0.517, 0.548]. This is a weak matched-index
+selection leak, not evidence of universal undetectability.
 
 ## Ablation and Sensitivity
 
 Removing attack qualification reduced controlled CIFAR-100 message success
-from 100% to 43.65%. Equal VICReg-style loss weights retained fewer stable
-covers than the 25/25/1 configuration. A 128-dimensional descriptor retained
-more covers in the reduced study but did not improve full-protocol capacity or
-reliability. Alternative projection directions can outperform PC1 in retained
-cover fraction; PC1 is used as a deterministic variance-maximising choice.
+from 100% to 43.65%. The matched BOSSBase seed-11 ablation fell from 210/210
+to 142/210 recoveries without qualification. A calibration-locked direction
+search increased the minimum stable bucket from 92 to 161 and recovered
+210/210 targeted trials. This single-partition result does not replace the
+five-seed PC1 campaign.
+
+With 128 Reed-Solomon parity symbols per block and `K=16`, the implemented net
+rate is 0.184, 0.646, and 1.213 bits/cover for 8-, 32-, and 128-byte
+plaintexts. The 128-byte case spans two RS blocks.
 
 ## Reproducibility
 
@@ -54,6 +59,7 @@ Consolidated evidence is stored in:
 - `bossbase_results_rs128_final/`;
 - `bossbase_sensitivity/`;
 - `q1_extension_results/`;
+- `q1_reviewer_results/`;
 - `paper/figures/`.
 
 The graphical abstract is available as

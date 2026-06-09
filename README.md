@@ -13,8 +13,14 @@ The evaluation uses five partitions each of BOSSBase and RGB Caltech-101:
 - `1,575 / 1,575` complete authenticated message recoveries;
 - 98.74% and 98.59% mean symbol accuracy;
 - 3-4 bits/cover on BOSSBase and 4 bits/cover on every Caltech-101 partition;
-- selection-CNN AUCs of 0.515 and 0.530, with both 95% intervals including
-  0.5.
+- net plaintext rate from 0.184 bit/cover at 8 bytes to 1.213 bits/cover at
+  128 bytes for `K=16`;
+- a matched BOSSBase ablation falling from 210/210 to 142/210 recoveries
+  without attack qualification;
+- a calibration-locked projection study increasing the minimum stable bucket
+  from 92 to 161 on BOSSBase seed 11;
+- a repeated Caltech-101 seed-47 selection-CNN AUC of 0.533
+  [0.517, 0.548].
 
 These results are bounded to the released protocol, datasets, attack suite,
 parameters, and detector classes. They do not establish universal
@@ -41,9 +47,13 @@ undetectability or maximum nominal capacity.
 - `download_caltech101.py`: resumable Caltech-101 preparation;
 - `consolidate_q1_extension.py`: cross-dataset evidence and figures;
 - `run_bossbase_sensitivity.py`: dimension, loss-weight, and projection study;
+- `run_q1_reviewer_validation.py`: payload scaling, principal-corpus
+  ablation, attack-aware projection, and repeated selection-leakage analysis;
 - `bossbase_results_rs128_final/`: consolidated principal results;
 - `bossbase_sensitivity/`: consolidated sensitivity results;
 - `q1_extension_results/`: consolidated cross-dataset and CNN evidence;
+- `q1_reviewer_results/`: consolidated evidence for the targeted Q1
+  validation experiments;
 - `paper/`: Elsevier manuscript, figures, cover letter, and review reports.
 
 External datasets and trained checkpoints are intentionally not committed.

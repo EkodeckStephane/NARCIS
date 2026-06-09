@@ -66,12 +66,31 @@ class QuantileCodebook:
         centered = embeddings - mean
         _, _, right = np.linalg.svd(centered, full_matrices=False)
         direction = right[0].astype(np.float32)
-        projection = centered @ direction
+        return cls.fit_direction(embeddings, clusters, direction)
+
+    @classmethod
+    def fit_direction(
+        cls,
+        embeddings: np.ndarray,
+        clusters: int,
+        direction: np.ndarray,
+    ) -> "QuantileCodebook":
+        if clusters < 2 or clusters > len(embeddings):
+            raise ValueError("clusters must be between 2 and the corpus size")
+        direction = np.asarray(direction, dtype=np.float32)
+        if direction.shape != (embeddings.shape[1],):
+            raise ValueError("direction must match the embedding dimension")
+        norm = float(np.linalg.norm(direction))
+        if norm <= 1e-12:
+            raise ValueError("direction must have non-zero norm")
+        direction = direction / norm
+        mean = embeddings.mean(axis=0).astype(np.float32)
+        projection = (embeddings - mean) @ direction
         boundaries = np.quantile(
             projection,
             np.arange(1, clusters) / clusters,
         ).astype(np.float32)
-        return cls(mean.astype(np.float32), direction, boundaries)
+        return cls(mean, direction, boundaries)
 
     def project(self, embeddings: np.ndarray) -> np.ndarray:
         return (embeddings - self.mean) @ self.direction

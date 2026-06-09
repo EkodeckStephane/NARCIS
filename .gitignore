@@ -32,6 +32,7 @@ bossbase_smoke2/
 bossbase_cnn_results/
 caltech101_results/
 caltech101_smoke/
+q1_reviewer_results/*.npz
 experimental_results/
 experimental_results_v2/
 experimental_results_v3/

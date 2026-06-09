@@ -1,0 +1,11 @@
+{
+  "dataset": "Caltech-101",
+  "partition_seed": 47,
+  "unique_selected_covers": 419,
+  "repetitions": 20,
+  "cnn_auc_mean": 0.5327710676107177,
+  "cnn_auc_ci95_low": 0.5170930083551131,
+  "cnn_auc_ci95_high": 0.5484491268663223,
+  "cnn_auc_minimum": 0.4454625387569994,
+  "cnn_auc_maximum": 0.579619602943218
+}

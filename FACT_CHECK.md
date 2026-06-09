@@ -21,14 +21,21 @@ This audit maps the principal manuscript claims to released evidence.
 | Every Caltech-101 partition supports 4 bits/cover | `q1_extension_results/selected_configurations.csv` | Verified |
 | Caltech-101 selection-CNN AUC is 0.530, CI [0.481, 0.579] | `q1_extension_results/report.json` | Verified |
 | Qualification ablation falls to 43.65% message success | Secondary CIFAR-100 campaign | Verified for that controlled campaign |
+| BOSSBase seed-11 matched ablation falls to 142/210 (67.62%) without qualification | `q1_reviewer_results/boss_seed11_matched_ablation_summary.csv` | Verified |
+| At K=16, net rate is 0.184, 0.646, and 1.213 bits/cover for 8, 32, and 128 plaintext bytes | `q1_reviewer_results/payload_scalability.csv` | Verified |
+| Attack-aware projection increases the seed-11 minimum bucket from 92 to 161 | `q1_reviewer_results/boss_projection_analysis.json` | Verified for the targeted partition |
+| Repeated Caltech seed-47 CNN AUC is 0.533, CI [0.517, 0.548] | `q1_reviewer_results/caltech_seed47_selection_report.json` | Verified for 20 repeated fits |
 
 ## Bounded Claims
 
 - The detector results apply only to the three implemented detector classes.
-- The results do not establish universal undetectability.
+- Caltech-101 seed 47 has a weak but measurable matched-index selection leak;
+  the results do not establish universal undetectability.
 - The 3--4 bits/cover values are finite-index operating points, not global
   capacity records.
 - Comparisons with published systems use reported context because datasets,
   attacks, and protocol overheads differ.
 - The implemented CNN targets selection bias; it is not an SRNet
   reimplementation for pixel-embedding steganalysis.
+- The attack-aware direction result is a full-index single-partition study and
+  does not replace the five-seed PC1 campaign.

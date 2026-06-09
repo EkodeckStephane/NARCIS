@@ -169,11 +169,21 @@ def save_graphical_abstract() -> None:
     )
     box(ax, 0.05, 0.12, 0.25, 0.23, "BOSSBase\n1,050 / 1,050 recoveries\n98.74% mean accuracy", "#eef2ff", 11, "bold")
     box(ax, 0.375, 0.12, 0.25, 0.23, "Caltech-101 RGB\n525 / 525 recoveries\n98.59% mean accuracy", "#ecfeff", 11, "bold")
-    box(ax, 0.70, 0.12, 0.25, 0.23, "Selection CNN\nAUC 0.515 / 0.530\n95% CIs include 0.5", "#f0fdf4", 11, "bold")
+    box(
+        ax,
+        0.70,
+        0.12,
+        0.25,
+        0.23,
+        "Selection leakage audit\nCaltech seed 47: AUC 0.533\n95% CI [0.517, 0.548]",
+        "#f0fdf4",
+        10.5,
+        "bold",
+    )
     ax.text(
         0.5,
         0.045,
-        "Measured scope: 5 seeds per dataset, 21 clean/calibration/holdout conditions, 3-4 operational bits per cover",
+        "Measured scope: 5 seeds per dataset, 21 conditions; net rate 0.184 to 1.213 bits/cover across tested payload sizes",
         ha="center",
         fontsize=10,
         color="#475569",
