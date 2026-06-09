@@ -229,8 +229,8 @@ Holidays, VOC, and ImageNet, respectively.
 \method shares the stability-aware objective but differs in scope. Its
 primary unit of evaluation is the recovered protected message after
 classification, error correction, and authenticated decryption. It also
-selects the codebook size from finite-bucket feasibility. The numerical
-A direct numerical comparison with \cite{guo2026capacity} is not attempted
+selects the codebook size from finite-bucket feasibility. A direct numerical
+comparison with \cite{guo2026capacity} is not attempted
 because the datasets, attack sets, and protocol overheads differ; the cited
 results serve as qualitative context only.
 
@@ -478,8 +478,9 @@ Let $N$ be the index size, $A=|\mathcal{T}_{\mathrm{cal}}|$, $d$ the
 descriptor dimension, $K$ the alphabet size, $L$ the number of transmitted
 covers, and $F_\theta$ the cost of one encoder inference. Clean embedding
 costs $O(NF_\theta)$. Multi-attack qualification is the dominant offline term,
-$O(ANF_\theta+ANKd)$ when label assignment is written explicitly; the scalar
-quantile implementation reduces assignment to $O(AN\log K)$ after projection.
+$O(ANF_\theta+ANKd)$ when label assignment is written explicitly. The scalar
+quantile implementation reduces label assignment after projection to
+$O(AN\log K)$ through binary search over the ordered boundaries.
 PCA fitting costs $O(Nd^2)$ for $N\ge d$, and sorting the projected values
 costs $O(N\log N)$. Online cover retrieval and keyed mapping are $O(L)$ with
 pre-built buckets, while decoding adds the Reed--Solomon block cost. Storage
@@ -575,9 +576,9 @@ For each seed in $\{11,29,47,71,101\}$, a deterministic permutation provides
 The encoder is trained for five epochs with AdamW, batch size 64, learning
 rate $10^{-3}$, and weight decay $10^{-5}$. Ten independently generated
 eight-byte plaintexts are evaluated per seed. Reed--Solomon coding uses 128
-parity bytes and symbol repetition one. Repetition one avoids multiplying the
-348--464-cover sequences; robustness is instead assigned to byte-level
-Reed--Solomon correction. For longer payloads, fixed framing and parity
+parity bytes. Symbol repetition is set to one; redundancy is instead provided
+by byte-level Reed--Solomon parity, which avoids multiplying the required
+348--464-cover sequences. For longer payloads, fixed framing and parity
 overheads would be amortised, but that regime is not inferred here. This
 yields 50 protected messages and 1,050 message-condition trials.
 
