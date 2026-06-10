@@ -1,69 +1,100 @@
-\documentclass[11pt]{article}
-\usepackage[a4paper,margin=1.8cm]{geometry}
+\documentclass[11pt,letterpaper]{article}
+\usepackage[letterpaper,margin=1.8cm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{newtxtext}
-\usepackage{parskip}
+\usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
 \pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1.5pt}
+\linespread{0.94}
+\setlist[itemize]{leftmargin=5mm,itemsep=0pt,topsep=1pt,parsep=0pt}
+\definecolor{sectionblue}{RGB}{42,112,167}
+\newcommand{\clhead}[1]{\textcolor{sectionblue}{\textbf{#1}}}
 
 \begin{document}
 
 \begin{flushright}
-9 June 2026
+\textbf{St\'ephane Ga\"el R. Ekodeck}\\
+Department of Computer Science, LIRIMA, Team GRIMCAPE\\
+University of Yaound\'e I, P.O. Box 812, Yaound\'e, Cameroon\\
+\href{mailto:stephane-gael.ekodeck@facsciences-uy1.cm}
+{stephane-gael.ekodeck@facsciences-uy1.cm}\\
+June 10, 2026
 \end{flushright}
 
-Editor-in-Chief\\
-\textit{Computers \& Security}
+The Editor-in-Chief\\
+\textit{Computers \& Security}\\
+Elsevier
 
-\textbf{Re: Submission of ``NARCIS: Authenticated Neural Coverless Image
-Signaling with Attack-Qualified Codebooks and Error Correction''}
+Dear Editor-in-Chief,
 
-Dear Editor,
+We respectfully submit our manuscript, \textbf{``NARCIS: Authenticated Neural
+Coverless Image Signaling with Attack-Qualified Codebooks and Error
+Correction,''} for consideration as a Research Paper in
+\textit{Computers \& Security}.
 
-Please consider the enclosed manuscript for publication as a Research Paper
-in \textit{Computers \& Security}.
+\clhead{Scope Fitness Assessment.}
+NARCIS addresses secure multimedia communication through unchanged natural
+images. It combines an invariant descriptor, balanced codebooks,
+attack-qualified selection, finite-index feasibility, AES-GCM protection,
+replay rejection, and Reed--Solomon correction. It therefore concerns
+information hiding, multimedia security, active-channel robustness, and
+authenticated communication.
 
-The manuscript addresses an operational limitation of selection-based
-coverless communication. A stable image descriptor alone does not ensure that
-a finite image index can realise every protected message symbol, survive
-channel processing, and recover an authenticated plaintext. NARCIS integrates
-a self-supervised image descriptor, balanced quantile codebooks,
-multi-attack cover qualification, keyed symbol assignment, AES-GCM protection,
-replay rejection, and Reed--Solomon correction into one end-to-end protocol
-that transmits unchanged natural images.
+\begin{itemize}
+\item \textbf{Security:} success requires exact authenticated plaintext
+recovery, rather than descriptor accuracy alone.
+\item \textbf{Operation:} an alphabet is accepted only when every coded symbol
+has sufficient qualified covers in the finite index.
+\item \textbf{Evaluation:} calibration and holdout attacks are separated;
+selection leakage is tested with statistical, residual, and CNN detectors.
+\end{itemize}
 
-Evaluation uses five deterministic partitions of BOSSBase and five of
-Caltech-101, covering $512\times512$ grayscale photographs and
-variable-resolution RGB images. All 1,575 message-condition trials recovered
-the authenticated plaintext. Mean symbol accuracy was 98.74\% on BOSSBase and
-98.59\% on Caltech-101. A learned selection CNN produced mean AUCs of 0.515
-and 0.530, with both 95\% confidence intervals including chance performance.
-Removing attack-based cover qualification in a controlled ablation reduced
-complete-message success from 100\% to 43.65\%.
+\clhead{Scientific Contribution and Evidence.}
+Across five deterministic partitions each of BOSSBase and RGB Caltech-101,
+all 1,575 clean, calibration, and holdout message-condition trials recovered
+the authenticated plaintext. Mean symbol accuracies were 98.74\% and 98.59\%.
+A matched BOSSBase ablation fell from 210/210 to 142/210 recoveries without
+qualification. At a 16-symbol operating point, net rate increased from 0.184
+to 1.213 bits/cover for 8- to 128-byte payloads. Calibration-locked projection
+selection increased the minimum stable bucket from 92 to 161 on the evaluated
+BOSSBase partition. The paper also reports a weak Caltech-101 selection signal
+(repeated CNN AUC 0.533, 95\% CI [0.517, 0.548]) and makes no general
+undetectability claim.
 
-The manuscript does not claim the highest published nominal capacity or
-universal resistance to steganalysis. It positions the contribution as a
-security-aware coverless protocol with measured robust operating points,
-explicit finite-index feasibility, authenticated recovery, and reproducible
-failure criteria. We believe this focus is aligned with the journal's scope in
-secure multimedia communication, active-channel robustness, and empirical
-security evaluation.
+\clhead{Positioning.}
+Unlike work centred on nominal hash length or single-image mapping capacity,
+NARCIS tests whether a complete protected message can be realised by a finite
+index and recovered after declared distortions. Its position is protocol
+completeness and verified operating-point selection, not universally maximal
+capacity.
 
-The manuscript is original, is not under consideration elsewhere, and has
-been approved by all authors. The authors declare no competing interests. The
-public project archive contains source code, deterministic seeds,
-consolidated results, plotting scripts, tests, and attack definitions.
-Datasets and trained checkpoints are not redistributed.
+\clhead{Mandatory Author Declarations.}
+\begin{itemize}
+\item \textbf{Originality/exclusivity:} The manuscript is original, unpublished,
+and not under consideration elsewhere.
+\item \textbf{Author approval:} All authors approved the manuscript, order,
+contributions, and submission.
+\item \textbf{Interests/funding:} No competing interests or external funding
+are declared.
+\item \textbf{Ethics/reproducibility:} No humans, animals, or personal data are
+involved. Code, seeds, evidence, tests, and sources are available at
+\href{https://github.com/EkodeckStephane/NARCIS}
+{github.com/EkodeckStephane/NARCIS}.
+\end{itemize}
 
-Thank you for considering this submission.
+The manuscript fits the journal's readership at the intersection of
+information security, robust image communication, and reproducible protocol
+evaluation. Thank you for considering this submission.
 
-Sincerely,
+Yours sincerely,
 
-\textbf{St\'ephane Ga\"el R. Ekodeck}\\
-Corresponding author\\
-University of Yaound\'e I, LIRIMA, Team GRIMCAPE\\
-\href{mailto:stephane-gael.ekodeck@facsciences-uy1.cm}
-{stephane-gael.ekodeck@facsciences-uy1.cm}
+\textbf{St\'ephane Ga\"el R. Ekodeck} (Corresponding Author)\\
+ORCID: 0000-0002-8094-8832\\
+\textbf{Co-authors:} Vivien Beyala Kamgang; Serge Alain Eb\'el\'e; Julius
+Marcellin Nkenlifack.
 
 \end{document}
