@@ -161,9 +161,10 @@ channel errors, payload confidentiality, metadata integrity, and replay.
 This paper studies the following operational question:
 
 \begin{quote}
-Given a finite shared image index and a declared channel model, what is the
-largest symbol alphabet that can carry a protected payload using unchanged
-covers and still recover the complete plaintext?
+Given a finite shared image index, a fixed descriptor and codebook
+construction, a specified single-transformation channel, and a protected
+payload demand, what is the largest empirically feasible symbol alphabet for
+complete plaintext recovery using unchanged covers?
 \end{quote}
 
 The proposed protocol, Neural Adaptive Robust Coverless Image Signaling
@@ -173,7 +174,9 @@ channel-invariant descriptor, partitions its principal direction with
 quantile boundaries, qualifies covers against a calibration attack set, and
 checks the multiplicity required by the protected message before transmission.
 Cryptographic and coding mechanisms are then integrated into the same
-end-to-end path.
+end-to-end path. The answer is conditional on the evaluated index partition,
+descriptor, candidate codebooks, protected envelopes, and declared
+transformation sets; it is not a corpus-independent capacity statement.
 
 The contributions are:
 
@@ -344,11 +347,16 @@ $y_i\in\{0,\ldots,K-1\}$ is its codebook label. The sender transmits a
 sequence of unchanged images. The receiver applies the same descriptor and
 codebook to recover labels and then decodes the protected payload.
 
-The channel may apply JPEG compression, additive Gaussian noise, Gaussian
-blur, resizing, central cropping, or small rotations. The adversary knows the
-algorithm and may observe, alter, reorder, or replay transmissions, but does
-not know the shared keys and does not compromise the local index. Traffic
-analysis and semantic inference from image content remain outside the
+For each evaluated transmission, the channel applies at most one
+transformation from the specified set: JPEG compression, additive Gaussian
+noise, Gaussian blur, resizing, central cropping, or a small rotation. Attack
+compositions, repeated transformations, and adaptive multi-stage channels are
+not included in the present model. Calibration transformations and their
+parameters are available during index qualification; holdout strengths are
+excluded from qualification and used only for evaluation. The adversary knows
+the algorithm and may observe, alter, reorder, or replay transmissions, but
+does not know the shared keys and does not compromise the local index.
+Traffic analysis and semantic inference from image content remain outside the
 cryptographic claim.
 
 The protocol targets:
@@ -551,9 +559,16 @@ d_k(c)\leq a_k,\qquad
 \label{eq:feasibility}
 \end{equation}
 Candidate sizes are evaluated from the largest to the smallest. The selected
-operating point is the largest $K$ satisfying Eq.~\eqref{eq:feasibility}.
-This criterion distinguishes nominal symbol capacity $\log_2K$ from the net
-payload rate after encryption, framing, and error correction.
+operating point for a partition is the largest $K$ satisfying
+Eq.~\eqref{eq:feasibility} for every protected envelope generated before
+channel evaluation for that partition. This single partition-level value is
+then fixed for all messages and all 21 channel conditions. No message-specific
+or attack-specific reselection is performed. The experiment therefore
+establishes feasibility for the evaluated envelope set
+$\mathcal{C}_{\mathrm{eval}}$; it does not guarantee every possible message
+up to a nominal length. This criterion distinguishes nominal symbol capacity
+$\log_2K$ from the net payload rate after encryption, framing, and error
+correction.
 
 \subsection{Computational complexity}
 
@@ -633,7 +648,7 @@ Algorithm~\ref{alg:narcis} summarises transmission and recovery.
 \KwOut{Recovered plaintext or failure}
 Encrypt $m$ with sequence-bound AES-GCM\;
 Frame the ciphertext and apply Reed--Solomon coding\;
-Select the largest feasible codebook $K$\;
+Use the partition-level codebook $K$ selected before channel evaluation\;
 Map coded symbols to labels with the keyed permutation\;
 Select one unused qualified cover for each required label\;
 Transmit the unchanged cover sequence and sealed metadata\;
@@ -674,7 +689,10 @@ by byte-level Reed--Solomon parity, which avoids multiplying the required
 8-, 32-, and 128-byte plaintexts with the implemented AES-GCM envelope,
 10-byte frame, and 128 parity symbols per Reed--Solomon block. The two
 principal evaluations comprise 75 protected messages and 1,575
-message-condition trials.
+message-condition trials. For each partition, all protected envelopes are
+generated before channel evaluation and jointly determine one feasible
+operating point. That value is held constant across the clean channel, the
+12 calibration conditions, and the eight holdout strengths.
 
 CIFAR-100 \cite{krizhevsky2009cifar} is retained only for the controlled
 qualification ablation and the matched local-descriptor comparison reported
@@ -688,6 +706,8 @@ Eq.~\eqref{eq:stable}. Eight holdout strengths are used only at evaluation:
 Gaussian noise with standard deviations 9 and 15; blur radii 1.2 and 1.8;
 crop fractions 0.08 and 0.12; and rotations of $5^\circ$ and $9^\circ$.
 Together with the clean channel, this gives 21 conditions.
+Each condition applies one transformation independently to the clean cover;
+the protocol is not evaluated under composed or sequential distortions.
 
 Two metrics are reported:
 \begin{enumerate}
