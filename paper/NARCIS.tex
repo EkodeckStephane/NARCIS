@@ -1081,12 +1081,13 @@ principal corpus and the smaller controlled experiment identifies
 qualification as a necessary robustness component rather than treating
 invariant training alone as sufficient.
 
-\begin{table*}[t]
+\begin{table}[t]
 \centering
 \caption{BOSSBase seed-11 matched ablation: complete-message success over
   10 messages per condition. ``Qualif.'' = PC1-qualified (\method standard);
   ``No qualif.'' = PC1 without qualification. (H) = holdout strength.}
 \label{tab:ablation_boss}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lccc}
 \toprule
 Condition & Qualif. & No qualif. & Sym.\ acc.\ (no qual.)\\
@@ -1107,8 +1108,9 @@ Rotate~$9^\circ$~(H) & 10/10 & \textbf{0/10} & 0.666\\
 \midrule
 \textbf{Total} & \textbf{210/210} & \textbf{142/210 (67.6\%)} & ---\\
 \bottomrule
-\end{tabular}
-\end{table*}
+\end{tabular}%
+}
+\end{table}
 
 Under the same quantile partition, attack set, candidate sizes, and
 protected-message demand, neither the $16\times16$ DCT descriptor nor the
@@ -1166,7 +1168,6 @@ finite-index feasibility, attack-qualified selection, authenticated
 communication, replay control, and complete-message recovery under calibrated
 and holdout distortions.
 
-\FloatBarrier
 \section{Discussion}
 \label{sec:discussion}
 
