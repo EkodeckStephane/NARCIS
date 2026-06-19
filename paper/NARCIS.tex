@@ -1035,17 +1035,19 @@ symbol accuracy.
   bucket balance. The calibration-locked random direction achieves the
   highest minimum bucket.}
 \label{tab:projections}
-\small
+\footnotesize
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lllr}
 \toprule
 Direction & Expl.\ var. & Stable images & Min.\ bucket\\
 \midrule
-PC1  & 94.07\% & 2{,}823~(35.3\%) & 92\\
-PC2  & 5.19\%  & 2{,}823~(35.3\%) & 115\\
-Random (median of 32) & --- & 3{,}630~(45.4\%) & 101\\
-Random (best of 32)   & --- & 3{,}867~(48.3\%) & 161\\
+PC1                  & 94.07\% & 2{,}823~(35.3\%) &  92\\
+PC2                  &  5.19\% & 2{,}823~(35.3\%) & 115\\
+Random, med.\ of 32  & ---     & 3{,}630~(45.4\%) & 101\\
+Random, best of 32   & ---     & 3{,}867~(48.3\%) & 161\\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \begin{figure}[t]
@@ -1168,6 +1170,7 @@ finite-index feasibility, attack-qualified selection, authenticated
 communication, replay control, and complete-message recovery under calibrated
 and holdout distortions.
 
+\FloatBarrier
 \section{Discussion}
 \label{sec:discussion}
 
