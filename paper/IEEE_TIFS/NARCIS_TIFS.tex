@@ -750,7 +750,8 @@ and error correction.
 \centering
 \caption{Selected BOSSBase operating points on 8{,}000-image indices.}
 \label{tab:config_boss}
-\small
+\footnotesize
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{rrrrrr}
 \toprule
 Seed & $K$ & bpc & Stable & Min.\ bucket & Median bucket\\
@@ -761,7 +762,8 @@ Seed & $K$ & bpc & Stable & Min.\ bucket & Median bucket\\
 71  & 16 & 4 & 2{,}687 (33.6\%) & 80  & 155\\
 101 & 16 & 4 & 2{,}846 (35.6\%) & 99  & 146\\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \begin{table}[t]
@@ -769,7 +771,8 @@ Seed & $K$ & bpc & Stable & Min.\ bucket & Median bucket\\
 \caption{Selected Caltech-101 operating points on 7{,}000-image RGB
   indices. All five partitions selected $K{=}16$.}
 \label{tab:config_cal}
-\small
+\footnotesize
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{rrrrr}
 \toprule
 Seed & Stable & Min.\ bucket & Median bucket & Max.\ bucket\\
@@ -780,7 +783,8 @@ Seed & Stable & Min.\ bucket & Median bucket & Max.\ bucket\\
 71  & 2{,}289 (32.7\%) & 45 & 110 & 284\\
 101 & 1{,}895 (27.1\%) & 35 & 89  & 214\\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \subsection{End-to-end robustness}
@@ -842,17 +846,19 @@ higher efficiency under identical cryptographic and coding settings.
   AES-GCM overhead: 12-byte nonce + 16-byte tag. Framing: 10~bytes.
   Two RS blocks are required for 128-byte payloads.}
 \label{tab:scalability}
-\small
+\footnotesize
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{rrrrrr}
 \toprule
 Payload & AES-GCM & RS blocks & Coded & Covers & Net bpc\\
-(bytes) & (bytes) & $\times$128-B parity & (bytes) & required &\\
+(bytes) & (bytes) & ($\times$128 parity) & (bytes) & required &\\
 \midrule
-8  & 36 & 1 $\times$ 128 & 174 & 348  & 0.184\\
-32 & 60 & 1 $\times$ 128 & 198 & 396  & 0.646\\
-128 & 156 & 2 $\times$ 128 & 422 & 844 & 1.213\\
+8   & 36  & 1 & 174 & 348 & 0.184\\
+32  & 60  & 1 & 198 & 396 & 0.646\\
+128 & 156 & 2 & 422 & 844 & 1.213\\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \begin{figure}[t]
@@ -890,23 +896,24 @@ confidence intervals over five partitions for each detector and dataset.
 \begin{table}[t]
 \centering
 \caption{Selection-detection AUC (mean and 95\% Student-$t$ CI over
-  five partitions).}
+  five partitions). Intervals excluding 0.5 indicate a measurable shift.}
 \label{tab:detect}
-\small
-\begin{tabular}{llll}
+\footnotesize
+\begin{tabular}{lll}
 \toprule
-Dataset & Global logistic & Residual ExtraTrees & Selection CNN\\
+Detector & BOSSBase & Caltech-101\\
 \midrule
-BOSSBase   & 0.518 [0.489, 0.547] & 0.514 [0.486, 0.543] & 0.515 [0.463, 0.566]\\
-Caltech-101 & 0.531 [0.504, 0.557] & 0.533 [0.504, 0.562] & 0.530 [0.481, 0.579]\\
+Global logistic     & 0.518 [0.489, 0.547] & 0.531 [0.504, 0.557]\\
+Residual ExtraTrees & 0.514 [0.486, 0.543] & 0.533 [0.504, 0.562]\\
+Selection CNN       & 0.515 [0.463, 0.566] & 0.530 [0.481, 0.579]\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-On BOSSBase, all three detector confidence intervals include 0.5.
-On Caltech-101, the two classical detectors identify a small
-dataset-specific selection shift (intervals exclude 0.5). The CNN
-interval is wider and includes 0.5 over five partitions.
+On BOSSBase, all three confidence intervals include 0.5. On
+Caltech-101, the two classical detectors show a small dataset-specific
+selection shift (intervals exclude 0.5); the CNN five-partition
+interval is wider and includes 0.5.
 
 To assess whether the CNN result is stable on the most sensitive
 partition, 20 independent training runs were performed on Caltech-101
@@ -979,17 +986,19 @@ fraction for all evaluated directions.
   random direction (best of 32 trials) achieves the highest minimum
   bucket.}
 \label{tab:projections}
-\small
+\footnotesize
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lllr}
 \toprule
-Direction & Expl.\ variance & Stable images & Min.\ bucket\\
+Direction & Expl.\ var. & Stable images & Min.\ bucket\\
 \midrule
-PC1  & 94.07\% & 2{,}823 (35.3\%) & 92\\
-PC2  & 5.19\%  & 2{,}823 (35.3\%) & 115\\
-Random (median of 32) & --- & 3{,}630 (45.4\%) & 101\\
-Random (best of 32)   & --- & 3{,}867 (48.3\%) & 161\\
+PC1                   & 94.07\% & 2{,}823 (35.3\%) &  92\\
+PC2                   &  5.19\% & 2{,}823 (35.3\%) & 115\\
+Random, median of 32  & ---     & 3{,}630 (45.4\%) & 101\\
+Random, best of 32    & ---     & 3{,}867 (48.3\%) & 161\\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \begin{figure}[t]
@@ -1030,36 +1039,35 @@ invariance training alone is insufficient: qualification is the
 dominant robustness mechanism for distortions with sharp spatial
 structure (crops, large rotations).
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
-\caption{BOSSBase seed-11 matched ablation: complete-message success
-  over 10 messages per condition (21 conditions, 210 trials total).
-  ``Qualif.'' = pc1-qualified (\method); ``No qualif.'' =
-  pc1-no-qualification.}
+\caption{BOSSBase seed-11 matched ablation: complete-message success over 10 messages
+  per condition (21 conditions, 210 trials total). ``Qualif.''~=~pc1-qualified
+  (\method standard); ``No qualif.''~=~pc1 without qualification. (H)~=~holdout strength.}
 \label{tab:ablation_boss}
 \small
-\begin{tabular}{lllll}
+\begin{tabular}{lccr}
 \toprule
-Condition & Qualif. & No qualif. & Symbol acc.\ (no qual.)\\
+Condition & Qualif. & No qualif. & Mean sym.\ acc.\ (no qual.)\\
 \midrule
-Clean & 10/10 & 10/10 & 1.000\\
-JPEG 80, 50 & 10/10 & 10/10 & $>$0.993\\
-Gaussian 5, 12 & 10/10 & 10/10 & 0.926--0.930\\
-Gaussian 9 (H), 15 (H) & 10/10 & 10/10 & 0.925--0.926\\
-Blur 0.8, 1.5 & 10/10 & 10/10 & 0.872--0.950\\
-Blur 1.2 (H), 1.8 (H) & 10/10 & 10/10 & 0.847--0.904\\
-Resize 0.75, 0.50 & 10/10 & 10/10 & 0.936--0.959\\
-Crop 5\%, 10\% & 10/10 & \textbf{0/10} & 0.430--0.627\\
-Crop 8\% (H), 12\% (H) & 10/10 & \textbf{0/10} & 0.381--0.524\\
-Rotate $3^\circ$ & 10/10 & 10/10 & 0.887\\
-Rotate $7^\circ$ & 10/10 & \textbf{0/10} & 0.719\\
-Rotate $5^\circ$ (H) & 10/10 & \textbf{2/10} & 0.788\\
-Rotate $9^\circ$ (H) & 10/10 & \textbf{0/10} & 0.666\\
+Clean                      & 10/10 & 10/10              & 1.000 \\
+JPEG 80, 50                & 10/10 & 10/10              & $>$0.993 \\
+Gaussian $\sigma$5, 12     & 10/10 & 10/10              & 0.926--0.930 \\
+Gaussian $\sigma$9~(H), 15~(H) & 10/10 & 10/10         & 0.925--0.926 \\
+Blur 0.8, 1.5              & 10/10 & 10/10              & 0.872--0.950 \\
+Blur 1.2~(H), 1.8~(H)     & 10/10 & 10/10              & 0.847--0.904 \\
+Resize 0.75, 0.50          & 10/10 & 10/10              & 0.936--0.959 \\
+Crop 5\%, 10\%             & 10/10 & \textbf{0/10}      & 0.430--0.627 \\
+Crop 8\%~(H), 12\%~(H)    & 10/10 & \textbf{0/10}      & 0.381--0.524 \\
+Rotate $3^\circ$           & 10/10 & 10/10              & 0.887 \\
+Rotate $7^\circ$           & 10/10 & \textbf{0/10}      & 0.719 \\
+Rotate $5^\circ$~(H)       & 10/10 & \textbf{2/10}      & 0.788 \\
+Rotate $9^\circ$~(H)       & 10/10 & \textbf{0/10}      & 0.666 \\
 \midrule
-\textbf{Total} & \textbf{210/210} & \textbf{142/210 (67.6\%)} & ---\\
+\textbf{Total}             & \textbf{210/210} & \textbf{142/210 (67.6\%)} & --- \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \subsection{Position relative to published methods}
 
