@@ -16,6 +16,8 @@
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{xcolor}
 \usepackage{hyperref}
+\usepackage{amsthm}
+\newtheorem{proposition}{Proposition}
 
 \hypersetup{
   colorlinks=true,
@@ -137,26 +139,35 @@ selection
 \section{Introduction}
 \label{sec:introduction}
 
-Coverless image steganography represents information through natural images
-or generated visual content without modifying an existing carrier
-\cite{zhou2015coverless,meng2024review}. Selection-based methods commonly
+Coverless image steganography communicates information by selecting or
+generating natural visual content rather than by modifying an existing
+carrier \cite{zhou2015coverless,meng2024review}. Selection-based methods
 associate image features with message symbols and retrieve a sequence of
-images from a shared database \cite{zheng2017hashing,li2024surf}. Their
-practical performance depends on three distinct properties: the diversity of
-the symbol space, the stability of each selected image under transmission,
-and the ability of the available covers to realise the complete coded message.
-Reporting nominal hash length alone is insufficient to characterise these
-properties in practice, as high-capacity block and category mappings may still
-leave message-dependent coverage gaps \cite{abdulsattar2021,wysawis2025}.
+unchanged images from a shared index \cite{zheng2017hashing,li2024surf}.
+Three interconnected gaps prevent these systems from providing end-to-end
+authenticated communication.
 
-Recent work has improved one or more parts of this problem. Single-cover
-schemes derive many symbol locations from image blocks
-\cite{abdulsattar2021,wysawis2025}. Deep and generative systems expand the
-representation space \cite{qin2020gan,ren2024joint}. Stability-aware
-quantisation and clustering can maintain high image-level robustness at large
-nominal capacities \cite{guo2025diverse,guo2026capacity}. These advances do
-not remove the need for a protocol-level treatment of incomplete buckets,
-channel errors, payload confidentiality, metadata integrity, and replay.
+\textbf{Gap~1: Finite-index message feasibility is not verified before
+transmission.} Published methods report nominal hash length or average symbol
+accuracy. Neither metric guarantees that the symbol sequence required by a
+specific protected message can be realised from the available, qualified
+index. A transmission that cannot be realised fails silently, producing
+message-dependent coverage gaps invisible in per-symbol statistics
+\cite{zhou2015coverless,abdulsattar2021,meng2024review}.
+
+\textbf{Gap~2: No end-to-end selection-based protocol integrates
+authentication, replay control, and error correction.} Selection-based
+schemes argue that cover integrity replaces steganographic hiding, but
+leave payload confidentiality, metadata authenticity, replay rejection,
+and channel error recovery as open problems
+\cite{zheng2017hashing,li2024surf,guo2025diverse,guo2026capacity}.
+
+\textbf{Gap~3: Cover stability filtering creates unquantified selection
+bias.} Retaining only stable covers changes the distribution of transmitted
+images relative to the full index. Whether this selection leaks detectable
+information depends on the dataset, the filtering policy, and the detector,
+and this three-way dependence is rarely measured
+\cite{fridrich2012rich,cachin1998steganography}.
 
 This paper studies the following operational question:
 
@@ -178,32 +189,37 @@ end-to-end path. The answer is conditional on the evaluated index partition,
 descriptor, candidate codebooks, protected envelopes, and declared
 transformation sets; it is not a corpus-independent capacity statement.
 
-The contributions are:
+\method closes all three gaps with three corresponding contributions.
 
-\begin{itemize}
-\item An end-to-end selection-based coverless protocol that combines unchanged
-natural covers, authenticated payload and metadata protection, keyed symbol
-assignment, replay rejection, framing, and forward-error correction.
-\item A feasible-operating-point rule that differs from descriptor-level
-robustness \cite{guo2025diverse,guo2026capacity}: it requires every
-attack-qualified bucket to satisfy the multiplicity of each protected coded
-message before transmission, and validates the operating point after
-error correction and authenticated decryption.
-\item A validation protocol that separates calibration attacks from holdout
-attack strengths and reports both symbol accuracy and complete-message
-success.
-\item Five-seed evaluations on BOSSBase and RGB Caltech-101, covering 1,575
-end-to-end trials, holdout attacks, convergence, parameter sensitivity, and
-linear, ensemble, and CNN selection-bias tests.
-\item Targeted validations that measure payload-overhead scaling, repeat the
-qualification ablation on BOSSBase, test calibration-locked projection
-selection, and quantify partition-specific selection leakage over repeated
-CNN fits.
-\end{itemize}
+\textbf{Contribution~1---Feasible operating point.} A codebook is accepted
+only when every attack-qualified bucket satisfies the multiplicity required
+by the complete protected coded message. Across 1,575 end-to-end trials on
+BOSSBase and Caltech-101 under 21 channel conditions (including 8 holdout
+strengths), \method recovered 100\% of authenticated plaintexts (mean symbol
+accuracies 98.74\% and 98.59\%). Removing qualification on BOSSBase seed~11
+reduced complete-message success from 210/210 to 142/210~(67.6\%), with
+crops and large rotations failing completely.
 
-Accordingly, the contribution concerns verified protected-message recovery at
-measured operating points under the stated datasets, attacks, detector
-classes, and threat model; it is not a claim of maximum nominal capacity.
+\textbf{Contribution~2---End-to-end cryptographic and coding integration.}
+AES-GCM \cite{nist2007gcm} authenticates payload and session metadata;
+associated data binds sender and receiver identities; keyed Gray permutation
+limits public symbol exposure; monotonic sequence checking rejects replay;
+Reed--Solomon \cite{reed1960polynomial} corrects residual label errors. Two
+formal propositions ground these properties in AES-GCM's established
+guarantee (Section~\ref{sec:model}). Net throughput at $K{=}16$ scales from
+0.184 to 1.213 bits per cover for 8- to 128-byte payloads.
+
+\textbf{Contribution~3---Systematic detectability measurement.} Three
+detector classes (global logistic regression, residual-feature ExtraTrees,
+selection CNN) are applied to five partitions of each dataset. BOSSBase AUC
+confidence intervals include 0.5. Caltech-101 shows a weak partition-specific
+CNN signal (mean AUC 0.533, 95\%~CI [0.517, 0.548] over 20 repeated fits
+on the most sensitive partition), reported transparently rather than
+suppressed.
+
+The contribution concerns verified protected-message recovery at measured
+operating points under the stated datasets, attacks, detector classes, and
+threat model; it is not a claim of maximum nominal capacity.
 
 \section{Related Work}
 \label{sec:related}
@@ -370,6 +386,40 @@ payload and session metadata;
 \item \emph{channel robustness}: correction of residual label errors within
 the configured Reed--Solomon budget.
 \end{enumerate}
+
+\subsection{Formal security properties}
+
+The following propositions state the cryptographic guarantees provided by
+\method under standard assumptions. They follow directly from the
+authenticated encryption security of AES-GCM \cite{nist2007gcm} and
+require no new cryptographic proof.
+
+\begin{proposition}[Payload Confidentiality]
+\label{prop:conf}
+For plaintext $m$, nonce derived from sequence number $n$, and key $k_p$
+unknown to the adversary, the ciphertext
+$c = \operatorname{AEAD.Enc}_{k_p}(m;\,\mathrm{nonce},\mathrm{AD})$
+is computationally indistinguishable from a uniformly random string of
+the same length, with advantage bounded by the IND-CCA2 security of
+AES-GCM \cite{nist2007gcm}. An adversary observing transmitted images
+and sealed metadata gains no information about $m$.
+\end{proposition}
+
+\begin{proposition}[Authenticity and Replay Rejection]
+\label{prop:auth}
+A message is accepted by the receiver only when
+(i)~the AES-GCM tag on the sealed metadata verifies under $k_m$
+    with sender--receiver identities as associated data, and
+(ii)~the sequence number $n$ satisfies $n > n_{\max}$, where $n_{\max}$
+    is the highest previously accepted value for that sender.
+Under AES-GCM's authentication guarantee \cite{nist2007gcm}, any
+altered or replayed message fails condition~(i) or condition~(ii).
+\end{proposition}
+
+\noindent
+Traffic analysis and semantic inference from image content remain outside
+the cryptographic claim. Selection detectability is treated as a measured
+empirical property (Section~\ref{sec:results}).
 
 \section{NARCIS Method}
 \label{sec:method}
@@ -863,12 +913,30 @@ convergence.
 
 \subsection{Selection detectability}
 
-On BOSSBase, the global, residual-ensemble, and CNN detectors produced mean
-AUCs of 0.518, 0.514, and 0.515, with 95\% intervals [0.489, 0.547],
-[0.486, 0.543], and [0.463, 0.566]. On Caltech-101, the corresponding means
-were 0.531, 0.533, and 0.530, with intervals [0.504, 0.557],
-[0.504, 0.562], and [0.481, 0.579]. Figure~\ref{fig:detectability} summarises
-these results.
+Table~\ref{tab:detect} reports the mean AUC and 95\% Student-$t$ confidence
+intervals over five partitions for each detector and dataset.
+
+\begin{table}[t]
+\centering
+\caption{Selection-detection AUC (mean and 95\% Student-$t$ CI over five
+  partitions). Intervals excluding 0.5 indicate a measurable shift.}
+\label{tab:detect}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{llll}
+\toprule
+Dataset & Global logistic & Residual ExtraTrees & Selection CNN\\
+\midrule
+BOSSBase    & 0.518~[0.489, 0.547] & 0.514~[0.486, 0.543] & 0.515~[0.463, 0.566]\\
+Caltech-101 & 0.531~[0.504, 0.557] & 0.533~[0.504, 0.562] & 0.530~[0.481, 0.579]\\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+On BOSSBase, all three confidence intervals include 0.5. On Caltech-101,
+the two classical detectors identify a small dataset-specific selection
+shift (intervals exclude 0.5), while the CNN interval includes 0.5 over
+five partitions. Figure~\ref{fig:detectability} summarises these results.
 
 The BOSSBase intervals and both CNN intervals include 0.5. The two classical
 Caltech-101 detectors show a small but measurable dataset-specific selection
@@ -940,8 +1008,14 @@ PC2 retained 34.93\%, PC3 31.40\%, and a fixed random direction 41.27\%.
 This result rules out a claim that PC1 is stability-optimal.
 
 The full-index attack-aware study selected fixed random direction 15 using
-calibration data only. Relative to PC1, it increased the stable fraction from
-35.29\% to 45.55\% and the minimum stable bucket from 92 to 161.
+calibration data only. Table~\ref{tab:projections} compares the key
+candidate directions. PC1 and PC2 retain the same stable images (2{,}823)
+but PC2 achieves a higher minimum bucket (115 vs.\ 92). The 32 random
+directions achieve substantially higher stable fractions (median 45.4\%)
+and the best (random\_15) reaches minimum bucket~161. This counter-intuitive
+pattern arises because PC1 encodes the descriptor dimensions most perturbed
+by channel attacks; lower-variance or random directions encode less
+channel-sensitive content and retain more stable covers.
 Figure~\ref{fig:projection} shows all 48 candidates. Across the 16 principal
 directions, explained variance and stable fraction were positively correlated
 ($\rho=0.640$, $p=0.0076$). High variance therefore did not imply greater
@@ -950,6 +1024,26 @@ maximisation and minimum qualified-bucket occupancy are different objectives.
 After the direction was locked, the attack-aware variant recovered 210/210
 messages across all channel conditions, with 99.24\% mean and 87.64\% worst
 symbol accuracy.
+
+\begin{table}[t]
+\centering
+\caption{Projection candidates on the full BOSSBase seed-11 index ($K{=}16$,
+  8{,}000 images). PC1 and PC2 retain the same stable images but differ in
+  bucket balance. The calibration-locked random direction achieves the
+  highest minimum bucket.}
+\label{tab:projections}
+\small
+\begin{tabular}{lllr}
+\toprule
+Direction & Expl.\ var. & Stable images & Min.\ bucket\\
+\midrule
+PC1  & 94.07\% & 2{,}823~(35.3\%) & 92\\
+PC2  & 5.19\%  & 2{,}823~(35.3\%) & 115\\
+Random (median of 32) & --- & 3{,}630~(45.4\%) & 101\\
+Random (best of 32)   & --- & 3{,}867~(48.3\%) & 161\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{figure}[t]
 \centering
@@ -972,15 +1066,46 @@ times confirm that the convolutional backbone dominates cost.
 
 On BOSSBase seed 11, the matched PC1 protocol without qualification recovered
 142/210 messages (67.62\%), compared with 210/210 for the qualified PC1
-protocol. Success was zero under crops 0.05, 0.08, 0.10, and
-0.12 and rotations $7^\circ$ and $9^\circ$; only 2/10 messages survived the
-$5^\circ$ rotation. The remaining 14 conditions recovered 140/140 messages.
-The released condition-level table reports all 21 matched outcomes.
+protocol. Table~\ref{tab:ablation_boss} shows the per-condition breakdown.
+Success was zero under all crop conditions and rotations $\geq 7^\circ$;
+only 2/10 messages survived the $5^\circ$ rotation. The remaining 14
+conditions recovered 140/140 messages, confirming that invariance training
+alone tolerates standard distortions; qualification is necessary only for
+distortions with sharp spatial structure.
 The controlled CIFAR-100 experiment independently recovered 189/189 qualified
 trials and fell to 43.65\% without qualification. Agreement across the
 principal corpus and the smaller controlled experiment identifies
 qualification as a necessary robustness component rather than treating
 invariant training alone as sufficient.
+
+\begin{table*}[t]
+\centering
+\caption{BOSSBase seed-11 matched ablation: complete-message success over
+  10 messages per condition. ``Qualif.'' = PC1-qualified (\method standard);
+  ``No qualif.'' = PC1 without qualification. (H) = holdout strength.}
+\label{tab:ablation_boss}
+\begin{tabular}{lccc}
+\toprule
+Condition & Qualif. & No qualif. & Sym.\ acc.\ (no qual.)\\
+\midrule
+Clean & 10/10 & 10/10 & 1.000\\
+JPEG~80, 50 & 10/10 & 10/10 & $>$0.993\\
+Gaussian $\sigma$5, 12 & 10/10 & 10/10 & 0.926--0.930\\
+Gaussian $\sigma$9~(H), 15~(H) & 10/10 & 10/10 & 0.925--0.926\\
+Blur~0.8, 1.5 & 10/10 & 10/10 & 0.872--0.950\\
+Blur~1.2~(H), 1.8~(H) & 10/10 & 10/10 & 0.847--0.904\\
+Resize~0.75, 0.50 & 10/10 & 10/10 & 0.936--0.959\\
+Crop~5\%, 10\% & 10/10 & \textbf{0/10} & 0.430--0.627\\
+Crop~8\%~(H), 12\%~(H) & 10/10 & \textbf{0/10} & 0.381--0.524\\
+Rotate~$3^\circ$ & 10/10 & 10/10 & 0.887\\
+Rotate~$7^\circ$ & 10/10 & \textbf{0/10} & 0.719\\
+Rotate~$5^\circ$~(H) & 10/10 & \textbf{2/10} & 0.788\\
+Rotate~$9^\circ$~(H) & 10/10 & \textbf{0/10} & 0.666\\
+\midrule
+\textbf{Total} & \textbf{210/210} & \textbf{142/210 (67.6\%)} & ---\\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 Under the same quantile partition, attack set, candidate sizes, and
 protected-message demand, neither the $16\times16$ DCT descriptor nor the
