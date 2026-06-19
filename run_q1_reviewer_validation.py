@@ -122,9 +122,9 @@ def payload_scalability() -> None:
     ax.grid(alpha=0.25)
     ax.legend(title="Codebook")
     fig.tight_layout()
-    fig.savefig(FIGURES / "payload_scalability.pdf", bbox_inches="tight")
+    fig.savefig(FIGURES / "Fig_03.pdf", bbox_inches="tight")
     fig.savefig(
-        FIGURES / "payload_scalability.png",
+        FIGURES / "Fig_03.png",
         dpi=300,
         bbox_inches="tight",
     )
@@ -195,9 +195,9 @@ def summary_figures() -> None:
     ax.grid(alpha=0.25)
     ax.legend()
     fig.tight_layout()
-    fig.savefig(FIGURES / "boss_projection_selection.pdf", bbox_inches="tight")
+    fig.savefig(FIGURES / "Fig_09.pdf", bbox_inches="tight")
     fig.savefig(
-        FIGURES / "boss_projection_selection.png",
+        FIGURES / "Fig_09.png",
         dpi=300,
         bbox_inches="tight",
     )
@@ -240,11 +240,11 @@ def summary_figures() -> None:
     ax.legend()
     fig.tight_layout()
     fig.savefig(
-        FIGURES / "caltech_seed47_cnn_repetitions.pdf",
+        FIGURES / "Fig_08.pdf",
         bbox_inches="tight",
     )
     fig.savefig(
-        FIGURES / "caltech_seed47_cnn_repetitions.png",
+        FIGURES / "Fig_08.png",
         dpi=300,
         bbox_inches="tight",
     )

@@ -56,6 +56,9 @@ paper/*.bbl
 paper/*.blg
 paper/*.log
 paper/*.out
+paper/*.synctex.gz
+paper/figures/*.aux
+paper/figures/*.log
 paper/rendered/
 paper/thumbnails/
 paper/*_preview.png
@@ -64,6 +67,7 @@ paper/rapport_fact_check_narcis.md
 paper/figures/attack_symbol_accuracy.*
 paper/figures/capacity_stability.*
 paper/figures/stability_ablation.*
+tmp/
 
 # OS/editor files
 .DS_Store

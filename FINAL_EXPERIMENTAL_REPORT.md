@@ -63,4 +63,4 @@ Consolidated evidence is stored in:
 - `paper/figures/`.
 
 The graphical abstract is available as
-`paper/figures/graphical_abstract.pdf` and `.png`.
+`paper/Graphical_Abstract.tex`, `.pdf`, and `.png`.

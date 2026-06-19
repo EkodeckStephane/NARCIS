@@ -1,0 +1,7 @@
+Highlights
+
+• Attack-qualified codebooks verify finite-index cover availability.
+• Unchanged images carry authenticated and error-corrected messages.
+• 1,575/1,575 authenticated recoveries span BOSSBase and Caltech-101.
+• Net rate rises from 0.184 to 1.213 bits/cover with payload size.
+• Selection leakage is measured and reported by dataset and detector.

@@ -1,0 +1,123 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[letterpaper,margin=1.6cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\linespread{0.96}
+\setlist[itemize]{leftmargin=5mm,itemsep=0pt,topsep=1pt,parsep=0pt}
+\definecolor{ieeeblue}{RGB}{0,84,166}
+\newcommand{\clhead}[1]{\textcolor{ieeeblue}{\textbf{#1}}}
+
+\begin{document}
+
+\begin{flushright}
+\textbf{St\'ephane Ga\"el R. Ekodeck}\\
+Department of Computer Science, LIRIMA, Team GRIMCAPE\\
+University of Yaound\'e I, P.O.\ Box 812, Yaound\'e, Cameroon\\
+\href{mailto:stephane-gael.ekodeck@facsciences-uy1.cm}%
+{stephane-gael.ekodeck@facsciences-uy1.cm}\\
+June 2026
+\end{flushright}
+
+The Editor-in-Chief\\
+\textit{IEEE Transactions on Information Forensics and Security}\\
+IEEE Signal Processing Society\\
+
+Dear Editor-in-Chief,
+
+We respectfully submit our manuscript, \textbf{``NARCIS: Authenticated
+Neural Coverless Image Signaling with Attack-Qualified Codebooks and
+Error Correction,''} for consideration as an original research article in
+\textit{IEEE Transactions on Information Forensics and Security} (TIFS).
+
+\clhead{Scope alignment.}
+NARCIS is an end-to-end security protocol that transmits authenticated
+messages by selecting unchanged natural images from a shared index.
+Its core contributions are at the intersection of information forensics
+and security: authenticated encryption of payload and metadata, formal
+security propositions grounded in AES-GCM's established properties,
+selection-bias measurement with three detector classes, and systematic
+evaluation of an attack-qualified finite-index communication system.
+These contributions fit squarely within TIFS's focus on cryptographic
+applications, multimedia security, and forensics.
+
+\clhead{Key technical contributions.}
+\begin{itemize}
+\item \textbf{Feasible operating point (Contribution 1).} A codebook is
+  accepted only when every attack-qualified bucket can satisfy the
+  multiplicity required by every protected coded message. The selected
+  alphabet is the largest satisfying this criterion. Over 1{,}575
+  end-to-end message-condition trials on BOSSBase~1.01 and Caltech-101,
+  NARCIS recovered 100\% of authenticated plaintexts under 21 channel
+  conditions including eight unseen holdout strengths.
+\item \textbf{End-to-end authenticated protocol (Contribution 2).}
+  AES-GCM~(NIST SP 800-38D) encrypts the payload; associated data binds
+  sender and receiver identities. A monotonic sequence counter rejects
+  replay. A keyed Gray permutation limits public symbol-to-label
+  correspondence. Reed--Solomon forward error correction handles residual
+  label errors. Two formal propositions (Confidentiality;
+  Authenticity+Freshness) ground these properties in AES-GCM's
+  IND-CCA2 and authentication guarantee. Net throughput at a 16-symbol
+  operating point scales from 0.184 to 1.213 bits per cover for
+  8- to 128-byte payloads.
+\item \textbf{Systematic detectability and ablation (Contribution 3).}
+  Three detector classes (global logistic regression, residual-feature
+  ExtraTrees, selection CNN) are evaluated on five partitions of each
+  dataset. BOSSBase AUCs include chance. Caltech-101 shows a weak but
+  reproducible partition-specific CNN signal (20-repeat mean AUC~0.533,
+  95\%~CI [0.517, 0.548]), reported transparently. Removing attack
+  qualification reduces BOSSBase seed-11 complete-message success from
+  210/210 to 142/210~(67.6\%), with crop and large-rotation conditions
+  failing completely, demonstrating that the qualification filter is the
+  dominant robustness mechanism.
+\end{itemize}
+
+\clhead{Novelty and positioning.}
+Selection-based coverless systems have been evaluated at the
+descriptor level (average symbol accuracy, nominal capacity) but have
+not integrated cryptographic payload protection, replay control, or
+error correction into a single verifiable system. NARCIS introduces the
+\emph{feasible-codebook} criterion as the primary evaluation unit, closes
+this protocol gap, and provides matching detectability and ablation
+evidence. The paper explicitly positions itself relative to related
+methods (Abdulsattar~2021; Guo--Ping~2026; Ren--Wu~2024) without
+overstating numerical comparisons across different datasets and protocols.
+
+\clhead{Author declarations.}
+\begin{itemize}
+\item The manuscript is original, has not been published, and is not under
+  consideration elsewhere. It was previously desk-rejected by JISA
+  (Ms.\ No.\ JISAS-D-26-03622) for scope reasons; this submission has
+  been substantially revised and is not a transfer.
+\item All four authors approved the final manuscript and author order.
+  WYSAWIS (cited in related work) shares authors with this submission
+  and is identified explicitly in the paper; it is used as qualitative
+  context, not as an experimental baseline.
+\item No competing interests and no external funding.
+\item No human subjects, personal data, or animals are involved.
+  Implementation, fixed seeds, experimental results, and manuscript
+  sources are available at
+  \href{https://github.com/EkodeckStephane/NARCIS}%
+  {github.com/EkodeckStephane/NARCIS}.
+\end{itemize}
+
+We believe NARCIS will interest TIFS readers working on authenticated
+multimedia communication, selection forensics, and practical steganographic
+security systems. We welcome the opportunity to provide any additional
+information the Associate Editor may require.\\[4pt]
+
+Yours sincerely,\\[6pt]
+
+\textbf{St\'ephane Ga\"el R. Ekodeck} (Corresponding Author)\\
+ORCID: 0000-0002-8094-8832\\
+\textbf{Co-authors:} Vivien Beyala Kamgang (ORCID 0000-0002-3644-1866);
+Serge Alain Eb\'el\'e (ORCID 0000-0001-7036-7068);
+Julius Marcellin Nkenlifack (ORCID 0000-0003-3322-4687).
+
+\end{document}

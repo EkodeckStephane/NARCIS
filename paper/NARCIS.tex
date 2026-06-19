@@ -426,32 +426,7 @@ implementation.
 
 \begin{figure*}[t]
 \centering
-\resizebox{\textwidth}{!}{%
-\begin{tikzpicture}[
-  node distance=5mm,
-  layer/.style={draw, rounded corners, align=center, minimum height=12mm,
-    minimum width=24mm, fill=blue!5},
-  head/.style={draw, rounded corners, align=center, minimum height=12mm,
-    minimum width=21mm, fill=green!8},
-  arrow/.style={-{Latex[length=2mm]}, thick}
-]
-\node[layer] (input) {Gray/RGB\\$128\times128\times C$};
-\node[layer, right=of input] (b1) {Block 1\\$128\times128\times16$};
-\node[layer, right=of b1] (b2) {Block 2\\$64\times64\times32$};
-\node[layer, right=of b2] (b3) {Block 3\\$32\times32\times64$};
-\node[layer, right=of b3] (b4) {Block 4\\$16\times16\times96$};
-\node[head, right=of b4] (gap) {Global average\\pooling};
-\node[head, right=of gap] (proj) {Linear 128\\SiLU, linear 64};
-\node[head, right=of proj] (norm) {$\ell_2$ normalisation\\$z\in\mathbb{R}^{64}$};
-\draw[arrow] (input)--(b1);
-\draw[arrow] (b1)--node[above, font=\scriptsize]{stride 2}(b2);
-\draw[arrow] (b2)--node[above, font=\scriptsize]{stride 2}(b3);
-\draw[arrow] (b3)--node[above, font=\scriptsize]{stride 2}(b4);
-\draw[arrow] (b4)--(gap);
-\draw[arrow] (gap)--(proj);
-\draw[arrow] (proj)--(norm);
-\end{tikzpicture}%
-}
+\includegraphics[width=\textwidth]{figures/Fig_01.pdf}
 \caption{Descriptor encoder used in both principal evaluations, with $C=1$
 for BOSSBase and $C=3$ for Caltech-101. Each
 convolutional block contains two $3\times3$ convolution--batch
@@ -590,49 +565,7 @@ protected transmission and recovery.
 
 \begin{figure*}[t]
 \centering
-\resizebox{\textwidth}{!}{%
-\begin{tikzpicture}[
-  node distance=5mm and 7mm,
-  box/.style={draw, rounded corners, align=center, minimum height=9mm,
-    minimum width=25mm, fill=blue!5},
-  store/.style={draw, cylinder, shape border rotate=90, aspect=0.25,
-    align=center, minimum height=11mm, minimum width=22mm, fill=green!8},
-  arrow/.style={-{Latex[length=2mm]}, thick},
-  dashedarrow/.style={-{Latex[length=2mm]}, thick, dashed}
-]
-\node[box] (train) {Distortion-paired\\training images};
-\node[box, right=of train] (encoder) {Neural descriptor\\$f_\theta(x)$};
-\node[box, right=of encoder] (quantile) {Quantile codebook\\$q_K$};
-\node[box, right=of quantile] (qualify) {Multi-attack\\qualification};
-\node[store, right=of qualify] (index) {Qualified\\cover index};
-
-\node[box, below=13mm of train] (payload) {Plaintext and\\sequence number};
-\node[box, right=of payload] (aead) {AES-GCM, framing,\\Reed--Solomon};
-\node[box, right=of aead] (mapping) {Keyed Gray\\symbol mapping};
-\node[box, right=of mapping] (select) {Unique-cover\\selection};
-\node[box, right=of select] (channel) {Public image\\channel};
-
-\node[box, below=13mm of channel] (classify) {Descriptor and\\codebook labels};
-\node[box, left=of classify] (decode) {RS decoding and\\CRC verification};
-\node[box, left=of decode] (decrypt) {AES-GCM verification\\and decryption};
-\node[box, left=of decrypt] (output) {Recovered plaintext\\or explicit failure};
-
-\draw[arrow] (train) -- (encoder);
-\draw[arrow] (encoder) -- (quantile);
-\draw[arrow] (quantile) -- (qualify);
-\draw[arrow] (qualify) -- (index);
-\draw[arrow] (payload) -- (aead);
-\draw[arrow] (aead) -- (mapping);
-\draw[arrow] (mapping) -- (select);
-\draw[arrow] (index) |- (select);
-\draw[arrow] (select) -- (channel);
-\draw[arrow] (channel) -- (classify);
-\draw[arrow] (classify) -- (decode);
-\draw[arrow] (decode) -- (decrypt);
-\draw[arrow] (decrypt) -- (output);
-\draw[dashedarrow] (quantile) |- (classify);
-\end{tikzpicture}%
-}
+\includegraphics[width=\textwidth]{figures/Fig_02.pdf}
 \caption{NARCIS construction and transmission pipeline. Training and index
 qualification are performed before communication. The transmitted objects are
 unchanged images selected from the qualified index.}
@@ -842,7 +775,7 @@ Plaintext & RS blocks & Coded bytes & Covers ($K=16$) & Net b/cover\\
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/payload_scalability.pdf}
+\includegraphics[width=\linewidth]{figures/Fig_03.pdf}
 \caption{Net plaintext rate for the implemented protected frame. The
 three-bit and four-bit operating points correspond to $K=8$ and $K=16$.}
 \label{fig:payloadscale}
@@ -859,7 +792,7 @@ positions, and authenticated decryption recovered every plaintext.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/bossbase_attack_accuracy.pdf}
+\includegraphics[width=\linewidth]{figures/Fig_04.pdf}
 \caption{Mean BOSSBase symbol accuracy over five seeds and ten messages per
 seed. Holdout strengths were excluded from codebook qualification.
 Complete-message success was 100\% for every condition.}
@@ -905,7 +838,7 @@ conditions, while dataset-specific differences appear for strong blur.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{figures/cross_dataset_robustness.pdf}
+\includegraphics[width=\textwidth]{figures/Fig_05.pdf}
 \caption{Mean symbol accuracy across the five BOSSBase and five Caltech-101
 partitions. Calibration and holdout conditions use the same declared
 strengths; all 1,575 complete-message trials succeeded.}
@@ -923,7 +856,7 @@ convergence.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/bossbase_convergence.pdf}
+\includegraphics[width=\linewidth]{figures/Fig_06.pdf}
 \caption{BOSSBase training loss for the five deterministic partitions.}
 \label{fig:convergence}
 \end{figure}
@@ -957,7 +890,7 @@ composition effects rather than one dominant low-level feature.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/cross_dataset_detectability.pdf}
+\includegraphics[width=\linewidth]{figures/Fig_07.pdf}
 \caption{Mean selection-detection AUC and 95\% Student-$t$ intervals over five
 partitions per dataset. The dashed line denotes chance performance.}
 \label{fig:detectability}
@@ -965,7 +898,7 @@ partitions per dataset. The dashed line denotes chance performance.}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/caltech_seed47_cnn_repetitions.pdf}
+\includegraphics[width=\linewidth]{figures/Fig_08.pdf}
 \caption{Selection-CNN AUC over 20 independent balanced subsamples, splits,
 and initialisations on Caltech-101 seed 47. The shaded band is the 95\%
 Student-$t$ interval for the repeated fits.}
@@ -1020,7 +953,7 @@ symbol accuracy.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/boss_projection_selection.pdf}
+\includegraphics[width=\linewidth]{figures/Fig_09.pdf}
 \caption{Calibration-only projection candidates on the full BOSSBase seed-11
 index. The selected direction maximises minimum stable-bucket occupancy under
 the declared lexicographic rule; holdout attacks are not used for selection.}

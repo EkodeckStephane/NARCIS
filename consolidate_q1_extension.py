@@ -2,7 +2,6 @@ from pathlib import Path
 import json
 
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch
 import numpy as np
 import pandas as pd
 from scipy.stats import t
@@ -60,7 +59,7 @@ def save_robustness_figure(attacks: dict[str, pd.DataFrame]) -> None:
     fig.tight_layout()
     for suffix in ("pdf", "png"):
         fig.savefig(
-            FIGURES / f"cross_dataset_robustness.{suffix}",
+            FIGURES / f"Fig_05.{suffix}",
             dpi=350,
             bbox_inches="tight",
         )
@@ -100,101 +99,9 @@ def save_detector_figure(detectors: dict[str, pd.DataFrame]) -> None:
     fig.tight_layout()
     for suffix in ("pdf", "png"):
         fig.savefig(
-            FIGURES / f"cross_dataset_detectability.{suffix}",
+            FIGURES / f"Fig_07.{suffix}",
             dpi=350,
             bbox_inches="tight",
-        )
-    plt.close(fig)
-
-
-def box(ax, x, y, w, h, text, color, fontsize=10, weight="normal"):
-    patch = FancyBboxPatch(
-        (x, y),
-        w,
-        h,
-        boxstyle="round,pad=0.015,rounding_size=0.025",
-        facecolor=color,
-        edgecolor="#243447",
-        linewidth=1.2,
-    )
-    ax.add_patch(patch)
-    ax.text(
-        x + w / 2,
-        y + h / 2,
-        text,
-        ha="center",
-        va="center",
-        fontsize=fontsize,
-        weight=weight,
-        color="#17202a",
-    )
-
-
-def save_graphical_abstract() -> None:
-    fig, ax = plt.subplots(figsize=(13.4, 5.2))
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.axis("off")
-    ax.text(
-        0.5,
-        0.94,
-        "NARCIS: verified coverless signaling from unchanged natural images",
-        ha="center",
-        va="center",
-        fontsize=18,
-        weight="bold",
-        color="#17324d",
-    )
-
-    box(ax, 0.02, 0.56, 0.15, 0.23, "Shared natural-image\nindex", "#dbeafe", 12, "bold")
-    box(ax, 0.205, 0.56, 0.16, 0.23, "Invariant neural\ndescriptor", "#e0f2fe", 12, "bold")
-    box(ax, 0.40, 0.56, 0.18, 0.23, "Attack-qualified\nbalanced codebook", "#dcfce7", 12, "bold")
-    box(ax, 0.615, 0.56, 0.17, 0.23, "AES-GCM +\nReed-Solomon", "#fef3c7", 12, "bold")
-    box(ax, 0.82, 0.56, 0.16, 0.23, "Unchanged cover\nsequence", "#fae8ff", 12, "bold")
-    for start, end in ((0.17, 0.205), (0.365, 0.40), (0.58, 0.615), (0.785, 0.82)):
-        ax.annotate(
-            "",
-            xy=(end, 0.675),
-            xytext=(start, 0.675),
-            arrowprops={"arrowstyle": "->", "lw": 2, "color": "#334155"},
-        )
-
-    ax.text(
-        0.5,
-        0.48,
-        "Largest feasible alphabet is selected only when every protected-message symbol has sufficient qualified covers",
-        ha="center",
-        fontsize=10.5,
-        color="#334155",
-    )
-    box(ax, 0.05, 0.12, 0.25, 0.23, "BOSSBase\n1,050 / 1,050 recoveries\n98.74% mean accuracy", "#eef2ff", 11, "bold")
-    box(ax, 0.375, 0.12, 0.25, 0.23, "Caltech-101 RGB\n525 / 525 recoveries\n98.59% mean accuracy", "#ecfeff", 11, "bold")
-    box(
-        ax,
-        0.70,
-        0.12,
-        0.25,
-        0.23,
-        "Selection leakage audit\nCaltech seed 47: AUC 0.533\n95% CI [0.517, 0.548]",
-        "#f0fdf4",
-        10.5,
-        "bold",
-    )
-    ax.text(
-        0.5,
-        0.045,
-        "Measured scope: 5 seeds per dataset, 21 conditions; net rate 0.184 to 1.213 bits/cover across tested payload sizes",
-        ha="center",
-        fontsize=10,
-        color="#475569",
-    )
-    fig.tight_layout()
-    for suffix in ("pdf", "png"):
-        fig.savefig(
-            FIGURES / f"graphical_abstract.{suffix}",
-            dpi=350,
-            bbox_inches="tight",
-            facecolor="white",
         )
     plt.close(fig)
 
@@ -280,7 +187,6 @@ def main() -> None:
     )
     save_robustness_figure(attacks)
     save_detector_figure(detectors)
-    save_graphical_abstract()
     print(json.dumps(report, indent=2))
 
 
