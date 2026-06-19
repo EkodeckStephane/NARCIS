@@ -1,4 +1,4 @@
-\documentclass[10pt,journal]{IEEEtran}
+﻿\documentclass[10pt,journal]{IEEEtran}
 
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{array}
@@ -22,6 +22,7 @@
 
 \newcommand{\method}{NARCIS\xspace}
 \newcommand{\bits}{\mathrm{bpc}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 
 \begin{document}
 
@@ -86,10 +87,13 @@ $K=16$ scales from 0.184 bits per cover for 8-byte payloads to 1.213
 bits per cover for 128-byte payloads. Removing attack qualification on
 BOSSBase seed~11 reduced complete-message success from 210/210 to
 142/210~(67.6\%), while a calibration-locked projection recovered
-210/210. Selection bias measured with three detector classes yielded
-AUCs near chance on BOSSBase; Caltech-101 exhibited a
-partition-specific CNN signal (mean~AUC~0.533, 95\%~CI~[0.517,
-0.548] over 20 repeated fits on the most sensitive partition).
+210/210. Selection bias was measured with three detector classes. On BOSSBase,
+all confidence intervals include chance performance. On Caltech-101,
+classical detectors identified a weak selection shift (global logistic
+AUC 0.531, 95\%~CI~[0.504, 0.557]; residual ExtraTrees 0.533,
+[0.504, 0.562]); 20 repeated CNN fits on the most sensitive partition
+confirmed a partition-specific signal (mean~AUC~0.533,
+95\%~CI~[0.517, 0.548]).
 \end{abstract}
 
 \begin{IEEEkeywords}

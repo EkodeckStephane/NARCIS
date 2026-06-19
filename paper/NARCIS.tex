@@ -1,4 +1,4 @@
-\documentclass[a4paper,fleqn]{cas-dc}
+﻿\documentclass[a4paper,fleqn]{cas-dc}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -115,13 +115,16 @@ RGB images. Across 1,575 clean, calibration, and holdout message-condition
 trials, \method recovered every authenticated plaintext. Mean symbol accuracy
 was 98.74\% on BOSSBase and 98.59\% on Caltech-101; the worst individual
 accuracies were 81.61\% and 79.89\%. BOSSBase supported 3--4 bits per cover,
-whereas all Caltech-101 partitions supported 4 bits per cover. A lightweight
-selection CNN produced mean AUCs of 0.515 and 0.530, with both 95\% confidence
-intervals including 0.5; however, 20 repeated CNN fits on Caltech-101 seed 47
-confirmed a weak partition-specific selection signal (mean AUC 0.533,
-95\% interval [0.517, 0.548]). On a matched BOSSBase seed-11 ablation,
-removing attack qualification reduced complete-message success from 100\% to
-67.62\%. Net plaintext rate increased from 0.184 to 1.213 bits per cover when
+whereas all Caltech-101 partitions supported 4 bits per cover. Selection bias was measured with three detector classes. On BOSSBase, all
+confidence intervals include chance performance. On Caltech-101, classical
+detectors identified a reproducible selection shift (global logistic AUC
+0.531, 95\%~CI~[0.504, 0.557]; residual ExtraTrees 0.533,
+[0.504, 0.562]); 20 repeated CNN fits on the most sensitive partition
+confirmed a partition-specific signal (mean AUC 0.533, 95\% interval
+[0.517, 0.548]). On a matched BOSSBase seed-11 ablation, removing attack
+qualification reduced complete-message success from 100\% to 67.6\%;
+a calibration-locked projection search recovered 210/210 trials while
+increasing the minimum stable bucket from 92 to 161. Net plaintext rate increased from 0.184 to 1.213 bits per cover when
 the plaintext grew from 8 to 128 bytes at a 16-symbol operating point. The
 contribution is a measurable feasible operating point for authenticated
 coverless communication, defined by finite-index stability,
