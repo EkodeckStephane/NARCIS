@@ -62,38 +62,37 @@
 
 % ---------------------------------------------------------------
 \begin{abstract}
-Selection-based coverless communication requires verifying that a
-finite image index can satisfy every message symbol \emph{before}
-transmission, not merely that a descriptor achieves high average
-robustness. This paper presents \method~(Neural Adaptive Robust
-Coverless Image Signaling), an end-to-end protocol that transmits
-unchanged natural images while providing authenticated payload
-protection, replay rejection, and forward error correction. A compact
-self-supervised encoder trained with a variance-invariance-covariance
-objective maps images to normalised 64-dimensional descriptors. A
-quantile codebook partitions the principal descriptor direction into
-balanced symbol classes. A multi-attack qualification stage retains
-only covers whose labels remain stable under all calibration
-conditions. Payloads are protected with AES-GCM; symbols are assigned
-through a keyed Gray permutation; Reed-Solomon coding corrects
-residual label errors.
-
-Evaluation uses five deterministic partitions each of BOSSBase-1.01
-(grayscale, $512\times512$) and Caltech-101 (variable-resolution RGB).
-Across 1{,}575 complete-message trials under clean, calibration, and
-holdout conditions, \method recovered every authenticated plaintext.
-Mean symbol accuracies were 98.74\% and 98.59\%. Net throughput at
-$K=16$ scales from 0.184 bits per cover for 8-byte payloads to 1.213
-bits per cover for 128-byte payloads. Removing attack qualification on
-BOSSBase seed~11 reduced complete-message success from 210/210 to
-142/210~(67.6\%), while a calibration-locked projection recovered
-210/210. Selection bias was measured with three detector classes. On BOSSBase,
-all confidence intervals include chance performance. On Caltech-101,
-classical detectors identified a weak selection shift (global logistic
-AUC 0.531, 95\%~CI~[0.504, 0.557]; residual ExtraTrees 0.533,
-[0.504, 0.562]); 20 repeated CNN fits on the most sensitive partition
-confirmed a partition-specific signal (mean~AUC~0.533,
-95\%~CI~[0.517, 0.548]).
+Selection-based coverless steganography communicates by transmitting
+unchanged natural images chosen from a shared index. Two gaps limit its
+operational viability: existing systems neither verify that a finite
+qualified index can satisfy a specific message \emph{before}
+transmission, nor provide a fully authenticated, replay-resistant,
+error-correcting protocol. This paper presents \method~(Neural Adaptive
+Robust Coverless Image Signaling) and makes three contributions.
+\emph{(i)~Feasible operating point criterion}: a codebook is accepted
+only when every attack-qualified bucket satisfies the multiplicity
+required by every protected coded message; the selected alphabet is the
+largest consistent with this criterion.
+\emph{(ii)~End-to-end coverless pipeline}: a self-supervised encoder
+trained with a variance--invariance--covariance objective maps images to
+normalised 64-dimensional descriptors; a quantile codebook provides
+balanced symbol classes; multi-attack qualification (12 calibration
+transforms) removes geometrically unstable covers; a calibration-locked
+projection search raises the minimum stable bucket from 92 to~161 while
+maintaining full recovery; AES-GCM authenticates payloads and session
+metadata; a keyed Gray permutation limits symbol exposure; Reed--Solomon
+coding corrects residual label errors.
+\emph{(iii)~Systematic detectability and ablation evaluation}: three
+detector classes are applied over five partitions each of BOSSBase-1.01
+and Caltech-101; on BOSSBase all confidence intervals include chance;
+on Caltech-101 a weak reproducible shift is confirmed (20-repeat CNN
+mean~AUC~0.533, 95\%~CI~[0.517, 0.548]); removing qualification
+reduces complete-message success from 210/210 to 142/210~(67.6\%).
+Across 1{,}575 trials under clean, calibration, and holdout conditions,
+\method recovered every authenticated plaintext (mean symbol accuracy
+98.74\% on BOSSBase, 98.59\% on Caltech-101). Net throughput at
+$K{=}16$ scales from 0.184 to 1.213~bits per cover for 8- to
+128-byte payloads.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -147,22 +146,33 @@ operating point is the largest alphabet consistent with this criterion.
 Across 1{,}575 end-to-end trials on two datasets and 21 channel
 conditions, \method recovered 100\% of authenticated plaintexts.
 
-\textbf{Contribution~2: End-to-end cryptographic and coding
-integration.} AES-GCM~\cite{nist2007gcm} authenticates payload and
-session metadata with associated sender-receiver identities; a keyed
-Gray permutation limits public symbol-to-label correspondence;
-monotonic sequence checking rejects replay; Reed-Solomon
-coding~\cite{reed1960polynomial} corrects residual label errors. Net
-throughput at $K{=}16$ scales from 0.184 to 1.213 bits per cover for
-8 to 128-byte payloads~(Section~\ref{subsec:scalability}).
+\textbf{Contribution~2: End-to-end coverless pipeline.} A
+self-supervised encoder trained with a variance--invariance--covariance
+objective maps images to normalised 64-dimensional descriptors. A
+quantile codebook partitions the principal descriptor direction into
+balanced symbol classes. Multi-attack qualification (12 calibration
+transforms) removes geometrically unstable covers; a calibration-locked
+projection search increases the minimum stable bucket from 92 to~161
+while maintaining 210/210 recoveries~(BOSSBase seed~11).
+AES-GCM~\cite{nist2007gcm} authenticates payloads and session metadata
+with associated sender-receiver identities; a keyed Gray permutation
+limits symbol-to-label exposure; monotonic sequence checking rejects
+replay; Reed-Solomon coding~\cite{reed1960polynomial} corrects residual
+label errors. Net throughput at $K{=}16$ scales from 0.184 to
+1.213~bits per cover for 8- to 128-byte
+payloads~(Section~\ref{subsec:scalability}).
 
-\textbf{Contribution~3: Systematic detectability measurement.} Three
-detector classes (global logistic regression, residual feature ensemble,
-and a selection CNN) are applied to five partitions of each dataset. On
-BOSSBase all confidence intervals include chance performance. Caltech-101
-shows a partition-specific CNN signal (mean~AUC~0.533, 95\%~CI
-[0.517,~0.548] over 20 repeated fits on the most sensitive partition),
-reported transparently rather than suppressed~(Section~\ref{subsec:detect}).
+\textbf{Contribution~3: Systematic detectability and ablation
+evaluation.} Three detector classes (global logistic regression,
+residual-feature ExtraTrees, and a selection CNN) are applied to five
+partitions of each dataset. On BOSSBase all confidence intervals include
+chance performance. On Caltech-101 a weak reproducible shift is
+confirmed (20-repeat CNN mean~AUC~0.533, 95\%~CI~[0.517, 0.548]),
+reported transparently. A matched ablation on BOSSBase seed~11
+establishes attack qualification as the dominant robustness mechanism:
+removing it reduces complete-message success from 210/210 to
+142/210~(67.6\%), with crop and large-rotation conditions failing
+entirely~(Section~\ref{subsec:detect}).
 
 The remainder of the paper is organised as follows. Section~\ref{sec:related}
 reviews related work. Section~\ref{sec:model} states the system and threat

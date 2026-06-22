@@ -64,17 +64,17 @@ publishes.
   BOSSBase~1.01 (grayscale) and Caltech-101 (RGB), NARCIS recovered
   100\% of authenticated plaintexts under 21 channel conditions,
   including eight unseen holdout strengths.
-\item \textbf{Self-supervised encoder and quantile codebook
-  (Contribution~2).} A four-block convolutional network trained with a
-  variance--invariance--covariance objective produces 64-dimensional
-  normalised descriptors. A quantile partition of the first principal
-  component yields balanced symbol classes. Attack qualification
-  (12 calibration transforms) removes geometrically unstable images
-  before indexing. A calibration-locked random projection search
-  recovers 210/210 complete-message trials while increasing the minimum
-  stable bucket from 92 to~161 (BOSSBase seed~11). Net throughput at a
-  16-symbol operating point scales from 0.184 to 1.213~bits per cover
-  for 8- to 128-byte payloads.
+\item \textbf{End-to-end coverless pipeline (Contribution~2).}
+  A self-supervised encoder (variance--invariance--covariance objective)
+  produces 64-dimensional normalised descriptors. A quantile partition
+  of the first principal component yields balanced symbol classes.
+  Multi-attack qualification (12 calibration transforms) removes
+  geometrically unstable images; a calibration-locked projection search
+  maintains 210/210 recoveries while raising the minimum stable bucket
+  from 92 to~161 (BOSSBase seed~11). AES-GCM authenticates payloads
+  and session metadata; a keyed Gray permutation limits symbol exposure;
+  Reed--Solomon coding corrects residual label errors. Net throughput
+  scales from 0.184 to 1.213~bits per cover for 8- to 128-byte payloads.
 \item \textbf{Detectability and ablation evaluation (Contribution~3).}
   Selection bias is quantified with three detector classes (global
   logistic regression on dense residuals, residual-feature ExtraTrees,
