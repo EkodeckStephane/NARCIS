@@ -100,9 +100,18 @@ learned descriptors for coverless steganography (Ren--Wu~2024;
 Guo--Ping~2026) and in multimedia security evaluation. NARCIS
 complements this body of work by introducing the feasible-codebook
 criterion as the primary evaluation unit and providing systematic
-cross-dataset, multi-detector detectability evidence. The paper
-explicitly positions its measured capacity against prior reported values
-without overstating cross-protocol comparisons.
+cross-dataset, multi-detector detectability evidence.
+
+On capacity, the paper distinguishes two metrics that are not
+interchangeable: \emph{nominal symbol capacity} ($\log_2 K$ bpc,
+measured at the symbol level before any protocol overhead) and
+\emph{net authenticated throughput} (plaintext bpc after AES-GCM,
+Reed-Solomon parity, and framing). NARCIS achieves 3--4~bpc nominal at
+$K{=}8$--$16$ and 0.184--1.213~bpc net. Prior systems reporting
+10--15~bpc measure nominal capacity without authentication overhead;
+adding a comparable protocol stack would reduce their net throughput by
+the same constant cost. The paper reports both metrics explicitly and
+does not conflate them.
 
 \clhead{Author declarations.}
 \begin{itemize}

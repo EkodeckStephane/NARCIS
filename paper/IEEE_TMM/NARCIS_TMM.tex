@@ -146,21 +146,27 @@ operating point is the largest alphabet consistent with this criterion.
 Across 1{,}575 end-to-end trials on two datasets and 21 channel
 conditions, \method recovered 100\% of authenticated plaintexts.
 
-\textbf{Contribution~2: End-to-end coverless pipeline.} A
-self-supervised encoder trained with a variance--invariance--covariance
-objective maps images to normalised 64-dimensional descriptors. A
-quantile codebook partitions the principal descriptor direction into
-balanced symbol classes. Multi-attack qualification (12 calibration
-transforms) removes geometrically unstable covers; a calibration-locked
-projection search increases the minimum stable bucket from 92 to~161
-while maintaining 210/210 recoveries~(BOSSBase seed~11).
-AES-GCM~\cite{nist2007gcm} authenticates payloads and session metadata
-with associated sender-receiver identities; a keyed Gray permutation
-limits symbol-to-label exposure; monotonic sequence checking rejects
-replay; Reed-Solomon coding~\cite{reed1960polynomial} corrects residual
-label errors. Net throughput at $K{=}16$ scales from 0.184 to
-1.213~bits per cover for 8- to 128-byte
-payloads~(Section~\ref{subsec:scalability}).
+\textbf{Contribution~2: End-to-end coverless pipeline with three
+problem-specific design decisions.}
+(a)~\emph{Channel-matched qualification policy}: the 12 calibration
+transforms are not merely training augmentations — they define the
+qualification criterion itself. A cover is indexed only when its
+descriptor label is stable under every one of the 12 transforms,
+tying the training invariance objective directly to the indexing
+decision.
+(b)~\emph{Calibration-locked projection search}: rather than defaulting
+to the principal descriptor direction, 32 candidate projections are
+evaluated on calibration data and the direction maximising the minimum
+qualified-bucket occupancy is selected. This search raised the minimum
+stable bucket from~92 (PC1) to~161 while maintaining 210/210 complete
+recoveries on BOSSBase seed~11.
+(c)~\emph{Full authenticated protocol}: a variance--invariance--covariance
+encoder maps images to 64-dimensional descriptors; AES-GCM~\cite{nist2007gcm}
+authenticates payloads and session metadata; a keyed Gray permutation
+limits symbol-to-label exposure; Reed-Solomon
+coding~\cite{reed1960polynomial} corrects residual label errors.
+Net throughput at $K{=}16$ scales from 0.184 to 1.213~bits per cover
+for 8- to 128-byte payloads~(Section~\ref{subsec:scalability}).
 
 \textbf{Contribution~3: Systematic detectability and ablation
 evaluation.} Three detector classes (global logistic regression,
@@ -1086,14 +1092,23 @@ from published context. Abdulsattar~\cite{abdulsattar2021} and
 WYSAWIS~\cite{wysawis2025} provide high nominal intra-image or
 category-based representations without end-to-end protocol evaluation.
 Guo and Ping~\cite{guo2026capacity} report higher nominal capacities
-and high average robustness on larger datasets, with a capacity
-advantage at their operating points. \method's supporting position is
-protocol completeness, not maximum nominal capacity.
+and high average robustness on larger datasets. Two distinct capacity
+metrics must be distinguished: \emph{nominal symbol capacity}
+($\log_2 K$ bits per cover, independent of protocol overhead) and
+\emph{net authenticated throughput} (plaintext bits per cover after
+AES-GCM, Reed-Solomon parity, and framing overhead). Methods reporting
+10--15 bpc measure the former without authentication cost. \method
+reports both: 3--4 bpc nominal at $K{=}8$--$16$, and 0.184--1.213 bpc
+net for 8- to 128-byte payloads. The two metrics are not
+interchangeable; the supporting claim is protocol completeness
+with a verified feasible operating point, not maximum nominal capacity.
 
 \begin{table*}[t]
 \centering
-\caption{Positioning of \method. Values from different publications are
-  not treated as a common-protocol ranking. (H) = holdout.}
+\caption{Positioning of \method against related work. Values from
+  different publications are not treated as a common-protocol ranking.
+  $^\dagger$Nominal symbol capacity $= \log_2 K$ bpc, before protocol
+  overhead; not comparable to net authenticated throughput.}
 \label{tab:position}
 \small
 \begin{tabularx}{\textwidth}{p{2.6cm}YYYY}
@@ -1107,20 +1122,20 @@ Representation & Eigenvalue comparisons in overlapping blocks &
 15-bit block hashes, 16 category sequences &
 PZM features, stability-aware quantisation and clustering &
 Learned invariant descriptors with quantile codebook\\
-Primary capacity & High nominal single-cover capacity &
-High nominal block/category capacity &
-10-15 bits on Holidays, VOC, ImageNet &
-3-4 bits on BOSSBase; 4 bits on Caltech-101\\
+Nominal capacity$^\dagger$ & High (single-cover) &
+High (block/category) &
+10--15 bpc on Holidays, VOC, ImageNet &
+3--4 bpc ($K{=}8$--$16$) on BOSSBase; 4 bpc ($K{=}16$) on Caltech-101\\
+Net auth.\ throughput & Not applicable & Not applicable & Not reported &
+0.184--1.213 bpc (8--128 byte payloads at $K{=}16$)\\
 Multi-attack qualification & Not evaluated & Not evaluated & Yes & Yes\\
 Holdout attack strengths & Not evaluated & Not evaluated &
 Not established from cited summary &
 8 holdout strengths, 21 total conditions\\
-Message-level error correction & Not reported & Not reported &
+Error correction & Not reported & Not reported &
 Not stated & Reed-Solomon; worst case 63 corrections\\
-Authenticated payload + metadata & Not reported & Not reported &
+Authenticated payload & Not reported & Not reported &
 Not stated & AES-GCM; replay guard; identity binding\\
-Net throughput range & --- & --- & Not reported &
-0.184-1.213 bpc (8-128 bytes at $K{=}16$)\\
 Measured complete recovery & Not reported & Not reported &
 Not directly comparable & 1{,}575/1{,}575 trials\\
 \bottomrule
@@ -1232,6 +1247,23 @@ for the multi-attack qualification stage to produce a usable codebook
 under the 12-attack calibration protocol. Without invariance training,
 too few covers survive all calibration conditions to satisfy the
 multiplicity constraint at any alphabet size.
+
+Two capacity metrics circulate in the coverless steganography
+literature and must not be conflated. \emph{Nominal symbol capacity}
+($\log_2 K$ bits per cover) measures how many bits a single cover image
+encodes at the symbol level, independently of any protocol overhead.
+\emph{Net authenticated throughput} measures the plaintext bits
+recovered per cover after AES-GCM encryption, Reed-Solomon parity
+bytes, framing, and session metadata are accounted for. \method reports
+4 bpc nominal at $K{=}16$ and 0.184--1.213 bpc net for 8- to 128-byte
+payloads. Systems that report 10--15 bpc measure nominal capacity
+without authentication overhead; adding a comparable protocol stack
+would reduce their net throughput by the same constant overhead.
+Comparing net throughput figures across systems with different protocol
+stacks is not meaningful; the appropriate comparison is at the nominal
+level, where \method's 4 bpc is lower than Guo-Ping's 10--15 bpc but
+is the maximum $K$ satisfying the feasibility constraint on the tested
+index sizes.
 
 Guo and Ping's stability-regularised clustering~\cite{guo2026capacity}
 shares the objective of retaining stable covers but reports robustness
