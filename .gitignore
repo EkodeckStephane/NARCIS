@@ -74,3 +74,11 @@ tmp/
 Thumbs.db
 *.swp
 *.swo
+
+paper/IEEE_TMM/*.aux
+paper/IEEE_TMM/*.bbl
+paper/IEEE_TMM/*.blg
+paper/IEEE_TMM/*.log
+paper/IEEE_TMM/*.out
+paper/IEEE_TMM/*.synctex.gz
+paper/IEEE_TMM/compile_run1.log
