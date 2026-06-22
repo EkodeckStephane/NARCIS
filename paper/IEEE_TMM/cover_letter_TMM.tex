@@ -1,0 +1,140 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[letterpaper,margin=1.6cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\linespread{0.96}
+\setlist[itemize]{leftmargin=5mm,itemsep=0pt,topsep=1pt,parsep=0pt}
+\definecolor{ieeeblue}{RGB}{0,84,166}
+\newcommand{\clhead}[1]{\textcolor{ieeeblue}{\textbf{#1}}}
+
+\begin{document}
+
+\begin{flushright}
+\textbf{St\'ephane Ga\"el R. Ekodeck}\\
+Department of Computer Science, LIRIMA, Team GRIMCAPE\\
+University of Yaound\'e I, P.O.\ Box 812, Yaound\'e, Cameroon\\
+\href{mailto:stephane-gael.ekodeck@facsciences-uy1.cm}%
+{stephane-gael.ekodeck@facsciences-uy1.cm}\\
+June 2026
+\end{flushright}
+
+The Editor-in-Chief\\
+\textit{IEEE Transactions on Multimedia}\\
+IEEE Signal Processing Society\\
+
+Dear Editor-in-Chief,
+
+We respectfully submit our manuscript, \textbf{``NARCIS: Authenticated
+Neural Coverless Image Signaling with Attack-Qualified Codebooks and
+Error Correction,''} for consideration as an original research article in
+\textit{IEEE Transactions on Multimedia} (TMM).
+
+\clhead{Scope alignment.}
+NARCIS addresses a core multimedia communications problem: how to
+transmit authenticated messages by selecting and sending unchanged
+natural images from a shared index, rather than by modifying a carrier.
+The technical pipeline is a multimedia processing contribution ---
+a compact self-supervised encoder that maps images to channel-invariant
+descriptors, a quantile codebook that converts the descriptor space into
+balanced message symbols, and a multi-attack qualification stage that
+retains only images whose labels remain stable under channel
+distortions. These components sit squarely within TMM's scope on
+multimedia content analysis, multimedia security, and image-based
+communications. The detectability evaluation (three detector classes,
+five partitions per dataset, calibration and holdout conditions) also
+directly addresses the multimedia security analysis that TMM regularly
+publishes.
+
+\clhead{Key technical contributions.}
+\begin{itemize}
+\item \textbf{Feasible-codebook operating point (Contribution~1).}
+  Existing coverless systems report nominal capacity or average symbol
+  accuracy, neither of which verifies that a given message can actually
+  be transmitted from a finite, qualified index. NARCIS introduces the
+  \emph{feasible operating point}: the largest symbol alphabet for which
+  every attack-qualified bucket satisfies the multiplicity required by
+  every protected coded message. Over 1{,}575 complete-message trials on
+  BOSSBase~1.01 (grayscale) and Caltech-101 (RGB), NARCIS recovered
+  100\% of authenticated plaintexts under 21 channel conditions,
+  including eight unseen holdout strengths.
+\item \textbf{Self-supervised encoder and quantile codebook
+  (Contribution~2).} A four-block convolutional network trained with a
+  variance--invariance--covariance objective produces 64-dimensional
+  normalised descriptors. A quantile partition of the first principal
+  component yields balanced symbol classes. Attack qualification
+  (12 calibration transforms) removes geometrically unstable images
+  before indexing. A calibration-locked random projection search
+  recovers 210/210 complete-message trials while increasing the minimum
+  stable bucket from 92 to~161 (BOSSBase seed~11). Net throughput at a
+  16-symbol operating point scales from 0.184 to 1.213~bits per cover
+  for 8- to 128-byte payloads.
+\item \textbf{Detectability and ablation evaluation (Contribution~3).}
+  Selection bias is quantified with three detector classes (global
+  logistic regression on dense residuals, residual-feature ExtraTrees,
+  selection CNN) over five partitions each of BOSSBase and Caltech-101.
+  BOSSBase AUCs include chance. Caltech-101 classical detectors identify
+  a weak but reproducible selection shift (global logistic AUC~0.531,
+  95\%~CI~[0.504, 0.557]; ExtraTrees~0.533, [0.504, 0.562]); 20
+  repeated CNN fits on the most sensitive partition confirm a
+  partition-specific signal (mean~AUC~0.533, 95\%~CI~[0.517, 0.548]),
+  reported transparently rather than dismissed. Removing attack
+  qualification on BOSSBase seed~11 reduces complete-message success
+  from 210/210 to 142/210~(67.6\%), establishing qualification as the
+  dominant robustness mechanism.
+\end{itemize}
+
+\clhead{Novelty and positioning.}
+Selection-based coverless systems have been evaluated at the descriptor
+level --- average symbol accuracy, nominal capacity --- but have not
+verified message-level feasibility over a finite qualified index, nor
+integrated payload authentication, replay control, and error correction
+into a single testable system. TMM has published related work in
+learned descriptors for coverless steganography (Ren--Wu~2024;
+Guo--Ping~2026) and in multimedia security evaluation. NARCIS
+complements this body of work by introducing the feasible-codebook
+criterion as the primary evaluation unit and providing systematic
+cross-dataset, multi-detector detectability evidence. The paper
+explicitly positions its measured capacity against prior reported values
+without overstating cross-protocol comparisons.
+
+\clhead{Author declarations.}
+\begin{itemize}
+\item The manuscript is original, has not been published, and is not
+  under consideration elsewhere. A previous version was desk-rejected
+  by \textit{Journal of Information Security and Applications}
+  (Ms.\ No.\ JISAS-D-26-03622) for scope reasons and has since been
+  substantially revised; this submission is not a transfer.
+\item All four authors approved the final manuscript and author order.
+  WYSAWIS (cited in the related work) shares authors with this
+  submission and is explicitly identified as such in the paper; it is
+  used as published qualitative context, not as an experimental
+  baseline.
+\item No competing interests and no external funding.
+\item No human subjects, personal data, or animals are involved.
+  Implementation, fixed seeds, experimental results, and manuscript
+  sources are available at
+  \href{https://github.com/EkodeckStephane/NARCIS}%
+  {github.com/EkodeckStephane/NARCIS}.
+\end{itemize}
+
+We believe NARCIS will interest TMM readers working on multimedia
+steganography, learned image representations, and multimedia security
+evaluation. We welcome the opportunity to provide any additional
+information the Associate Editor may require.\\[4pt]
+
+Yours sincerely,\\[6pt]
+
+\textbf{St\'ephane Ga\"el R. Ekodeck} (Corresponding Author)\\
+ORCID: 0000-0002-8094-8832\\
+\textbf{Co-authors:} Vivien Beyala Kamgang (ORCID 0000-0002-3644-1866);
+Serge Alain Eb\'el\'e (ORCID 0000-0001-7036-7068);
+Julius Marcellin Nkenlifack, Member IEEE (ORCID 0000-0003-3322-4687).
+
+\end{document}

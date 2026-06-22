@@ -1,4 +1,4 @@
-﻿\documentclass[10pt,journal]{IEEEtran}
+\documentclass[10pt,journal]{IEEEtran}
 
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{array}
@@ -54,8 +54,8 @@
   Sorbonne Universit\'e, UMI~209 UMMISCO, 75005 Paris, France.
   (ORCID: 0000-0001-7036-7068)}}
 
-\markboth{IEEE Transactions on Information Forensics and Security}%
-{Ekodeck \MakeLowercase{\textit{et al.}}: NARCIS---Authenticated
+\markboth{IEEE Transactions on Multimedia}%
+{Ekodeck \MakeLowercase{\textit{et al.}}: NARCIS: Authenticated
   Neural Coverless Image Signaling}
 
 \maketitle
@@ -69,13 +69,13 @@ robustness. This paper presents \method~(Neural Adaptive Robust
 Coverless Image Signaling), an end-to-end protocol that transmits
 unchanged natural images while providing authenticated payload
 protection, replay rejection, and forward error correction. A compact
-self-supervised encoder trained with a variance--invariance--covariance
+self-supervised encoder trained with a variance-invariance-covariance
 objective maps images to normalised 64-dimensional descriptors. A
 quantile codebook partitions the principal descriptor direction into
 balanced symbol classes. A multi-attack qualification stage retains
 only covers whose labels remain stable under all calibration
 conditions. Payloads are protected with AES-GCM; symbols are assigned
-through a keyed Gray permutation; Reed--Solomon coding corrects
+through a keyed Gray permutation; Reed-Solomon coding corrects
 residual label errors.
 
 Evaluation uses five deterministic partitions each of BOSSBase-1.01
@@ -99,7 +99,7 @@ confirmed a partition-specific signal (mean~AUC~0.533,
 \begin{IEEEkeywords}
 Coverless image steganography, neural image descriptor, robust
 codebook, authenticated encryption, error correction, cover
-selection, Reed--Solomon, AES-GCM.
+selection, Reed-Solomon, AES-GCM.
 \end{IEEEkeywords}
 
 % ---------------------------------------------------------------
@@ -140,23 +140,23 @@ measured \cite{fridrich2012rich,cachin1998steganography}.
 \method~(Neural Adaptive Robust Coverless Image Signaling) closes all
 three gaps simultaneously.
 
-\textbf{Contribution~1---Feasible operating point.} A codebook is
+\textbf{Contribution~1: Feasible operating point.} A codebook is
 accepted only when every attack-qualified bucket satisfies the
 multiplicity required by each protected coded message. The selected
 operating point is the largest alphabet consistent with this criterion.
 Across 1{,}575 end-to-end trials on two datasets and 21 channel
 conditions, \method recovered 100\% of authenticated plaintexts.
 
-\textbf{Contribution~2---End-to-end cryptographic and coding
+\textbf{Contribution~2: End-to-end cryptographic and coding
 integration.} AES-GCM~\cite{nist2007gcm} authenticates payload and
-session metadata with associated sender--receiver identities; a keyed
+session metadata with associated sender-receiver identities; a keyed
 Gray permutation limits public symbol-to-label correspondence;
-monotonic sequence checking rejects replay; Reed--Solomon
+monotonic sequence checking rejects replay; Reed-Solomon
 coding~\cite{reed1960polynomial} corrects residual label errors. Net
 throughput at $K{=}16$ scales from 0.184 to 1.213 bits per cover for
 8 to 128-byte payloads~(Section~\ref{subsec:scalability}).
 
-\textbf{Contribution~3---Systematic detectability measurement.} Three
+\textbf{Contribution~3: Systematic detectability measurement.} Three
 detector classes (global logistic regression, residual feature ensemble,
 and a selection CNN) are applied to five partitions of each dataset. On
 BOSSBase all confidence intervals include chance performance. Caltech-101
@@ -281,14 +281,14 @@ Generated images &
 Semantic prompts or latent transformations &
 Not directly comparable to finite-index retrieval\\
 Stability-aware selection &
-Guo et~al.~\cite{guo2025diverse}; Guo--Ping~\cite{guo2026capacity} &
+Guo et~al.~\cite{guo2025diverse}; Guo-Ping~\cite{guo2026capacity} &
 Selected natural images &
 Stable handcrafted features and clustering &
 Image-level robustness and diversity\\
 \method & This work &
 Selected unchanged natural images &
 Invariant neural descriptor and qualified quantile codebook &
-AES-GCM, replay control, Reed--Solomon, exact recovery\\
+AES-GCM, replay control, Reed-Solomon, exact recovery\\
 \bottomrule
 \end{tabularx}
 \end{table*}
@@ -317,14 +317,14 @@ used to qualify covers and train the descriptor.
 \subsection{Protocol targets}
 
 The protocol enforces five properties:
-(i)~\emph{cover integrity}---no pixel modification by the sender;
-(ii)~\emph{message correctness}---exact plaintext recovery or explicit
+(i)~\emph{cover integrity}: no pixel modification by the sender;
+(ii)~\emph{message correctness}: exact plaintext recovery or explicit
      failure;
-(iii)~\emph{confidentiality and authenticity}---authenticated
+(iii)~\emph{confidentiality and authenticity}: authenticated
      encryption of payload and metadata;
-(iv)~\emph{freshness}---rejection of replayed or reordered sequences;
-(v)~\emph{channel robustness}---correction of residual label errors
-    within the Reed--Solomon budget.
+(iv)~\emph{freshness}: rejection of replayed or reordered sequences;
+(v)~\emph{channel robustness}: correction of residual label errors
+    within the Reed-Solomon budget.
 
 \subsection{Formal security properties}
 
@@ -348,7 +348,7 @@ and sealed metadata gains no information about $m$.
 \label{prop:auth}
 A message is accepted by the receiver only when
 (i)~the AES-GCM tag on the sealed metadata verifies under $k_m$
-    with sender--receiver identities as associated data, and
+    with sender-receiver identities as associated data, and
 (ii)~the sequence number $n$ embedded in the metadata satisfies
     $n>n_{\max}$, where $n_{\max}$ is the highest previously accepted
     value for that sender. Under AES-GCM's authentication
@@ -392,7 +392,7 @@ identity transform. The loss is
 where $\mathcal{L}_{\mathrm{inv}}$ is the mean squared distance between
 paired descriptors, $\mathcal{L}_{\mathrm{var}}$ prevents dimensional
 collapse, and $\mathcal{L}_{\mathrm{cov}}$ penalises off-diagonal
-covariance. This variance--invariance--covariance structure follows the
+covariance. This variance-invariance-covariance structure follows the
 non-contrastive principle of VICReg \cite{bardes2022vicreg}. The weights
 are $(\lambda_{\mathrm{inv}},\lambda_{\mathrm{var}},\lambda_{\mathrm{cov}})
 =(25,25,1)$; the target standard deviation is $64^{-1/2}$, consistent
@@ -441,7 +441,7 @@ $C(Z)=(Z-\bar Z)^\top(Z-\bar Z)/(B-1)$.
 }
 \caption{Descriptor encoder used in both principal evaluations, with $C{=}1$
 for BOSSBase and $C{=}3$ for Caltech-101. Each convolutional block contains
-two $3\times3$ convolution--batch-normalisation--SiLU stages; channels
+two $3\times3$ convolution-batch-normalisation-SiLU stages; channels
 transformations precede model resizing to $128\times128$.}
 \label{fig:encoder}
 \end{figure*}
@@ -497,7 +497,7 @@ c=\operatorname{AEAD.Enc}_{k_p}(m;\,\mathrm{nonce},
 \texttt{NARCIS-PAYLOAD-1}\Vert n).
 \end{equation}
 The ciphertext envelope is framed with a protocol marker, length field,
-and CRC-32, then encoded with Reed--Solomon parity
+and CRC-32, then encoded with Reed-Solomon parity
 \cite{reed1960polynomial}. Session metadata contains the sequence
 number, padding, codebook size, and cover count; it is independently
 sealed with AES-GCM using sender and receiver identities as associated
@@ -544,7 +544,7 @@ $O(NF_\theta)$. Multi-attack qualification is the dominant offline
 term, $O(ANF_\theta{+}AN\log K)$ with binary search over sorted
 boundaries. PCA fitting costs $O(Nd^2)$; sorting projected values
 $O(N\log N)$. Online cover retrieval and keyed mapping are $O(L)$
-with pre-built buckets; Reed--Solomon decoding adds a fixed block cost.
+with pre-built buckets; Reed-Solomon decoding adds a fixed block cost.
 Offline qualification is intentionally amortised across subsequent
 transmissions.
 
@@ -571,7 +571,7 @@ summarises the transmission and recovery steps.
 \node[store, right=of qualify](index)   {Qualified\\cover index};
 
 \node[box, below=13mm of train]   (payload) {Plaintext and\\sequence number};
-\node[box, right=of payload]  (aead)    {AES-GCM, framing,\\Reed--Solomon};
+\node[box, right=of payload]  (aead)    {AES-GCM, framing,\\Reed-Solomon};
 \node[box, right=of aead]     (mapping) {Keyed Gray\\symbol mapping};
 \node[box, right=of mapping]  (select)  {Unique-cover\\selection};
 \node[box, right=of select]   (channel) {Public image\\channel};
@@ -610,14 +610,14 @@ objects are unchanged images selected from the qualified index.}
 \KwIn{Plaintext $m$, sequence $n$, qualified index $\mathcal{I}$, keys}
 \KwOut{Recovered plaintext or failure}
 Encrypt $m$ with sequence-bound AES-GCM\;
-Frame the ciphertext and apply Reed--Solomon coding\;
+Frame the ciphertext and apply Reed-Solomon coding\;
 Select the largest feasible codebook $K$\;
 Map coded symbols to labels with the keyed permutation $\pi_k$\;
 Select one unused qualified cover for each required label\;
 Transmit the unchanged cover sequence and sealed metadata\;
 Verify metadata and reject replayed sequence numbers\;
 Classify received covers and invert the keyed mapping\;
-Apply Reed--Solomon decoding and verify CRC\;
+Apply Reed-Solomon decoding and verify CRC\;
 Authenticate and decrypt the payload\;
 \Return plaintext if every verification succeeds; otherwise failure\;
 \end{algorithm}
@@ -650,9 +650,9 @@ messages per seed.
 The encoder is trained separately on each partition for five epochs
 with AdamW, batch size~16, learning rate~$10^{-3}$, and weight
 decay~$10^{-5}$. BOSSBase evaluates ten eight-byte plaintexts per
-seed; Caltech-101 evaluates five. Reed--Solomon coding uses 128 parity
+seed; Caltech-101 evaluates five. Reed-Solomon coding uses 128 parity
 bytes. Symbol repetition is set to one; redundancy is instead provided
-by byte-level parity, which avoids multiplying the required 348--464
+by byte-level parity, which avoids multiplying the required 348-464
 cover sequences. The two principal campaigns comprise 75 protected
 messages and 1{,}575 message-condition trials.
 
@@ -724,7 +724,7 @@ index, three epochs, $96\times96$ inputs) compares descriptor dimensions
 the first three principal directions plus a fixed random direction.
 
 A separate seed-11 full-protocol analysis evaluates 16 PCA directions
-(PC1--PC16) and 32 independent random projections to characterise the
+(PC1-PC16) and 32 independent random projections to characterise the
 relationship between descriptor variance and stability under
 calibration attacks.
 
@@ -793,7 +793,7 @@ All 1{,}050 BOSSBase trials succeeded across five seeds, ten messages,
 and 21 conditions. Mean symbol accuracy was 98.74\%. The two most
 difficult holdout conditions were crop~12\% (84.37\%) and rotation
 $9^\circ$ (91.75\%); the worst individual accuracy was 81.61\%.
-Reed--Solomon corrected at most 61 byte positions per message block,
+Reed-Solomon corrected at most 61 byte positions per message block,
 and authenticated decryption recovered every plaintext. The clean
 channel, both JPEG settings, both resize settings, calibrated crops,
 both blur calibration settings, and rotations up to $3^\circ$ produced
@@ -803,7 +803,7 @@ Fig.~\ref{fig:attacks} shows per-condition means for BOSSBase. All
 525 Caltech-101 message-condition trials also recovered the
 authenticated plaintext. Mean symbol accuracy was 98.59\%; the worst
 individual accuracy was 79.89\% under the unseen 12\% crop;
-Reed--Solomon corrected at most 63 byte positions. Fig.~\ref{fig:crossrobust}
+Reed-Solomon corrected at most 63 byte positions. Fig.~\ref{fig:crossrobust}
 compares the two datasets condition by condition.
 
 \begin{figure}[t]
@@ -831,7 +831,7 @@ Table~\ref{tab:scalability} reports the implemented overhead breakdown
 and net throughput at $K{=}16$ for 8-, 32-, and 128-byte plaintexts.
 AES-GCM adds a 12-byte nonce and 16-byte authentication tag; protocol
 framing adds 10 bytes. For 8- and 32-byte payloads, a single
-Reed--Solomon block with 128 parity bytes suffices; 128-byte payloads
+Reed-Solomon block with 128 parity bytes suffices; 128-byte payloads
 span two blocks, doubling the effective parity to 256 bytes. Net
 throughput therefore scales sub-linearly with overhead: from 0.184
 bits per cover at 8 bytes to 0.646 at 32 bytes and 1.213 at 128 bytes.
@@ -1005,7 +1005,7 @@ Random, best of 32    & ---     & 3{,}867 (48.3\%) & 161\\
 \centering
 \includegraphics[width=\linewidth]{figures/Fig_09.pdf}
 \caption{Minimum bucket size vs.\ stable fraction for PCA directions
-  (PC1--PC16) and 32 random projections on BOSSBase seed-11.
+  (PC1-PC16) and 32 random projections on BOSSBase seed-11.
   Random directions consistently dominate the PCA directions in
   minimum-bucket size, motivating attack-aware projection selection
   as a future extension.}
@@ -1032,8 +1032,8 @@ Table~\ref{tab:ablation_boss} reports the per-condition results of the
 matched BOSSBase seed-11 ablation (10~messages, 21~conditions). With
 qualification (pc1-qualified), all 210/210 trials succeeded. Without
 qualification (pc1-no-qualification), 142/210 trials succeeded
-(67.6\%). Crop conditions failed completely (symbol accuracy 38--63\%,
-far beyond the Reed--Solomon correction capacity of 64 bytes). Rotation
+(67.6\%). Crop conditions failed completely (symbol accuracy 38-63\%,
+far beyond the Reed-Solomon correction capacity of 64 bytes). Rotation
 conditions at $\geq 7^\circ$ also failed outright. This confirms that
 invariance training alone is insufficient: qualification is the
 dominant robustness mechanism for distortions with sharp spatial
@@ -1052,13 +1052,13 @@ Condition & Qualif. & No qualif. & Mean sym.\ acc.\ (no qual.)\\
 \midrule
 Clean                      & 10/10 & 10/10              & 1.000 \\
 JPEG 80, 50                & 10/10 & 10/10              & $>$0.993 \\
-Gaussian $\sigma$5, 12     & 10/10 & 10/10              & 0.926--0.930 \\
-Gaussian $\sigma$9~(H), 15~(H) & 10/10 & 10/10         & 0.925--0.926 \\
-Blur 0.8, 1.5              & 10/10 & 10/10              & 0.872--0.950 \\
-Blur 1.2~(H), 1.8~(H)     & 10/10 & 10/10              & 0.847--0.904 \\
-Resize 0.75, 0.50          & 10/10 & 10/10              & 0.936--0.959 \\
-Crop 5\%, 10\%             & 10/10 & \textbf{0/10}      & 0.430--0.627 \\
-Crop 8\%~(H), 12\%~(H)    & 10/10 & \textbf{0/10}      & 0.381--0.524 \\
+Gaussian $\sigma$5, 12     & 10/10 & 10/10              & 0.926-0.930 \\
+Gaussian $\sigma$9~(H), 15~(H) & 10/10 & 10/10         & 0.925-0.926 \\
+Blur 0.8, 1.5              & 10/10 & 10/10              & 0.872-0.950 \\
+Blur 1.2~(H), 1.8~(H)     & 10/10 & 10/10              & 0.847-0.904 \\
+Resize 0.75, 0.50          & 10/10 & 10/10              & 0.936-0.959 \\
+Crop 5\%, 10\%             & 10/10 & \textbf{0/10}      & 0.430-0.627 \\
+Crop 8\%~(H), 12\%~(H)    & 10/10 & \textbf{0/10}      & 0.381-0.524 \\
 Rotate $3^\circ$           & 10/10 & 10/10              & 0.887 \\
 Rotate $7^\circ$           & 10/10 & \textbf{0/10}      & 0.719 \\
 Rotate $5^\circ$~(H)       & 10/10 & \textbf{2/10}      & 0.788 \\
@@ -1091,7 +1091,7 @@ protocol completeness, not maximum nominal capacity.
 Property &
 Abdulsattar~\cite{abdulsattar2021} &
 WYSAWIS~\cite{wysawis2025} &
-Guo--Ping~\cite{guo2026capacity} & \method\\
+Guo-Ping~\cite{guo2026capacity} & \method\\
 \midrule
 Representation & Eigenvalue comparisons in overlapping blocks &
 15-bit block hashes, 16 category sequences &
@@ -1099,18 +1099,18 @@ PZM features, stability-aware quantisation and clustering &
 Learned invariant descriptors with quantile codebook\\
 Primary capacity & High nominal single-cover capacity &
 High nominal block/category capacity &
-10--15 bits on Holidays, VOC, ImageNet &
-3--4 bits on BOSSBase; 4 bits on Caltech-101\\
+10-15 bits on Holidays, VOC, ImageNet &
+3-4 bits on BOSSBase; 4 bits on Caltech-101\\
 Multi-attack qualification & Not evaluated & Not evaluated & Yes & Yes\\
 Holdout attack strengths & Not evaluated & Not evaluated &
 Not established from cited summary &
 8 holdout strengths, 21 total conditions\\
 Message-level error correction & Not reported & Not reported &
-Not stated & Reed--Solomon; worst case 63 corrections\\
+Not stated & Reed-Solomon; worst case 63 corrections\\
 Authenticated payload + metadata & Not reported & Not reported &
 Not stated & AES-GCM; replay guard; identity binding\\
 Net throughput range & --- & --- & Not reported &
-0.184--1.213 bpc (8--128 bytes at $K{=}16$)\\
+0.184-1.213 bpc (8-128 bytes at $K{=}16$)\\
 Measured complete recovery & Not reported & Not reported &
 Not directly comparable & 1{,}575/1{,}575 trials\\
 \bottomrule
@@ -1193,10 +1193,10 @@ result does not replace the five-seed PC1 campaign, and an attack-aware
 direction trained on calibration data while locked before holdout
 evaluation is identified as the highest-priority future extension.
 
-\subsection{Reed--Solomon parameter choice}
+\subsection{Reed-Solomon parameter choice}
 \label{subsec:rs}
 
-The choice of 128 parity bytes per Reed--Solomon block is conservative
+The choice of 128 parity bytes per Reed-Solomon block is conservative
 but verifiable. The maximum observed correction across all 1{,}575
 trials was 63 byte positions~(Caltech-101), leaving a 1-byte margin
 to the theoretical capacity of $\lfloor 128/2\rfloor{=}64$
@@ -1230,7 +1230,7 @@ capacities. A direct comparison requires matching datasets, attack
 definitions, and protocol overheads. The present results are
 complementary rather than competitive: they characterise the
 operating regime where the feasibility constraint is the binding
-factor, whereas Guo--Ping target maximum nominal capacity at high
+factor, whereas Guo-Ping target maximum nominal capacity at high
 average robustness.
 
 \subsection{Limitations}
@@ -1257,11 +1257,11 @@ future extension.
 
 \method integrates learned image descriptors, balanced codebooks,
 attack-based cover qualification, keyed assignment, authenticated
-encryption, replay control, and Reed--Solomon correction into one
+encryption, replay control, and Reed-Solomon correction into one
 selection-based coverless protocol. It recovered 1{,}050/1{,}050
 protected message-condition trials on BOSSBase and 525/525 on RGB
 Caltech-101, including eight holdout attack strengths. BOSSBase
-supported 3--4 bits per cover; all Caltech-101 partitions supported
+supported 3-4 bits per cover; all Caltech-101 partitions supported
 4~bits per cover. Mean symbol accuracies were 98.74\% and 98.59\%.
 
 Net throughput at $K{=}16$ scales from 0.184 bits per cover for
