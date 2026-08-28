@@ -46,6 +46,10 @@ A four-direction GLCM texture implementation has been added using Energy, Contra
 
 Reference: H. Cao, Z. Wang, and X. Zhang, “On improving steganalysis against cover selection steganography,” *Cybersecurity*, vol. 8, art. 115, 2025. DOI: 10.1186/s42400-025-00423-z.
 
+### D. Calibration-locked TOMM validation path
+
+A dedicated TOMM runner now freezes the projection search to calibration data, applies the revised selection mechanism, executes real 8/32/64-byte image-channel transmissions, and evaluates global, residual, CNN, and GLCM selection detectors. The default evaluation uses the five previously defined seeds `11, 29, 47, 71, 101`.
+
 ## TOMM positioning references verified for integration
 
 The revision will position NARCIS against work published in the target journal where scientifically relevant, including:
@@ -58,15 +62,23 @@ The revision will position NARCIS against work published in the target journal w
 
 These citations must support explicit scientific comparisons; they are not journal-target citation padding.
 
-## External baseline selected for reproducible comparison
+## External baselines selected for comparison
 
-A public implementation exists for Y. Chen and P. Li, “Coverless Image Steganography Based on Diffusion Probabilistic Models” (2024 preprint, DOI 10.2139/ssrn.4781026):
+### Executable peer-reviewed baseline: DiffStega
 
-`rucvma/Coverless-image-Steganography`
+The primary executable external baseline is Y. Yang et al., “DiffStega: Towards Universal Training-Free Coverless Image Steganography with Diffusion Models,” *IJCAI 2024*, pp. 1579–1587, DOI 10.24963/ijcai.2024/175.
 
-The repository does not expose a license file at its root. Therefore its source is **not copied into NARCIS**. The TOMM benchmark will treat it as an external baseline and record source commit/environment separately if executable under its stated dependencies.
+Official repository: `evtricks/DiffStega`.
 
-The 2026 Guo–Ping stability-aware PZM method remains a high-priority numerical comparison, but no verified public implementation has yet been located. It must not be described as reimplemented until an implementation faithful to the paper is completed and validated.
+Frozen upstream reference commit: `73cd7cb8d102f4fc0f5bb168a71cfb948077d89a`.
+
+GitHub reports no repository license metadata. Therefore its source is **not copied into NARCIS**. It will be executed as an external dependency in a separate environment, with package/model identifiers and deviations recorded. Direct comparison is limited to genuinely common metrics; generative reconstruction quality is not treated as equivalent to NARCIS finite-index plaintext capacity.
+
+### Closest conceptual comparator: Guo–Ping 2026
+
+The 2026 Guo–Ping stability-aware PZM/SA-PQE method remains the closest conceptual comparator. No verified official public implementation has been located. Its published values may be used as clearly labeled literature results under its original datasets and attacks, but it must not be described as reimplemented until a faithful implementation is independently validated.
+
+The detailed comparison policy is frozen in `TOMM_BASELINE_PROTOCOL.md`.
 
 ## Fresh experiment gates
 
@@ -90,7 +102,7 @@ Evaluate at least global statistics, residual-feature classifier, CNN selection 
 
 ### Gate T5 — recent comparison
 
-Run at least one recent external coverless/generative baseline from public code under a documented environment, and separate directly comparable metrics from protocol-family differences. Do not claim superiority where protocols/datasets do not permit a matched comparison.
+Run DiffStega from its frozen upstream reference in a documented environment and separate directly comparable metrics from protocol-family differences. Guo–Ping 2026 remains a literature-level comparator unless a faithful implementation becomes available. Do not claim superiority where protocols/datasets do not permit a matched comparison.
 
 ### Gate T6 — claim/code/data audit
 
