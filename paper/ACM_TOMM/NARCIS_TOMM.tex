@@ -1,0 +1,132 @@
+\documentclass[manuscript]{acmart}
+
+% ACM review submission scaffold for NARCIS.
+% Numerical abstract/results are intentionally not copied from the historical
+% IEEE/Elsevier versions until the TOMM validation gates have been rerun.
+
+\acmJournal{TOMM}
+
+\title{NARCIS: Authenticated Neural Coverless Image Signaling with Attack-Qualified Codebooks and Error Correction}
+
+\author{St\'ephane Ga\"el R. Ekodeck}
+\orcid{0000-0002-8094-8832}
+\affiliation{%
+  \institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}
+  \city{Yaound\'e}
+  \country{Cameroon}}
+\affiliation{%
+  \institution{UMMISCO, IRD France Nord}
+  \city{Bondy}
+  \country{France}}
+\affiliation{%
+  \institution{Sorbonne Universit\'e, UMI 209 UMMISCO}
+  \city{Paris}
+  \country{France}}
+\email{stephane-gael.ekodeck@facsciences-uy1.cm}
+
+\author{Serge Alain Eb\'el\'e}
+\orcid{0000-0001-7036-7068}
+\affiliation{%
+  \institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}
+  \city{Yaound\'e}
+  \country{Cameroon}}
+\affiliation{%
+  \institution{UMMISCO, IRD France Nord}
+  \city{Bondy}
+  \country{France}}
+\affiliation{%
+  \institution{Sorbonne Universit\'e, UMI 209 UMMISCO}
+  \city{Paris}
+  \country{France}}
+\email{serge-alain.ebele@facsciences-uy1.cm}
+
+\author{Arthur Ulrich Ewane}
+\orcid{0009-0001-6722-2842}
+\affiliation{%
+  \institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}
+  \city{Yaound\'e}
+  \country{Cameroon}}
+\email{ulrich.ewane@facsciences-uy1.cm}
+
+\author{Chantal Marguerite Mveh-Abia}
+\orcid{0009-0005-9398-1067}
+\authornote{Corresponding author.}
+\affiliation{%
+  \institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}
+  \city{Yaound\'e}
+  \country{Cameroon}}
+\affiliation{%
+  \institution{Department of Computer Engineering, National Advanced School of Engineering, University of Yaound\'e I}
+  \city{Yaound\'e}
+  \country{Cameroon}}
+\email{cmmveh@yahoo.fr}
+
+\author{Ren\'e Ndoundam}
+\orcid{0000-0003-1105-762X}
+\affiliation{%
+  \institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}
+  \city{Yaound\'e}
+  \country{Cameroon}}
+\affiliation{%
+  \institution{UMMISCO, IRD France Nord}
+  \city{Bondy}
+  \country{France}}
+\affiliation{%
+  \institution{Sorbonne Universit\'e, UMI 209 UMMISCO}
+  \city{Paris}
+  \country{France}}
+\email{rene.ndoundam@facsciences-uy1.cm}
+
+\renewcommand{\shortauthors}{Ekodeck et al.}
+
+\begin{abstract}
+The final TOMM abstract will be generated only after the revised end-to-end
+campaign has passed the preregistered validation gates in
+\texttt{TOMM\_REVISION\_STATUS.md}. This prevents historical detectability,
+projection, and payload results from being presented as outcomes of the
+revised protocol before they have been re-executed.
+\end{abstract}
+
+\ccsdesc[500]{Information systems~Multimedia information systems}
+\ccsdesc[500]{Security and privacy~Cryptography}
+\ccsdesc[300]{Computing methodologies~Neural networks}
+
+\keywords{coverless image steganography, covert communication, multimedia security, robust image descriptors, authenticated encryption, error correction, steganalysis}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+\label{sec:introduction}
+
+NARCIS is being repositioned for multimedia covert communication rather than
+as an isolated image-feature construction. The revision distinguishes three
+complementary requirements: robust multimedia transport, message-level
+protection, and empirical resistance to selection-oriented steganalysis.
+Recent TOMM work demonstrates that capacity, extraction accuracy, and
+anti-detectability must be evaluated jointly in generative steganography
+\cite{zhou2025pgs}, while TOMM steganalysis research emphasizes robustness to
+cover mismatch and heterogeneous image sources \cite{li2023siairnet}.
+Distribution preservation is also an explicit concern in generative image
+steganography \cite{sun2024guidance}, and adversarial embedding work shows
+that security conclusions depend on the steganalyst used in evaluation
+\cite{wang2024adversarial}.
+
+The revised NARCIS manuscript will therefore report only operating points that
+are simultaneously feasible for the protected payload, qualified under the
+declared image channel, evaluated under multiple selection detectors, and
+validated end-to-end through authenticated decryption. Its media-authentication
+layer is positioned separately from semi-fragile watermarking approaches such
+as FaceSigns \cite{neekhara2024facesigns}: NARCIS authenticates the protected
+message and session while transmitting unchanged indexed images, whereas
+semi-fragile watermarking embeds authentication information into media pixels.
+
+% The remainder of the historical manuscript is migrated only after the fresh
+% TOMM validation results have been generated and audited. Keeping this file
+% deliberately claim-light prevents stale IEEE/Elsevier numbers from becoming
+% the new ACM submission by formatting alone.
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{tomm_positioning}
+
+\end{document}
