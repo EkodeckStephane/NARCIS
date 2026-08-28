@@ -85,6 +85,42 @@ def test_keyed_mapping_preserves_gray_locality():
     assert sum(distance == 1 for distance in distances) >= 14
 
 
+def test_cover_selection_is_deterministic_for_same_payload():
+    index = abundant_index(16, per_cluster=200)
+    protocol = NarcisProtocol(index, 16, b"selection-key")
+    first = protocol.encode(b"same protected payload").covers
+    second = protocol.encode(b"same protected payload").covers
+    assert first == second
+
+
+def test_cover_selection_diversifies_distinct_payloads():
+    index = abundant_index(16, per_cluster=500)
+    protocol = NarcisProtocol(index, 16, b"selection-key")
+    first = protocol.encode(b"protected payload A").covers
+    second = protocol.encode(b"protected payload B").covers
+    assert first != second
+    overlap = len(set(first).intersection(second))
+    assert overlap < min(len(first), len(second))
+
+
+def test_cover_index_accepts_positive_selection_weights():
+    paths = ["a.png", "b.png"]
+    labels = np.array([0, 0])
+    index = CoverIndex.build(paths, labels, weights=np.array([3.0, 0.5]))
+    assert index.selection_weight("a.png") == pytest.approx(3.0)
+    assert index.selection_weight("b.png") == pytest.approx(0.5)
+    assert index.selection_weight("unknown.png") == pytest.approx(1.0)
+
+
+def test_cover_index_rejects_nonpositive_weights():
+    with pytest.raises(ValueError, match="finite and positive"):
+        CoverIndex.build(
+            ["a.png"],
+            np.array([0]),
+            weights=np.array([0.0]),
+        )
+
+
 def test_codebook_predicts_nearest_centroid():
     codebook = NeuralCodebook(np.array([[1.0, 0.0], [0.0, 1.0]]))
     labels = codebook.predict(np.array([[0.9, 0.1], [0.1, 0.9]]))
