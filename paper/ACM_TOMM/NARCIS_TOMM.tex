@@ -99,18 +99,18 @@ revised protocol before they have been re-executed.
 \section{Introduction}
 \label{sec:introduction}
 
-NARCIS is being repositioned for multimedia covert communication rather than
-as an isolated image-feature construction. The revision distinguishes three
-complementary requirements: robust multimedia transport, message-level
-protection, and empirical resistance to selection-oriented steganalysis.
-Recent TOMM work demonstrates that capacity, extraction accuracy, and
-anti-detectability must be evaluated jointly in generative steganography
-\cite{zhou2025pgs}, while TOMM steganalysis research emphasizes robustness to
-cover mismatch and heterogeneous image sources \cite{li2023siairnet}.
-Distribution preservation is also an explicit concern in generative image
-steganography \cite{sun2024guidance}, and adversarial embedding work shows
-that security conclusions depend on the steganalyst used in evaluation
-\cite{wang2024adversarial}.
+NARCIS is repositioned as an end-to-end multimedia covert-communication
+protocol rather than as an isolated image-feature construction. The revision
+distinguishes three complementary requirements: robust multimedia transport,
+message-level protection, and empirical resistance to selection-oriented
+steganalysis. Recent TOMM work demonstrates that capacity, extraction
+accuracy, and anti-detectability must be evaluated jointly in generative
+steganography \cite{zhou2025pgs}, while TOMM steganalysis research emphasizes
+robustness to cover mismatch and heterogeneous image sources
+\cite{li2023siairnet}. Distribution preservation is also an explicit concern
+in generative image steganography \cite{sun2024guidance}, and adversarial
+embedding work shows that security conclusions depend on the steganalyst used
+in evaluation \cite{wang2024adversarial}.
 
 The revised NARCIS manuscript will therefore report only operating points that
 are simultaneously feasible for the protected payload, qualified under the
@@ -121,12 +121,54 @@ as FaceSigns \cite{neekhara2024facesigns}: NARCIS authenticates the protected
 message and session while transmitting unchanged indexed images, whereas
 semi-fragile watermarking embeds authentication information into media pixels.
 
+\section{Positioning Against Recent Coverless Multimedia Communication}
+\label{sec:positioning}
+
+Recent coverless steganography spans fundamentally different carrier models.
+DiffStega is a training-free diffusion-based framework that reconstructs a
+secret image through a password-dependent reference image and prompt-guided
+diffusion process \cite{yang2024diffstega}. Its operating unit is therefore a
+generated image and recovered visual content. NARCIS instead communicates a
+protected byte string by selecting unchanged images from a finite shared
+index. The TOMM evaluation treats DiffStega as an executable recent baseline,
+but compares only metrics that retain the same interpretation across these
+two carrier models; visual reconstruction quality is not equated with
+finite-index plaintext rate.
+
+Closer to the NARCIS selection setting, Guo and Ping combine pseudo-Zernike
+moments, stability-aware quantization, and stability-regularized representative
+selection to improve both robustness and nominal capacity
+\cite{guo2026capacity}. Their method is the principal conceptual comparator
+for stability-aware cover selection. Because no verified official
+implementation has been located, its published measurements remain labeled as
+literature results under the original datasets and attacks rather than being
+presented as a matched reimplementation.
+
+Geometric robustness remains a major failure mode for retrieval and
+hash-based coverless methods. Tan et al. use deep unsupervised hashing with
+attention and Transformer components to strengthen recovery under geometric
+attacks \cite{tan2026hashing}. Meng et al. take a complementary receiver-side
+approach: classify the encountered image attack and restore the received image
+before applying the underlying coverless decoder \cite{meng2025restoration}.
+These works motivate two distinct TOMM evaluation requirements for NARCIS:
+strong holdout geometric transformations and explicit reporting of complete
+message recovery rather than nominal descriptor accuracy alone.
+
+A separate threat comes from the selection mechanism itself. Even unchanged
+covers can become distinguishable when transmission preferentially samples a
+statistically atypical subset of the shared index. The revised protocol
+therefore evaluates both conventional residual/global detectors and a
+texture-oriented GLCM detector following the cover-selection steganalysis
+framework of Cao et al. \cite{cao2025glcm}. This detector battery is used as an
+evaluation instrument; detector outcomes are not used to tune a projection on
+holdout data.
+
 % The remainder of the historical manuscript is migrated only after the fresh
 % TOMM validation results have been generated and audited. Keeping this file
 % deliberately claim-light prevents stale IEEE/Elsevier numbers from becoming
 % the new ACM submission by formatting alone.
 
 \bibliographystyle{ACM-Reference-Format}
-\bibliography{tomm_positioning}
+\bibliography{tomm_positioning,external_comparators}
 
 \end{document}
