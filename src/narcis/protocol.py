@@ -64,6 +64,9 @@ class NarcisProtocol:
         self.inverse = {
             cluster: symbol for symbol, cluster in enumerate(self.permutation)
         }
+        self.selection_key = hmac.new(
+            key, b"cover-selection", hashlib.sha256
+        ).digest()
 
     def demand(self, payload: bytes) -> tuple[dict[int, int], int]:
         coded = (
@@ -90,6 +93,38 @@ class NarcisProtocol:
         }
         return not deficits, deficits
 
+    def _selection_context(self, payload: bytes) -> bytes:
+        return hmac.new(
+            self.selection_key,
+            b"payload:" + hashlib.sha256(payload).digest(),
+            hashlib.sha256,
+        ).digest()
+
+    def _weighted_cover_order(
+        self,
+        cluster: int,
+        payload_context: bytes,
+    ) -> list[str]:
+        candidates = self.cover_index.buckets.get(cluster, [])
+        ranked: list[tuple[float, bytes, str]] = []
+        cluster_bytes = int(cluster).to_bytes(4, "big", signed=False)
+        for path in candidates:
+            digest = hmac.new(
+                self.selection_key,
+                b"candidate:" + payload_context + cluster_bytes + path.encode("utf-8"),
+                hashlib.sha256,
+            ).digest()
+            # Deterministic exponential-race sampling without replacement.
+            # For equal weights this is a keyed pseudorandom permutation; larger
+            # inverse-propensity weights are preferentially ranked earlier.
+            integer = int.from_bytes(digest[:8], "big")
+            uniform = (integer + 1.0) / (2**64 + 1.0)
+            weight = max(self.cover_index.selection_weight(path), 1e-12)
+            score = -math.log(uniform) / weight
+            ranked.append((score, digest, path))
+        ranked.sort(key=lambda row: (row[0], row[1], row[2]))
+        return [path for _, _, path in ranked]
+
     def encode(self, payload: bytes) -> Transmission:
         coded = (
             encode_payload(payload)
@@ -99,12 +134,20 @@ class NarcisProtocol:
         symbols, padding = bits_to_symbols(
             coded, self.bits_per_symbol
         )
+        required_clusters = {
+            self.permutation[symbol] for symbol in symbols
+        }
+        payload_context = self._selection_context(payload)
+        ordered_candidates = {
+            cluster: self._weighted_cover_order(cluster, payload_context)
+            for cluster in required_clusters
+        }
         cursors = {label: 0 for label in range(self.codebook_size)}
         covers: list[str] = []
         for symbol in symbols:
             cluster = self.permutation[symbol]
             for _ in range(self.repetition):
-                candidates = self.cover_index.buckets.get(cluster, [])
+                candidates = ordered_candidates[cluster]
                 cursor = cursors[cluster]
                 if cursor >= len(candidates):
                     raise ValueError(
