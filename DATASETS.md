@@ -25,20 +25,24 @@ descriptor comparison. It can be obtained from:
 
 ## Caltech-101
 
-The cross-dataset evaluation uses all 9,144 RGB images from Caltech-101:
+The cross-dataset evaluation uses all 9,144 images from Caltech-101:
 
+- 101 object categories plus the `BACKGROUND_Google` directory;
+- source image modes in the verified TOMM archive: 8,733 RGB and 411 grayscale;
 - variable original resolutions;
 - official record: <https://data.caltech.edu/records/mzrjq-6wc02>;
 - deterministic preparation script: `download_caltech101.py`.
 
-The preparation script uses the `mteb/Caltech101` Hugging Face mirror as a
-distribution channel while preserving CaltechDATA as the scientific
-provenance. Images are centre-fitted to `256 x 256` in RGB for channel
-simulation and resized to `128 x 128` only at the encoder boundary.
+All source images are converted to RGB and centre-fitted to `256 x 256` for
+channel simulation, then resized to `128 x 128` only at the encoder boundary.
+The source corpus itself is therefore heterogeneous in image mode even though
+the experimental tensors are uniformly RGB.
 
 ## Data Integrity
 
 No synthetic images are used in the principal, cross-dataset, or secondary
-experiments.
-Deterministic seeds define the train/index partitions but do not alter the
-source images.
+experiments. Deterministic seeds define the train/index partitions but do not
+alter the source images.
+
+The fresh TOMM campaign records archive and per-image-manifest hashes in
+`TOMM_DATASET_PROVENANCE.md` before retraining or holdout evaluation.
