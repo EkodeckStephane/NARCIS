@@ -22,12 +22,12 @@ def keyed_permutation(
 ) -> list[int]:
     """Return a keyed Gray permutation with exact cyclic session balancing.
 
-    ``key`` is the mapping subkey. A secret base rotation is derived once from
-    it, while the authenticated session sequence advances the rotation by one
-    position modulo ``size``. Consequently, for any fixed Gray symbol, every
-    block of ``size`` consecutive session sequences visits every cluster
-    exactly once. A separately keyed orientation bit preserves per-session
-    forward/reverse diversity without changing that balance property.
+    ``key`` is the mapping subkey. A secret base rotation and a secret fixed
+    orientation are derived from it. The authenticated session sequence then
+    advances the rotation by one position modulo ``size``. Consequently, for
+    every fixed Gray symbol, any ``size`` consecutive session sequences visit
+    every cluster exactly once while Gray locality is preserved in every
+    individual session.
     """
     if size < 2 or size & (size - 1):
         raise ValueError("Codebook size must be a power of two")
@@ -38,11 +38,7 @@ def keyed_permutation(
     base_digest = hmac.new(key, b"mapping-base", hashlib.sha256).digest()
     base_shift = int.from_bytes(base_digest[:8], "big") % size
     shift = (base_shift + sequence) % size
-    orientation = hmac.new(
-        key,
-        b"mapping-orientation:" + sequence.to_bytes(8, "big", signed=False),
-        hashlib.sha256,
-    ).digest()
+    orientation = hmac.new(key, b"mapping-orientation", hashlib.sha256).digest()
     reverse = bool(orientation[0] & 1)
 
     permutation = [0] * size
