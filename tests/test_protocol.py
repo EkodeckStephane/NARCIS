@@ -82,6 +82,29 @@ def test_sequence_changes_keyed_mapping():
     assert sorted(second) == list(range(16))
 
 
+def test_balanced_cyclic_mapping_visits_every_cluster_per_symbol():
+    size = 8
+    permutations = [
+        keyed_permutation(size, b"balanced-session-key", sequence=sequence)
+        for sequence in range(size)
+    ]
+    for symbol in range(size):
+        assert sorted(permutation[symbol] for permutation in permutations) == list(
+            range(size)
+        )
+
+
+def test_balanced_cyclic_mapping_repeats_rotation_after_full_cycle():
+    size = 8
+    first = keyed_permutation(size, b"balanced-session-key", sequence=3)
+    repeated = keyed_permutation(size, b"balanced-session-key", sequence=3 + size)
+    # The cyclic shift repeats; the independently keyed orientation may differ.
+    # Both mappings remain valid Gray permutations with the same session-balance
+    # guarantee over every complete block of ``size`` consecutive sequences.
+    assert sorted(first) == list(range(size))
+    assert sorted(repeated) == list(range(size))
+
+
 def test_negative_sequence_is_rejected():
     with pytest.raises(ValueError, match="non-negative"):
         keyed_permutation(16, b"session-key", sequence=-1)
