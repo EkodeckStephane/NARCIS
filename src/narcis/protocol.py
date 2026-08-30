@@ -20,16 +20,31 @@ def keyed_permutation(
     key: bytes,
     sequence: int | None = None,
 ) -> list[int]:
+    """Return a keyed Gray permutation with exact cyclic session balancing.
+
+    ``key`` is the mapping subkey. A secret base rotation is derived once from
+    it, while the authenticated session sequence advances the rotation by one
+    position modulo ``size``. Consequently, for any fixed Gray symbol, every
+    block of ``size`` consecutive session sequences visits every cluster
+    exactly once. A separately keyed orientation bit preserves per-session
+    forward/reverse diversity without changing that balance property.
+    """
     if size < 2 or size & (size - 1):
         raise ValueError("Codebook size must be a power of two")
-    context = b"cluster-order"
-    if sequence is not None:
-        if sequence < 0:
-            raise ValueError("sequence must be non-negative")
-        context += b":" + int(sequence).to_bytes(8, "big", signed=False)
-    digest = hmac.new(key, context, hashlib.sha256).digest()
-    shift = int.from_bytes(digest[:8], "big") % size
-    reverse = bool(digest[8] & 1)
+    sequence = 0 if sequence is None else int(sequence)
+    if sequence < 0:
+        raise ValueError("sequence must be non-negative")
+
+    base_digest = hmac.new(key, b"mapping-base", hashlib.sha256).digest()
+    base_shift = int.from_bytes(base_digest[:8], "big") % size
+    shift = (base_shift + sequence) % size
+    orientation = hmac.new(
+        key,
+        b"mapping-orientation:" + sequence.to_bytes(8, "big", signed=False),
+        hashlib.sha256,
+    ).digest()
+    reverse = bool(orientation[0] & 1)
+
     permutation = [0] * size
     for position in range(size):
         gray_symbol = position ^ (position >> 1)
@@ -164,7 +179,9 @@ class NarcisProtocol:
             coded, self.bits_per_symbol
         )
         permutation = self._permutation(sequence)
-        required_clusters = {permutation[symbol] for symbol in symbols}
+        required_clusters = {
+            permutation[symbol] for symbol in symbols
+        }
         payload_context = self._selection_context(payload, sequence)
         ordered_candidates = {
             cluster: self._weighted_cover_order(cluster, payload_context)
