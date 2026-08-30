@@ -15,9 +15,12 @@ The following choices are fixed for every Caltech-101 partition and may not be c
 - codebook size: `K=8`;
 - codebook family: one-dimensional balanced quantile codebook;
 - projection candidates: first 16 clean-descriptor principal directions plus 32 deterministic random directions;
+- random-direction generator seed for partition seed `s`: `20260828 + s`;
 - calibration attack set: JPEG 80/50, Gaussian 5/12, blur 0.8/1.5, resize 0.75/0.50, crop 0.05/0.10, rotation 3/7 degrees;
 - group size: `5` covers per coded symbol;
 - group decoding: strict majority label;
+- group-bank construction seed for partition seed `s`: `20260830 + s`;
+- group-bank optimization budget: 10 deterministic restarts and 6,000 swap proposals per restart;
 - Reed–Solomon parity: `128` bytes;
 - plaintext lengths: `8`, `32`, and `64` bytes;
 - messages: 10 per plaintext length, 30 authenticated sessions total;
@@ -79,7 +82,7 @@ No holdout attack, steganalyzer score, payload recovery result, or Caltech categ
 
 ## Group-bank construction
 
-Within each clean codebook label, all covers are partitioned exactly once into groups of five. The construction minimizes majority-failing group/attack cells and compares the obtained count with the analytical lower bound. The group bank uses calibration correctness only.
+Within each clean codebook label, all covers are partitioned exactly once into groups of five. The construction minimizes majority-failing group/attack cells and compares the obtained count with the analytical lower bound. The group bank uses calibration correctness only. Its deterministic construction seed is `20260830 + partition_seed`; each label uses the versioned label/restart offsets implemented in `src/narcis/group_bank.py`.
 
 During emission, groups are partitioned by their calibration majority-failure signature. The requested prefix is scheduled to track the natural signature proportions of the complete label-specific group bank, with HMAC ranking used only as the deterministic secret-dependent tie-break/order within each signature.
 
