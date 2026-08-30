@@ -74,6 +74,19 @@ def test_key_changes_symbol_permutation():
     assert keyed_permutation(16, b"first") != keyed_permutation(16, b"second")
 
 
+def test_sequence_changes_keyed_mapping():
+    first = keyed_permutation(16, b"session-key", sequence=1)
+    second = keyed_permutation(16, b"session-key", sequence=2)
+    assert first != second
+    assert sorted(first) == list(range(16))
+    assert sorted(second) == list(range(16))
+
+
+def test_negative_sequence_is_rejected():
+    with pytest.raises(ValueError, match="non-negative"):
+        keyed_permutation(16, b"session-key", sequence=-1)
+
+
 def test_keyed_mapping_preserves_gray_locality():
     permutation = keyed_permutation(16, b"locality")
     inverse = {cluster: symbol for symbol, cluster in enumerate(permutation)}
@@ -83,6 +96,30 @@ def test_keyed_mapping_preserves_gray_locality():
         xor = inverse[first] ^ inverse[second]
         distances.append(xor.bit_count())
     assert sum(distance == 1 for distance in distances) >= 14
+
+
+def test_sequence_keyed_protocol_roundtrip():
+    index = abundant_index(16, per_cluster=300)
+    protocol = NarcisProtocol(
+        index,
+        16,
+        b"secret-session-material",
+        fec="reed_solomon",
+        rs_parity=16,
+    )
+    transmissions = []
+    for sequence in (1, 2, 17):
+        payload = f"payload-{sequence}".encode()
+        transmission = protocol.encode(payload, sequence=sequence)
+        labels = [index.labels[path] for path in transmission.covers]
+        decoded, _ = protocol.decode_labels(
+            labels,
+            transmission.padding_bits,
+            sequence=sequence,
+        )
+        assert decoded == payload
+        transmissions.append(transmission.covers)
+    assert transmissions[0] != transmissions[1]
 
 
 def test_cover_selection_is_deterministic_for_same_payload():
