@@ -94,15 +94,11 @@ def test_balanced_cyclic_mapping_visits_every_cluster_per_symbol():
         )
 
 
-def test_balanced_cyclic_mapping_repeats_rotation_after_full_cycle():
+def test_balanced_cyclic_mapping_repeats_after_full_cycle():
     size = 8
     first = keyed_permutation(size, b"balanced-session-key", sequence=3)
     repeated = keyed_permutation(size, b"balanced-session-key", sequence=3 + size)
-    # The cyclic shift repeats; the independently keyed orientation may differ.
-    # Both mappings remain valid Gray permutations with the same session-balance
-    # guarantee over every complete block of ``size`` consecutive sequences.
-    assert sorted(first) == list(range(size))
-    assert sorted(repeated) == list(range(size))
+    assert repeated == first
 
 
 def test_negative_sequence_is_rejected():
