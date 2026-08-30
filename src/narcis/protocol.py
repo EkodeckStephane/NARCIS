@@ -15,10 +15,19 @@ from .coding import (
 from .index import CoverIndex
 
 
-def keyed_permutation(size: int, key: bytes) -> list[int]:
+def keyed_permutation(
+    size: int,
+    key: bytes,
+    sequence: int | None = None,
+) -> list[int]:
     if size < 2 or size & (size - 1):
         raise ValueError("Codebook size must be a power of two")
-    digest = hmac.new(key, b"cluster-order", hashlib.sha256).digest()
+    context = b"cluster-order"
+    if sequence is not None:
+        if sequence < 0:
+            raise ValueError("sequence must be non-negative")
+        context += b":" + int(sequence).to_bytes(8, "big", signed=False)
+    digest = hmac.new(key, context, hashlib.sha256).digest()
     shift = int.from_bytes(digest[:8], "big") % size
     reverse = bool(digest[8] & 1)
     permutation = [0] * size
@@ -60,15 +69,30 @@ class NarcisProtocol:
         self.bits_per_symbol = int(math.log2(codebook_size))
         if 2**self.bits_per_symbol != codebook_size:
             raise ValueError("codebook_size must be a power of two")
-        self.permutation = keyed_permutation(codebook_size, key)
-        self.inverse = {
-            cluster: symbol for symbol, cluster in enumerate(self.permutation)
-        }
+        self.mapping_key = hmac.new(
+            key, b"cluster-mapping", hashlib.sha256
+        ).digest()
         self.selection_key = hmac.new(
             key, b"cover-selection", hashlib.sha256
         ).digest()
+        # Compatibility snapshots for callers that inspect these attributes.
+        self.permutation = self._permutation(0)
+        self.inverse = {
+            cluster: symbol for symbol, cluster in enumerate(self.permutation)
+        }
 
-    def demand(self, payload: bytes) -> tuple[dict[int, int], int]:
+    def _permutation(self, sequence: int) -> list[int]:
+        return keyed_permutation(
+            self.codebook_size,
+            self.mapping_key,
+            sequence=sequence,
+        )
+
+    def demand(
+        self,
+        payload: bytes,
+        sequence: int = 0,
+    ) -> tuple[dict[int, int], int]:
         coded = (
             encode_payload(payload)
             if self.fec == "hamming"
@@ -77,15 +101,20 @@ class NarcisProtocol:
         symbols, padding = bits_to_symbols(
             coded, self.bits_per_symbol
         )
+        permutation = self._permutation(sequence)
         required = Counter(
-            self.permutation[symbol]
+            permutation[symbol]
             for symbol in symbols
             for _ in range(self.repetition)
         )
         return dict(required), padding
 
-    def feasibility(self, payload: bytes) -> tuple[bool, dict[int, int]]:
-        required, _ = self.demand(payload)
+    def feasibility(
+        self,
+        payload: bytes,
+        sequence: int = 0,
+    ) -> tuple[bool, dict[int, int]]:
+        required, _ = self.demand(payload, sequence=sequence)
         deficits = {
             cluster: count - len(self.cover_index.buckets.get(cluster, []))
             for cluster, count in required.items()
@@ -93,10 +122,13 @@ class NarcisProtocol:
         }
         return not deficits, deficits
 
-    def _selection_context(self, payload: bytes) -> bytes:
+    def _selection_context(self, payload: bytes, sequence: int) -> bytes:
         return hmac.new(
             self.selection_key,
-            b"payload:" + hashlib.sha256(payload).digest(),
+            b"sequence:"
+            + int(sequence).to_bytes(8, "big", signed=False)
+            + b":payload:"
+            + hashlib.sha256(payload).digest(),
             hashlib.sha256,
         ).digest()
 
@@ -114,9 +146,6 @@ class NarcisProtocol:
                 b"candidate:" + payload_context + cluster_bytes + path.encode("utf-8"),
                 hashlib.sha256,
             ).digest()
-            # Deterministic exponential-race sampling without replacement.
-            # For equal weights this is a keyed pseudorandom permutation; larger
-            # inverse-propensity weights are preferentially ranked earlier.
             integer = int.from_bytes(digest[:8], "big")
             uniform = (integer + 1.0) / (2**64 + 1.0)
             weight = max(self.cover_index.selection_weight(path), 1e-12)
@@ -125,7 +154,7 @@ class NarcisProtocol:
         ranked.sort(key=lambda row: (row[0], row[1], row[2]))
         return [path for _, _, path in ranked]
 
-    def encode(self, payload: bytes) -> Transmission:
+    def encode(self, payload: bytes, sequence: int = 0) -> Transmission:
         coded = (
             encode_payload(payload)
             if self.fec == "hamming"
@@ -134,10 +163,9 @@ class NarcisProtocol:
         symbols, padding = bits_to_symbols(
             coded, self.bits_per_symbol
         )
-        required_clusters = {
-            self.permutation[symbol] for symbol in symbols
-        }
-        payload_context = self._selection_context(payload)
+        permutation = self._permutation(sequence)
+        required_clusters = {permutation[symbol] for symbol in symbols}
+        payload_context = self._selection_context(payload, sequence)
         ordered_candidates = {
             cluster: self._weighted_cover_order(cluster, payload_context)
             for cluster in required_clusters
@@ -145,7 +173,7 @@ class NarcisProtocol:
         cursors = {label: 0 for label in range(self.codebook_size)}
         covers: list[str] = []
         for symbol in symbols:
-            cluster = self.permutation[symbol]
+            cluster = permutation[symbol]
             for _ in range(self.repetition):
                 candidates = ordered_candidates[cluster]
                 cursor = cursors[cluster]
@@ -165,7 +193,10 @@ class NarcisProtocol:
         )
 
     def decode_labels(
-        self, received_labels: list[int], padding_bits: int
+        self,
+        received_labels: list[int],
+        padding_bits: int,
+        sequence: int = 0,
     ) -> tuple[bytes, int]:
         if len(received_labels) % self.repetition:
             raise ValueError("Received label count violates repetition framing")
@@ -178,8 +209,12 @@ class NarcisProtocol:
                     max(counts, key=lambda label: (counts[label], -label))
                 )
             received_labels = voted
+        permutation = self._permutation(sequence)
+        inverse = {
+            cluster: symbol for symbol, cluster in enumerate(permutation)
+        }
         try:
-            symbols = [self.inverse[label] for label in received_labels]
+            symbols = [inverse[label] for label in received_labels]
         except KeyError as error:
             raise ValueError(f"Unknown received cluster {error.args[0]}") from error
         coded_bits = symbols_to_bits(
