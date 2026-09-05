@@ -45,16 +45,28 @@ for repo, filename, destination in assets:
     print(destination)
 PY
 
-if [[ ! -d "$DIFFSTEGA_ROOT/dataset/UniStega" && ! -d "$DIFFSTEGA_ROOT/dataset/Unistega" ]]; then
+DATASET_DIR="$DIFFSTEGA_ROOT/dataset"
+if [[ ! -d "$DATASET_DIR/content_prompts" && ! -d "$DATASET_DIR/UniStega/content_prompts" && ! -d "$DATASET_DIR/Unistega/content_prompts" ]]; then
   python -m gdown 'https://drive.google.com/uc?id=1ITaNvYAP8hB32TxwEo4Rdf-515plUOdA' -O "$WORK_ROOT/unistega_download"
   FILE_TYPE="$(file -b "$WORK_ROOT/unistega_download" || true)"
   echo "$FILE_TYPE" | tee "$EVIDENCE_ROOT/unistega_file_type.txt"
-  mkdir -p "$DIFFSTEGA_ROOT/dataset"
+  sha256sum "$WORK_ROOT/unistega_download" | tee "$EVIDENCE_ROOT/unistega_archive_sha256.txt"
+  mkdir -p "$DATASET_DIR"
   if [[ "$FILE_TYPE" == *Zip* ]]; then
-    unzip -q "$WORK_ROOT/unistega_download" -d "$DIFFSTEGA_ROOT/dataset"
+    unzip -q "$WORK_ROOT/unistega_download" -d "$DATASET_DIR"
   else
-    tar -xf "$WORK_ROOT/unistega_download" -C "$DIFFSTEGA_ROOT/dataset"
+    tar -xf "$WORK_ROOT/unistega_download" -C "$DATASET_DIR"
   fi
+fi
+
+# The official Google Drive archive currently stores the three prompt folders
+# directly at archive root, while the upstream README commands address them
+# through ./dataset/UniStega/.  Create a path alias only; do not move, rename,
+# filter, or alter any corpus file.
+if [[ -d "$DATASET_DIR/content_prompts" && ! -e "$DATASET_DIR/UniStega" ]]; then
+  (cd "$DATASET_DIR" && ln -s . UniStega)
+elif [[ -d "$DATASET_DIR/Unistega/content_prompts" && ! -e "$DATASET_DIR/UniStega" ]]; then
+  (cd "$DATASET_DIR" && ln -s Unistega UniStega)
 fi
 
 python "$NARCIS_ROOT/tools/diffstega_gpu_preflight.py" \
