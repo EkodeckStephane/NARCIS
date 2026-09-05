@@ -30,7 +30,7 @@ jobs:
       - name: Install CPU scientific environment
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0 torchvision==0.25.0
           python -m pip install \
             'cryptography>=45' 'numpy>=2.2' 'pandas>=2.2' 'Pillow>=11' \
             'psutil>=7' 'reedsolo>=1.7' 'scikit-learn>=1.6' 'scipy>=1.15'
