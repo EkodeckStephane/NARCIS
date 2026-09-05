@@ -11,6 +11,7 @@ import subprocess
 import sys
 
 EXPECTED_COMMIT = "73cd7cb8d102f4fc0f5bb168a71cfb948077d89a"
+EXPECTED_PYTHON = (3, 11, 5)
 EXPECTED_COUNTS = {
     "content_prompts": 42,
     "style_prompts": 28,
@@ -31,6 +32,7 @@ EXPECTED_PACKAGES = {
     "transformers": "4.38.2",
     "controlnet-aux": "0.0.7",
 }
+LOCAL_BUILD_PACKAGES = {"torch", "torchvision", "torchaudio"}
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".bmp", ".webp", ".tif", ".tiff"}
 
 
@@ -58,6 +60,29 @@ def package_version(name: str) -> str | None:
         return None
 
 
+def package_matches(name: str, actual: str | None, expected: str) -> bool:
+    if actual is None:
+        return False
+    # Official PyTorch wheels append a PEP 440 local build tag such as
+    # +cpu or +cu121. The frozen package release remains 2.1.0/0.16.0.
+    if name in LOCAL_BUILD_PACKAGES:
+        return actual.split("+", 1)[0] == expected
+    return actual == expected
+
+
+def discover_unistega_root(root: Path) -> tuple[Path, str]:
+    dataset = root / "dataset"
+    candidates = (
+        (dataset / "UniStega", "dataset/UniStega"),
+        (dataset / "Unistega", "dataset/Unistega"),
+        (dataset, "dataset archive root"),
+    )
+    for candidate, layout in candidates:
+        if all((candidate / subset).is_dir() for subset in EXPECTED_COUNTS):
+            return candidate, layout
+    return dataset / "UniStega", "unresolved"
+
+
 def main() -> None:
     parser = ArgumentParser(description="Preflight for the frozen DiffStega GPU reproduction")
     parser.add_argument("--diffstega-root", type=Path, required=True)
@@ -73,6 +98,7 @@ def main() -> None:
         "tracked_changes": tracked_changes,
         "environment": {
             "python": sys.version,
+            "python_expected": ".".join(map(str, EXPECTED_PYTHON)),
             "platform": platform.platform(),
             "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
             "packages": {},
@@ -87,7 +113,7 @@ def main() -> None:
         report["environment"]["packages"][package] = {
             "expected": expected,
             "actual": actual,
-            "matches": actual == expected,
+            "matches": package_matches(package, actual, expected),
         }
 
     try:
@@ -110,12 +136,9 @@ def main() -> None:
             "sha256": sha256_file(path) if path.exists() else None,
         }
 
-    dataset_root = root / "dataset" / "UniStega"
-    if not dataset_root.exists():
-        alternate = root / "dataset" / "Unistega"
-        if alternate.exists():
-            dataset_root = alternate
+    dataset_root, dataset_layout = discover_unistega_root(root)
     report["unistega"]["root"] = str(dataset_root)
+    report["unistega"]["layout"] = dataset_layout
     total = 0
     for subset, expected in EXPECTED_COUNTS.items():
         subset_root = dataset_root / subset
@@ -144,6 +167,7 @@ def main() -> None:
     report["checks"] = {
         "commit_matches": report["actual_commit"] == EXPECTED_COMMIT,
         "tracked_source_unchanged": tracked_changes == "",
+        "python_matches": sys.version_info[:3] == EXPECTED_PYTHON,
         "packages_match": package_ok,
         "cuda_available": bool(torch_runtime.get("cuda_available", False)),
         "assets_present": all(item["exists"] for item in report["assets"].values()),
