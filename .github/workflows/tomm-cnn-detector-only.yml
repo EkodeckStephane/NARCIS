@@ -1,0 +1,139 @@
+name: TOMM CNN detector-only audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [tomm-revision]
+    paths:
+      - 'tools/tomm_final_cnn_from_frozen_payload.py'
+      - 'tools/tomm_final_detector_audit.py'
+      - 'tools/.tomm_frozen_payload/**'
+      - '.github/workflows/tomm-cnn-detector-only.yml'
+
+jobs:
+  caltech-cnn:
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        seed: [11, 29, 47, 71, 101]
+        repeat_start: [0, 5, 10, 15]
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout frozen revision
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install CPU scientific environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0 torchvision==0.25.0
+          python -m pip install \
+            'cryptography>=45' 'numpy>=2.2' 'pandas>=2.2' 'Pillow>=11' \
+            'psutil>=7' 'reedsolo>=1.7' 'scikit-learn>=1.6' 'scipy>=1.15'
+
+      - name: Download and certify official Caltech-101
+        run: |
+          set -euo pipefail
+          mkdir -p dataset_external/caltech101
+          curl --fail --location --retry 6 --retry-all-errors \
+            'https://data.caltech.edu/records/mzrjq-6wc02/files/caltech-101.zip?download=1' \
+            --output dataset_external/caltech101/caltech-101.zip
+          ACTUAL_SHA="$(sha256sum dataset_external/caltech101/caltech-101.zip | awk '{print $1}')"
+          EXPECTED_SHA='331234750fc7f77520e50d9565e8b6907b03565e30320da1401130db08c61f91'
+          echo "Caltech wrapper SHA-256: $ACTUAL_SHA"
+          test "$ACTUAL_SHA" = "$EXPECTED_SHA"
+          unzip -q dataset_external/caltech101/caltech-101.zip -d dataset_external/caltech101/extracted
+          INNER_ARCHIVE="$(find dataset_external/caltech101/extracted -type f -name 101_ObjectCategories.tar.gz | head -n 1)"
+          test -n "$INNER_ARCHIVE"
+          mkdir -p dataset_external/caltech101/images
+          tar -xzf "$INNER_ARCHIVE" -C dataset_external/caltech101/images
+          CALTECH_ROOT="$(find dataset_external/caltech101/images -type d -name 101_ObjectCategories | head -n 1)"
+          test -n "$CALTECH_ROOT"
+          echo "CALTECH_ROOT=$CALTECH_ROOT" >> "$GITHUB_ENV"
+          export CALTECH_ROOT
+          python - <<'PY'
+          from pathlib import Path
+          import os
+          from PIL import Image
+          root = Path(os.environ['CALTECH_ROOT'])
+          suffixes = {'.jpg', '.jpeg', '.png', '.bmp', '.pgm', '.ppm', '.tif', '.tiff'}
+          paths = sorted(p for p in root.rglob('*') if p.is_file() and p.suffix.lower() in suffixes)
+          modes = {}
+          for p in paths:
+              with Image.open(p) as im:
+                  im.load()
+                  modes[im.mode] = modes.get(im.mode, 0) + 1
+          print({'root': str(root), 'images': len(paths), 'modes': modes})
+          if len(paths) != 9144 or modes != {'RGB': 8733, 'L': 411}:
+              raise SystemExit('Caltech-101 provenance check failed')
+          PY
+
+      - name: Record code hashes
+        run: |
+          mkdir -p "tomm_cnn_work/seed_${{ matrix.seed }}/r${{ matrix.repeat_start }}"
+          sha256sum \
+            tools/tomm_final_cnn_from_frozen_payload.py \
+            tools/tomm_final_detector_audit.py \
+            tools/.tomm_frozen_payload/part*.b64 \
+            > "tomm_cnn_work/seed_${{ matrix.seed }}/r${{ matrix.repeat_start }}/code_sha256.txt"
+          git rev-parse HEAD > "tomm_cnn_work/seed_${{ matrix.seed }}/r${{ matrix.repeat_start }}/git_commit.txt"
+
+      - name: Execute certified CNN-only chunk
+        env:
+          PYTHONPATH: src
+        run: |
+          python tools/tomm_final_cnn_from_frozen_payload.py \
+            --dataset-root "$CALTECH_ROOT" \
+            --output "tomm_cnn_work/seed_${{ matrix.seed }}/r${{ matrix.repeat_start }}" \
+            --seed "${{ matrix.seed }}" \
+            --repeat-start "${{ matrix.repeat_start }}" \
+            --repeat-count 5
+
+      - name: Verify chunk evidence
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import numpy as np
+          import pandas as pd
+          seed = int('${{ matrix.seed }}')
+          start = int('${{ matrix.repeat_start }}')
+          root = Path(f'tomm_cnn_work/seed_{seed}/r{start}')
+          target = np.load(root / 'session_target.npy')
+          reps = pd.read_csv(root / 'detector_repetitions.csv')
+          heads = pd.read_csv(root / 'detector_heads.csv')
+          manifest = json.loads((root / 'detector_only_manifest.json').read_text(encoding='utf-8'))
+          assert target.shape == (7000, 30)
+          assert int(target.sum()) == 80300
+          assert len(reps) == 5
+          assert set(reps['repeat'].astype(int)) == set(range(start, start + 5))
+          assert len(heads) == 150
+          assert set(heads['detector']) == {'cnn30head'}
+          assert int(heads['session'].min()) == 0 and int(heads['session'].max()) == 29
+          assert manifest['target_raw_sha256'] == __import__('hashlib').sha256(target.tobytes()).hexdigest()
+          print({
+              'seed': seed,
+              'repeats': reps['repeat'].astype(int).tolist(),
+              'macro_auc': reps['cnn30head_macro_auc'].astype(float).tolist(),
+              'target_raw_sha256': manifest['target_raw_sha256'],
+              'rows_heads': len(heads),
+              'verified': True,
+          })
+          PY
+
+      - name: Upload frozen CNN evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tomm-cnn-seed-${{ matrix.seed }}-r${{ matrix.repeat_start }}-${{ matrix.repeat_start }}plus4
+          path: tomm_cnn_work/seed_${{ matrix.seed }}/r${{ matrix.repeat_start }}
+          if-no-files-found: warn
+          retention-days: 30
