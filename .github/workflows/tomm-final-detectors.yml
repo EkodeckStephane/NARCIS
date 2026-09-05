@@ -98,6 +98,36 @@ jobs:
             --epochs 0 \
             --repeats 20
 
+      - name: Verify channel and detector schedule identity
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          import json
+          root = Path('tomm_final_detector_work/seed_${{ matrix.seed }}')
+          channel = json.loads((root / 'channel_recheck_manifest.json').read_text(encoding='utf-8'))
+          detector = json.loads((root / 'audit_manifest.json').read_text(encoding='utf-8'))
+          def sha(path):
+              h = hashlib.sha256()
+              with path.open('rb') as f:
+                  for block in iter(lambda: f.read(1024 * 1024), b''):
+                      h.update(block)
+              return h.hexdigest()
+          schedule = sha(root / 'schedule.csv')
+          target = sha(root / 'session_target.npy')
+          expected_schedule = channel['artifacts']['schedule_csv_sha256']
+          expected_target = channel['artifacts']['session_target_npy_sha256']
+          if schedule != expected_schedule:
+              raise SystemExit(f'schedule hash changed: {schedule} != {expected_schedule}')
+          if target != expected_target:
+              raise SystemExit(f'target hash changed: {target} != {expected_target}')
+          if detector['artifacts']['schedule_csv_sha256'] != schedule:
+              raise SystemExit('detector manifest schedule hash mismatch')
+          if detector['artifacts']['session_target_npy_sha256'] != target:
+              raise SystemExit('detector manifest target hash mismatch')
+          print({'schedule_sha256': schedule, 'session_target_sha256': target, 'identity': True})
+          PY
+
       - name: Upload frozen evidence
         if: always()
         uses: actions/upload-artifact@v4
