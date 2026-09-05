@@ -42,8 +42,13 @@ jobs:
             'https://data.caltech.edu/records/mzrjq-6wc02/files/caltech-101.zip?download=1' \
             --output dataset_external/caltech101/caltech-101.zip
           unzip -q dataset_external/caltech101/caltech-101.zip -d dataset_external/caltech101/extracted
-          CALTECH_ROOT="$(find dataset_external/caltech101/extracted -type d -name 101_ObjectCategories | head -n 1)"
+          INNER_ARCHIVE="$(find dataset_external/caltech101/extracted -type f -name 101_ObjectCategories.tar.gz | head -n 1)"
+          test -n "$INNER_ARCHIVE"
+          mkdir -p dataset_external/caltech101/images
+          tar -xzf "$INNER_ARCHIVE" -C dataset_external/caltech101/images
+          CALTECH_ROOT="$(find dataset_external/caltech101/images -type d -name 101_ObjectCategories | head -n 1)"
           test -n "$CALTECH_ROOT"
+          export CALTECH_ROOT
           echo "CALTECH_ROOT=$CALTECH_ROOT" >> "$GITHUB_ENV"
           python - <<'PY'
           from pathlib import Path
