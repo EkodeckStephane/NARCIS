@@ -1,5 +1,6 @@
 import numpy as np
 
+from narcis.coding import bits_to_symbols, encode_payload
 from narcis.complementary_protocol import encode_complementary
 from narcis.index import CoverIndex
 from narcis.protocol import NarcisProtocol
@@ -7,7 +8,13 @@ from narcis.protocol import NarcisProtocol
 
 def test_complementary_protocol_roundtrip_with_clean_labels():
     codebook_size = 4
-    per_label = 18
+    payload = b"A"
+    symbols, _ = bits_to_symbols(encode_payload(payload), bits_per_symbol=2)
+    # Every coded symbol consumes one fresh triplet. Provision each label for
+    # the conservative worst case in which all coded symbols map to the same
+    # clean label; this keeps the test focused on round-trip correctness rather
+    # than accidental finite-index exhaustion.
+    per_label = 3 * len(symbols)
     identifiers = [
         f"label-{label}/cover-{index}.png"
         for label in range(codebook_size)
@@ -32,7 +39,7 @@ def test_complementary_protocol_roundtrip_with_clean_labels():
 
     transmission = encode_complementary(
         protocol,
-        b"A",
+        payload,
         sequence=7,
         identifiers=identifiers,
         failure_masks=failure_masks,
@@ -44,6 +51,6 @@ def test_complementary_protocol_roundtrip_with_clean_labels():
         transmission.padding_bits,
         sequence=7,
     )
-    assert recovered == b"A"
+    assert recovered == payload
     assert corrections == 0
     assert len(transmission.covers) == len(set(transmission.covers))
