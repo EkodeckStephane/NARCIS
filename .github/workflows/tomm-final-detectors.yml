@@ -1,0 +1,88 @@
+name: TOMM final detector audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [tomm-revision]
+    paths:
+      - 'tools/tomm_final_detector_audit.py'
+      - 'TOMM_CANONICAL_AUDIT_EXECUTION_FREEZE.md'
+      - '.github/workflows/tomm-final-detectors.yml'
+
+jobs:
+  caltech-final-detectors:
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [11, 29, 47, 71, 101]
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout frozen revision
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install CPU scientific environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install \
+            'cryptography>=45' 'numpy>=2.2' 'pandas>=2.2' 'Pillow>=11' \
+            'psutil>=7' 'reedsolo>=1.7' 'scikit-learn>=1.6' 'scipy>=1.15'
+
+      - name: Download official Caltech-101
+        run: |
+          mkdir -p dataset_external/caltech101
+          curl --fail --location --retry 6 --retry-all-errors \
+            'https://data.caltech.edu/records/mzrjq-6wc02/files/caltech-101.zip?download=1' \
+            --output dataset_external/caltech101/caltech-101.zip
+          unzip -q dataset_external/caltech101/caltech-101.zip -d dataset_external/caltech101/extracted
+          CALTECH_ROOT="$(find dataset_external/caltech101/extracted -type d -name 101_ObjectCategories | head -n 1)"
+          test -n "$CALTECH_ROOT"
+          echo "CALTECH_ROOT=$CALTECH_ROOT" >> "$GITHUB_ENV"
+          python - <<'PY'
+          from pathlib import Path
+          import os
+          from PIL import Image
+          root = Path(os.environ['CALTECH_ROOT'])
+          suffixes = {'.jpg', '.jpeg', '.png', '.bmp', '.pgm', '.ppm', '.tif', '.tiff'}
+          paths = sorted(p for p in root.rglob('*') if p.is_file() and p.suffix.lower() in suffixes)
+          readable = 0
+          modes = {}
+          for p in paths:
+              with Image.open(p) as im:
+                  im.load()
+                  readable += 1
+                  modes[im.mode] = modes.get(im.mode, 0) + 1
+          print({'root': str(root), 'images': len(paths), 'readable': readable, 'modes': modes})
+          if len(paths) != 9144 or readable != 9144:
+              raise SystemExit('Caltech-101 provenance check failed')
+          PY
+
+      - name: Execute frozen multi-session detector audit
+        env:
+          PYTHONPATH: src
+        run: |
+          python tools/tomm_final_detector_audit.py \
+            --dataset-root "$CALTECH_ROOT" \
+            --checkpoint-root "tomm_final_detector_work/checkpoints_seed_${{ matrix.seed }}" \
+            --output "tomm_final_detector_work/seed_${{ matrix.seed }}" \
+            --seed "${{ matrix.seed }}" \
+            --epochs 5 \
+            --repeats 20
+
+      - name: Upload frozen evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tomm-final-detectors-seed-${{ matrix.seed }}
+          path: |
+            tomm_final_detector_work/seed_${{ matrix.seed }}
+            tomm_final_detector_work/checkpoints_seed_${{ matrix.seed }}/encoder_seed_${{ matrix.seed }}.pt
+          if-no-files-found: warn
+          retention-days: 30
