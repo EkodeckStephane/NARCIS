@@ -1,0 +1,53 @@
+name: Inspect frozen TOMM detector payload
+
+on:
+  push:
+    branches: [tomm-revision]
+    paths:
+      - '.github/workflows/tomm-frozen-payload-inspect.yml'
+  workflow_dispatch:
+
+jobs:
+  inspect-payload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Decode frozen payload
+        run: |
+          set -euo pipefail
+          cat tools/.tomm_frozen_payload/part*.b64 > /tmp/payload.b64
+          base64 -d /tmp/payload.b64 > /tmp/payload.zlib
+          python - <<'PY'
+          import zlib
+          from pathlib import Path
+          raw = Path('/tmp/payload.zlib').read_bytes()
+          data = zlib.decompress(raw)
+          Path('/tmp/payload.decoded').write_bytes(data)
+          print({'compressed_bytes': len(raw), 'decoded_bytes': len(data), 'first_32_hex': data[:32].hex()})
+          PY
+          file /tmp/payload.decoded || true
+          sha256sum /tmp/payload.decoded
+
+      - name: Identify payload structure
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import io, json, tarfile, zipfile
+          p = Path('/tmp/payload.decoded')
+          data = p.read_bytes()
+          print('utf8_prefix=', repr(data[:500].decode('utf-8', errors='replace')))
+          if zipfile.is_zipfile(p):
+              with zipfile.ZipFile(p) as z:
+                  print('ZIP MEMBERS:')
+                  for n in z.namelist(): print(n)
+          else:
+              try:
+                  with tarfile.open(p) as t:
+                      print('TAR MEMBERS:')
+                      for m in t.getmembers(): print(m.name, m.size)
+              except Exception as e:
+                  print('not_tar=', type(e).__name__, str(e))
+          PY
