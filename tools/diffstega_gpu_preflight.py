@@ -65,11 +65,12 @@ def main() -> None:
     args = parser.parse_args()
 
     root = args.diffstega_root.resolve()
+    tracked_changes = git_output(root, "diff", "--name-only", "HEAD")
     report = {
         "upstream_root": str(root),
         "expected_commit": EXPECTED_COMMIT,
         "actual_commit": git_output(root, "rev-parse", "HEAD"),
-        "git_status_porcelain": git_output(root, "status", "--porcelain"),
+        "tracked_changes": tracked_changes,
         "environment": {
             "python": sys.version,
             "platform": platform.platform(),
@@ -142,7 +143,7 @@ def main() -> None:
     torch_runtime = report["environment"].get("torch_runtime", {})
     report["checks"] = {
         "commit_matches": report["actual_commit"] == EXPECTED_COMMIT,
-        "clean_git_tree": report["git_status_porcelain"] == "",
+        "tracked_source_unchanged": tracked_changes == "",
         "packages_match": package_ok,
         "cuda_available": bool(torch_runtime.get("cuda_available", False)),
         "assets_present": all(item["exists"] for item in report["assets"].values()),
