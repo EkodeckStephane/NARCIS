@@ -30,10 +30,11 @@ jobs:
           PY
           sha256sum /tmp/payload.py
 
-      - name: Show frozen payload CLI and execution hooks
+      - name: Show frozen certification hooks
         run: |
-          python /tmp/payload.py --help || true
-          echo '--- ARGUMENTS ---'
-          grep -n "add_argument" /tmp/payload.py || true
-          echo '--- ENTRY POINT ---'
-          grep -n -E "def main|__main__|run_detectors|cnn|schedule|payload" /tmp/payload.py | tail -n 120 || true
+          echo '--- IMPORTS / CONSTANTS ---'
+          grep -n -E "NativeImageDataset|FROZEN|EXPECTED|target_raw|sha256|base64|zlib" /tmp/payload.py | head -n 120 || true
+          echo '--- DATASET / TARGET / SCHEDULE ---'
+          grep -n -E "discover_images|index_paths|dataset=|dataset =|identifiers|target=|target =|actual=|actual =|expected=|expected =|schedule.csv|run_detectors" /tmp/payload.py | head -n 160 || true
+          echo '--- MAIN BODY ---'
+          sed -n '39,67p' /tmp/payload.py
