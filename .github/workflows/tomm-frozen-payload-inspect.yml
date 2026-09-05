@@ -25,29 +25,15 @@ jobs:
           from pathlib import Path
           raw = Path('/tmp/payload.zlib').read_bytes()
           data = zlib.decompress(raw)
-          Path('/tmp/payload.decoded').write_bytes(data)
-          print({'compressed_bytes': len(raw), 'decoded_bytes': len(data), 'first_32_hex': data[:32].hex()})
+          Path('/tmp/payload.py').write_bytes(data)
+          print({'compressed_bytes': len(raw), 'decoded_bytes': len(data)})
           PY
-          file /tmp/payload.decoded || true
-          sha256sum /tmp/payload.decoded
+          sha256sum /tmp/payload.py
 
-      - name: Identify payload structure
+      - name: Show frozen payload CLI and execution hooks
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import io, json, tarfile, zipfile
-          p = Path('/tmp/payload.decoded')
-          data = p.read_bytes()
-          print('utf8_prefix=', repr(data[:500].decode('utf-8', errors='replace')))
-          if zipfile.is_zipfile(p):
-              with zipfile.ZipFile(p) as z:
-                  print('ZIP MEMBERS:')
-                  for n in z.namelist(): print(n)
-          else:
-              try:
-                  with tarfile.open(p) as t:
-                      print('TAR MEMBERS:')
-                      for m in t.getmembers(): print(m.name, m.size)
-              except Exception as e:
-                  print('not_tar=', type(e).__name__, str(e))
-          PY
+          python /tmp/payload.py --help || true
+          echo '--- ARGUMENTS ---'
+          grep -n "add_argument" /tmp/payload.py || true
+          echo '--- ENTRY POINT ---'
+          grep -n -E "def main|__main__|run_detectors|cnn|schedule|payload" /tmp/payload.py | tail -n 120 || true
