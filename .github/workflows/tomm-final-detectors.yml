@@ -6,7 +6,9 @@ on:
     branches: [tomm-revision]
     paths:
       - 'tools/tomm_final_detector_audit.py'
+      - 'tools/tomm_final_channel_recheck.py'
       - 'TOMM_CANONICAL_AUDIT_EXECUTION_FREEZE.md'
+      - 'TOMM_ALIGNED_CHANNEL_RECHECK_FREEZE.md'
       - '.github/workflows/tomm-final-detectors.yml'
 
 jobs:
@@ -41,6 +43,8 @@ jobs:
           curl --fail --location --retry 6 --retry-all-errors \
             'https://data.caltech.edu/records/mzrjq-6wc02/files/caltech-101.zip?download=1' \
             --output dataset_external/caltech101/caltech-101.zip
+          md5sum dataset_external/caltech101/caltech-101.zip
+          sha256sum dataset_external/caltech101/caltech-101.zip
           unzip -q dataset_external/caltech101/caltech-101.zip -d dataset_external/caltech101/extracted
           INNER_ARCHIVE="$(find dataset_external/caltech101/extracted -type f -name 101_ObjectCategories.tar.gz | head -n 1)"
           test -n "$INNER_ARCHIVE"
@@ -67,7 +71,20 @@ jobs:
           print({'root': str(root), 'images': len(paths), 'readable': readable, 'modes': modes})
           if len(paths) != 9144 or readable != 9144:
               raise SystemExit('Caltech-101 provenance check failed')
+          if modes != {'RGB': 8733, 'L': 411}:
+              raise SystemExit(f'Caltech-101 mode census mismatch: {modes}')
           PY
+
+      - name: Execute aligned frozen channel recheck
+        env:
+          PYTHONPATH: src
+        run: |
+          python tools/tomm_final_channel_recheck.py \
+            --dataset-root "$CALTECH_ROOT" \
+            --checkpoint-root "tomm_final_detector_work/checkpoints_seed_${{ matrix.seed }}" \
+            --output "tomm_final_detector_work/seed_${{ matrix.seed }}" \
+            --seed "${{ matrix.seed }}" \
+            --epochs 5
 
       - name: Execute frozen multi-session detector audit
         env:
@@ -78,7 +95,7 @@ jobs:
             --checkpoint-root "tomm_final_detector_work/checkpoints_seed_${{ matrix.seed }}" \
             --output "tomm_final_detector_work/seed_${{ matrix.seed }}" \
             --seed "${{ matrix.seed }}" \
-            --epochs 5 \
+            --epochs 0 \
             --repeats 20
 
       - name: Upload frozen evidence
