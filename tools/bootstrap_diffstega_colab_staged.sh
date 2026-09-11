@@ -13,6 +13,15 @@ if ! command -v nvidia-smi >/dev/null 2>&1; then
 fi
 nvidia-smi
 
+# GNU time is used only to collect wall-clock/resource evidence around each
+# frozen DiffStega command. Some Colab images omit /usr/bin/time by default.
+# Installing it does not modify any scientific parameter or Python package.
+if [[ ! -x /usr/bin/time ]]; then
+  apt-get update -qq
+  DEBIAN_FRONTEND=noninteractive apt-get install -y time
+fi
+/usr/bin/time --version | head -n 1
+
 if [[ ! -x "$ENV_ROOT/bin/micromamba" ]]; then
   mkdir -p "$ENV_ROOT/bin"
   curl -Ls https://micro.mamba.pm/api/micromamba/linux-64/latest \
