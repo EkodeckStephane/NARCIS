@@ -40,6 +40,23 @@ for repo in repos:
     except Exception as e:
         rev[repo] = {"error": f"{type(e).__name__}: {e}"}
 (evidence / "model_revisions.json").write_text(json.dumps(rev, indent=2), encoding="utf-8")
+
+manifest_path = evidence / "ip_adapter_assets.json"
+previous = {}
+if manifest_path.exists():
+    try:
+        for row in json.loads(manifest_path.read_text(encoding="utf-8")):
+            previous[row["filename"]] = row
+    except Exception:
+        previous = {}
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for block in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(block)
+    return h.hexdigest()
+
 assets = [
     ("h94/IP-Adapter", "models/ip-adapter-plus_sd15.bin", root / "pretrained_models" / "ip-adapter-plus_sd15.bin"),
     ("h94/IP-Adapter", "models/ip-adapter-plus-face_sd15.bin", root / "pretrained_models" / "ip-adapter-plus-face_sd15.bin"),
@@ -49,12 +66,21 @@ assets = [
 rows = []
 for repo, filename, destination in assets:
     destination.parent.mkdir(parents=True, exist_ok=True)
-    downloaded = Path(hf_hub_download(repo_id=repo, filename=filename))
-    if not destination.exists() or destination.stat().st_size != downloaded.stat().st_size:
+    old = previous.get(filename)
+    reusable = False
+    if destination.exists() and old and old.get("sha256"):
+        actual = sha256_file(destination)
+        reusable = actual == old["sha256"] and destination.stat().st_size == old.get("bytes")
+    if reusable:
+        h = old["sha256"]
+        print(f"REUSE verified {filename} {h}")
+    else:
+        downloaded = Path(hf_hub_download(repo_id=repo, filename=filename))
         destination.write_bytes(downloaded.read_bytes())
-    h = hashlib.sha256(destination.read_bytes()).hexdigest()
+        h = sha256_file(destination)
+        print(f"DOWNLOADED {filename} {h}")
     rows.append({"repo": repo, "filename": filename, "path": str(destination), "bytes": destination.stat().st_size, "sha256": h})
-(evidence / "ip_adapter_assets.json").write_text(json.dumps(rows, indent=2), encoding="utf-8")
+manifest_path.write_text(json.dumps(rows, indent=2), encoding="utf-8")
 PY
 
 DATASET_DIR="$DIFFSTEGA_ROOT/dataset"
