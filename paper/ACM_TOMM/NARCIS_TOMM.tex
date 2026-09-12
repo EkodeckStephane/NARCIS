@@ -5,8 +5,9 @@
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta,positioning,fit}
+\usetikzlibrary{arrows.meta,positioning,fit,matrix}
 \usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
 \pgfplotsset{compat=1.18}
 
 \acmJournal{TOMM}
@@ -16,6 +17,12 @@
 \orcid{0009-0001-6722-2842}
 \affiliation{\institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}\city{Yaound\'e}\country{Cameroon}}
 \email{ulrich.ewane@facsciences-uy1.cm}
+
+\author{Juvet Karnel Sadi\'e}
+\affiliation{\institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}\city{Yaound\'e}\country{Cameroon}}
+\affiliation{\institution{UMMISCO, IRD France Nord}\city{Bondy}\country{France}}
+\affiliation{\institution{Sorbonne Universit\'e, UMI 209 UMMISCO}\city{Paris}\country{France}}
+\email{sadie.juvet@gmail.com}
 
 \author{St\'ephane Ga\"el R. Ekodeck}
 \orcid{0000-0002-8094-8832}
@@ -37,6 +44,11 @@
 \affiliation{\institution{RUFCEA (UR-IFIA), University of Dschang}\city{Dschang}\country{Cameroon}}
 \email{vivsxx@univ-bertoua.cm}
 
+\author{Damaris Belle M. Fotso}
+\orcid{0009-0001-8736-0644}
+\affiliation{\institution{Department of Computer Science, University of Yaound\'e I, LIRIMA}\city{Yaound\'e}\country{Cameroon}}
+\email{makwate.fotso@facsciences-uy1.cm}
+
 \author{Chantal Marguerite Mveh-Abia}
 \orcid{0009-0005-9398-1067}
 \authornote{Corresponding author.}
@@ -47,7 +59,7 @@
 \renewcommand{\shortauthors}{Ewane et al.}
 
 \begin{abstract}
-Selection-based coverless communication avoids pixel modification, but unchanged carriers alone do not guarantee reliable or statistically inconspicuous communication. A finite shared image index can become infeasible for a protected message after channel qualification, and repeated secret-dependent selection can itself create a detectable distribution shift. We present NARCIS, an authenticated neural coverless image-signaling protocol that treats these two effects as protocol constraints rather than post-hoc diagnostics. NARCIS combines a learned normalized image descriptor, calibration-locked quantile codebooks, complementary five-cover group banks, an exact session-balanced keyed Gray mapping, AES-GCM authenticated framing, replay control, and Reed--Solomon correction. The final operating point ($K=8$, group size 5, 128 Reed--Solomon parity bytes) was fixed on a development corpus before external evaluation on five Caltech-101 partitions. Across twelve calibration transformations, NARCIS recovered 1,800/1,800 authenticated messages. On eight unseen holdout transformations it recovered 1,163/1,200 (96.92\%); all 37 failures occurred under a 12\% central crop, while the other seven holdouts were 150/150 each. A repeated image-disjoint detector audit yielded mean macro-AUC 0.504 for SRM-lite/ExtraTrees, 0.513 for GLCM/logistic regression, and 0.527 for a 30-head CNN, establishing low but measurable selection leakage rather than undetectability. A frozen execution of the official DiffStega benchmark completed all 100 UniStega cases; its independently reproduced correct-recovery PSNR was 23.274 dB versus 23.290 dB reported by the original paper. Because DiffStega reconstructs secret images whereas NARCIS transmits authenticated byte strings through unchanged indexed images, family-specific metrics are reported without a cross-family superiority claim.
+Selection-based coverless communication preserves carrier pixels while reliability and statistical inconspicuousness depend on the selected-index distribution and the image channel. We present NARCIS, an authenticated neural coverless image-signaling protocol that treats finite-index feasibility, channel robustness, session balancing, and selection detectability as joint protocol constraints. NARCIS combines a learned normalized image descriptor, calibration-locked quantile codebooks, complementary five-cover group banks, exact session-balanced keyed Gray mapping, AES-GCM authenticated framing, replay control, and Reed--Solomon correction. The final operating point ($K=8$, group size 5, 128 Reed--Solomon parity bytes) was fixed on BOSSBase development evidence before external evaluation on five Caltech-101 partitions. The development lineage achieved 1,800/1,800 calibration recoveries across five seeds while exercising essentially the full index. External Caltech calibration recovered 1,800/1,800 authenticated messages. Eight unseen holdout transformations yielded 1,163/1,200 recoveries (96.92\%); the 37 failures were concentrated in the 12\% central-crop condition, while each of the other seven holdouts achieved 150/150. A repeated image-disjoint detector audit yielded mean macro-AUC 0.504 for SRM-lite/ExtraTrees, 0.513 for GLCM/logistic regression, and 0.527 for a 30-head CNN, supporting a low but measurable selection-leakage characterization. A frozen execution of the official DiffStega benchmark completed all 100 UniStega cases; independently reproduced correct-recovery PSNR reached 23.274 dB versus 23.290 dB in the original paper. Family-specific metrics preserve the distinct semantics of generated-image reconstruction and authenticated finite-index byte signaling.
 \end{abstract}
 
 \ccsdesc[500]{Security and privacy~Cryptography}
