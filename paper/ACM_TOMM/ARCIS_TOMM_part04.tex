@@ -1,0 +1,95 @@
+\addplot+[mark=square*] coordinates {(1,.964)(2,.950)(3,.958)(4,.928)(5,.707)(6,.603)(7,.923)(8,.860)};
+\legend{Authenticated success,Mean label accuracy}
+\end{axis}
+\end{tikzpicture}
+\caption{Holdout robustness at message and pre-FEC label levels. G denotes Gaussian noise, B blur, C crop percentage, and R rotation degrees. The gap between label accuracy and authenticated recovery visualizes protection supplied by majority grouping and RS128.}
+\Description{Line chart comparing authenticated success and mean pre-FEC label accuracy for eight holdout transformations. Seven transformations have perfect message success; the 12 percent crop has 113 of 150 successes.}
+\label{fig:holdout}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=.78\textwidth,height=5cm,ymin=.86,ymax=1.01,xtick={1,2,3,4,5},xticklabels={11,29,47,71,101},xlabel={Caltech seed},ylabel={Holdout authenticated success},ymajorgrids=true]
+\addplot+[ybar,bar width=13pt] coordinates {(1,1)(2,.8917)(3,1)(4,.9625)(5,.9917)};
+\end{axis}
+\end{tikzpicture}
+\caption{External holdout authenticated-message success by partition. The aggregate across all five partitions is 96.92\%.}
+\Description{Bar chart showing holdout authenticated-message success by seed: 1.0, approximately 0.892, 1.0, 0.963, and 0.992.}
+\label{fig:holdoutseed}
+\end{figure}
+
+\subsection{Selection detectability}
+Table~\ref{tab:detectors} summarizes the final detector audit. SRM-lite remains close to chance, GLCM reveals a small repeatable texture/selection shift, and the trained CNN provides the strongest discrimination with mean macro-AUC 0.5266. The five CNN seed means lie between 0.5232 and 0.5301, showing that the signal persists across external partitions. The supported characterization is therefore low but measurable selection leakage under the evaluated matched-index warden.
+
+\begin{table}[t]
+\caption{Final repeated Caltech-101 selection-detector audit ($n=100$ overlapping image-disjoint splits per detector). Intervals summarize repeated-split variability.}
+\label{tab:detectors}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Detector & Mean AUC & SD & Min--Max & Descriptive 95\% interval\\
+\midrule
+SRM-lite + ExtraTrees&0.5040&0.0023&0.4969--0.5088&0.5036--0.5045\\
+GLCM + logistic&0.5128&0.0017&0.5088--0.5162&0.5125--0.5132\\
+30-head CNN&0.5266&0.0034&0.5186--0.5340&0.5259--0.5273\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=.72\textwidth,height=5cm,ymin=.495,ymax=.535,xtick={1,2,3},xticklabels={SRM-lite,GLCM,CNN},ylabel={Mean macro-AUC},ymajorgrids=true]
+\addplot+[ybar,bar width=17pt] coordinates {(1,.5040)(2,.5128)(3,.5266)};
+\addplot[domain=.7:3.3,dashed] {.5};
+\end{axis}
+\end{tikzpicture}
+\caption{Mean macro-AUC of the frozen detector battery. The dashed reference is chance AUC 0.5.}
+\Description{Three-bar chart with mean AUC 0.504 for SRM-lite, 0.513 for GLCM, and 0.527 for CNN; a dashed line marks chance at 0.5.}
+\label{fig:detectors}
+\end{figure}
+
+The CNN evidence comprises 20/20 successful workflow jobs, 100 repetition-level macro-AUC rows, and 3,000 per-session-head AUC rows. This granularity supports both aggregate and partition-level inspection of learned detector behavior.
+
+\subsection{DiffStega reproduction and execution evidence}
+All 100 official UniStega cases complete under the frozen external execution: 30 similar-prompt cases in 1:14:52, 42 content-prompt cases in 1:36:01, and 28 style-prompt cases in 54:35.80. The run produces 700 PNG files, with 22 face cases and zero face-detection failures in the independent metric pass.
+
+Table~\ref{tab:diffstega} compares independently reproduced values with the published IJCAI reference. Correct-recovery PSNR is 23.274 dB, within 0.016 dB of the reported 23.290 dB. Face-ID similarity on 22 face cases is 0.888 versus 0.893. Remaining differences are preserved as reproduction evidence under the disclosed independent metric environment. DiffStega and \method retain distinct communication semantics: DiffStega evaluates reconstruction of a secret image through generative diffusion, whereas \method evaluates authenticated byte recovery from a finite index of unchanged natural images.
+
+\begin{table}[t]
+\caption{DiffStega external reproduction. Reproduced values come from the frozen 100-case execution; published values are reported by Yang et al.~\cite{yang2024diffstega}.}
+\label{tab:diffstega}
+\small
+\begin{tabular}{llrr}
+\toprule
+Condition & Metric & Reproduced & Published\\
+\midrule
+Encrypted&PSNR&18.569&18.611\\
+&SSIM&0.529&0.590\\
+&LPIPS&0.418&0.461\\
+&Face ID similarity&0.345&0.343\\
+&CLIP score&28.946&29.446\\
+&NIQE&3.901&3.408\\
+\midrule
+Correct recovery&PSNR&23.274&23.290\\
+&SSIM&0.672&0.769\\
+&LPIPS&0.183&0.266\\
+&Face ID similarity&0.888&0.893\\
+\midrule
+No-password recovery&PSNR&18.495&18.491\\
+&SSIM&0.535&0.595\\
+&LPIPS&0.408&0.457\\
+&Face ID similarity&0.346&0.331\\
+\midrule
+Wrong-password recovery&PSNR&17.613&17.530\\
+&SSIM&0.491&0.540\\
+&LPIPS&0.434&0.476\\
+&Face ID similarity&0.548&0.477\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\begin{minipage}[t]{.36\textwidth}
