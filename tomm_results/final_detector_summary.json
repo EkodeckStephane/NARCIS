@@ -1,0 +1,54 @@
+{
+  "status": "final_multi_session_detector_audit_complete",
+  "dataset": "Caltech-101",
+  "seeds": [11, 29, 47, 71, 101],
+  "sessions_per_seed": 30,
+  "repetitions_per_seed": 20,
+  "total_repeated_splits": 100,
+  "split_rule": "image-disjoint 65/35; split_seed = partition_seed*10000 + repeat",
+  "session_target_shape": [7000, 30],
+  "detectors": {
+    "srm_lite_extratrees": {
+      "features": 52,
+      "n": 100,
+      "mean_macro_auc": 0.5040483433773926,
+      "sample_sd": 0.0022639480522018045,
+      "min": 0.49691887804882,
+      "median": 0.504071917600066,
+      "max": 0.5088454852333921,
+      "descriptive_95_interval": [0.5035991269671236, 0.5044975597876615]
+    },
+    "glcm_logistic": {
+      "features": 5,
+      "n": 100,
+      "mean_macro_auc": 0.5128334839901955,
+      "sample_sd": 0.001718048760795593,
+      "min": 0.5088029877290637,
+      "median": 0.5128188311167885,
+      "max": 0.5162433122196963,
+      "descriptive_95_interval": [0.5124925858427132, 0.5131743821376777]
+    },
+    "cnn_30_head": {
+      "n": 100,
+      "mean_macro_auc": 0.5266028248184438,
+      "sample_sd": 0.003386984143201465,
+      "min": 0.5186272486432716,
+      "max": 0.5339707596444454,
+      "descriptive_95_interval": [0.5259307736832743, 0.5272748759536132],
+      "per_seed": {
+        "11": {"mean": 0.5231504607384523, "sd": 0.002178410672291638, "min": 0.5190290797764583, "max": 0.5272109184838715},
+        "29": {"mean": 0.5270229506056732, "sd": 0.0018132111233344417, "min": 0.5241633882397119, "max": 0.5314842346512235},
+        "47": {"mean": 0.5300536060239851, "sd": 0.001984369309814456, "min": 0.5258389990094183, "max": 0.5339707596444454},
+        "71": {"mean": 0.5242388266321195, "sd": 0.002910963107894336, "min": 0.5186272486432716, "max": 0.5293962348493682},
+        "101": {"mean": 0.5285482800919894, "sd": 0.002048317209617465, "min": 0.5252300266513484, "max": 0.5319304727471774}
+      },
+      "workflow_run_id": 33987707681,
+      "launch_commit": "d8086c3fba09ca3ef2bfab4e02b25b126ce0d7a2",
+      "jobs_success": "20/20",
+      "per_head_auc_rows": 3000,
+      "frozen_payload_sha256": "ac7fefd1e216e11216ac3575beb7de37874523d9efbd00972c9c6186088b7431"
+    }
+  },
+  "interpretation": "SRM-lite is essentially at chance; GLCM reveals a weak reproducible texture/selection signal; the trained CNN is the strongest detector and reveals a modest systematic signal. The result supports low detectability under the evaluated threat model, not undetectability.",
+  "inference_boundary": "Repeated splits overlap, so the reported 95% intervals are descriptive. No naive one-sample repeated-split t-test p-value is used as confirmatory inference."
+}
