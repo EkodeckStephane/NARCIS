@@ -1,0 +1,128 @@
+\section{System and Threat Model}
+\label{sec:threat}
+
+\subsection{Parties and shared state}
+
+Sender and receiver share an indexed image corpus $\mathcal{I}=\{x_i\}_{i=1}^{N}$, the trained descriptor and frozen codebook, and independent cryptographic subkeys for payload encryption, cluster mapping, and cover selection. The sender transmits only images already present in the index; NARCIS performs no pixel modification. Session metadata records at least the authenticated sequence number, codebook size, padding information, and cover count. In the implementation, metadata are separately sealed with AES-GCM and bound to sender/receiver identities.
+
+The benchmark uses deterministic public key/nonce derivation solely for reproducibility. This benchmark root is not presented as production key management. For a partition key $K_{\mathrm{master}}$, subkeys are derived with HMAC-SHA256 for encryption, mapping, and selection. The benchmark nonce combines a four-byte HMAC-derived prefix with the unique 64-bit session sequence, making nonce uniqueness explicit for sequences $0,\ldots,29$ under a fixed benchmark key.
+
+\subsection{Channel and warden}
+
+The image channel can apply lossy compression, additive Gaussian noise, blur, resizing, central cropping, and small rotations. Calibration and holdout transformation values are disjoint. The receiver does not know the transformation applied to a particular received image.
+
+For detectability, we use a strong matched-index warden: for each authenticated session, images selected by that session form the positive class and images in the same frozen index not selected by that session form the negative class. Training and test image identities are disjoint. This measures selection leakage relative to the shared index distribution. It does not model every possible traffic-analysis adversary, semantic side information, timing channel, or cross-platform social-media pipeline.
+
+\subsection{Security goals and claim boundary}
+
+NARCIS separates cryptographic and steganographic claims. AES-GCM provides payload confidentiality/integrity and metadata authentication under its standard AEAD assumptions and nonce discipline \cite{nistgcm}; the replay guard rejects sequence numbers no greater than the highest previously accepted value for a sender. Reed--Solomon coding \cite{reed1960polynomial} corrects residual symbol errors within its decoding budget. None of those properties implies that cover selection is statistically hidden. Selection detectability is therefore empirical and detector-scoped, while traffic-analysis resistance and universal steganographic secrecy remain outside the claim.
+
+\section{NARCIS Protocol}
+\label{sec:method}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  node distance=5mm and 7mm,
+  box/.style={draw,rounded corners,align=center,minimum height=8mm,text width=28mm,font=\small},
+  arrow/.style={-{Latex[length=2mm]},thick}
+]
+\node[box] (train) {Learn normalized\\image descriptor};
+\node[box,right=of train] (project) {Calibration-locked\\projection + $K=8$ quantiles};
+\node[box,right=of project] (bank) {Five-cover group bank\\+ failure signatures};
+\node[box,below=of project] (crypto) {AES-GCM + framing\\+ RS128};
+\node[box,right=of crypto] (map) {Session-balanced\\keyed Gray map};
+\node[box,right=of map] (select) {Signature-balanced\\keyed group selection};
+\node[box,below=of map] (channel) {Image channel};
+\node[box,left=of channel] (decode) {Majority labels\\+ RS decode};
+\node[box,left=of decode] (auth) {Authenticate/decrypt\\or explicit failure};
+\draw[arrow] (train)--(project);
+\draw[arrow] (project)--(bank);
+\draw[arrow] (crypto)--(map);
+\draw[arrow] (map)--(select);
+\draw[arrow] (bank)--(select);
+\draw[arrow] (select)--(channel);
+\draw[arrow] (channel)--(decode);
+\draw[arrow] (decode)--(auth);
+\end{tikzpicture}
+\caption{NARCIS separates offline channel-aware index construction (top) from online protected transmission and recovery (bottom). The external-validation operating point is frozen before Caltech-101 outcomes are inspected.}
+\Description{A block diagram showing descriptor learning, projection and quantile codebook construction, five-cover group banks, AES-GCM and Reed-Solomon framing, keyed Gray mapping, keyed group selection, the image channel, majority decoding, and final authentication.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{Invariant descriptor}
+
+A convolutional encoder $f_\theta$ maps an image to an $L_2$-normalized descriptor $z=f_\theta(x)\in\mathbb{R}^{64}$. The frozen encoder contains four convolutional blocks with batch normalization and SiLU activations, adaptive average pooling, and a two-layer projector. Training uses paired channel augmentations and variance--invariance--covariance regularization in the spirit of VICReg \cite{bardes2022vicreg}. In the external campaign, images are fit to 256$\times$256 RGB at the channel boundary and 128$\times$128 at the encoder boundary; base width is 16, batch size 16, and training lasts five epochs with AdamW ($10^{-3}$ learning rate, $10^{-5}$ weight decay).
+
+\subsection{Calibration-locked codebook and qualification}
+
+For a candidate unit direction $u$, each indexed image receives scalar score
+\begin{equation}
+  s_i = u^\top f_\theta(x_i).
+\end{equation}
+A balanced one-dimensional quantile codebook partitions the clean scores into $K=8$ labels. Candidate projections comprise the first 16 clean-descriptor principal directions and 32 deterministic random directions. Projection selection uses only the twelve calibration transformations: JPEG qualities 80 and 50; Gaussian noise standard deviations 5 and 12; Gaussian blur radii 0.8 and 1.5; resize scales 0.75 and 0.50; central crops 5\% and 10\%; and rotations 3 and 7 degrees.
+
+Let $y_i$ be the clean label and $y_{i,a}$ the label under calibration attack $a$. Define correctness
+\begin{equation}
+ c_{i,a}=\mathbb{1}[y_{i,a}=y_i].
+\end{equation}
+Rather than discarding every individually imperfect image, the final protocol exploits complementary error patterns. Projection candidates are ranked by analytical lower bounds on unavoidable majority-failing groups, with stable-cover and distribution-balance diagnostics used only after the primary failure criteria. No holdout outcome, category label, steganalyzer score, or message-recovery result enters projection selection.
+
+\subsection{Complementary group bank}
+
+Within each codebook label, all covers of the 7,000-image index carrying that label are partitioned into disjoint groups of five. A group $G$ fails calibration attack $a$ only when at least three members are mislabeled:
+\begin{equation}
+ F_a(G)=\mathbb{1}\!\left[\sum_{i\in G} c_{i,a}<3\right].
+\end{equation}
+The vector $(F_a(G))_a$ is stored as a calibration majority-failure signature. Group-bank construction minimizes majority-failing group/attack cells using deterministic restarts and swap proposals, and compares the achieved count against an analytical lower bound. This turns robustness into a group-composition problem: covers with different individual failure modes can form a majority-correct group even when none is universally stable.
+
+During emission, groups of a requested label are partitioned by failure signature. If $p_s$ is the natural proportion of signature $s$ in the complete label-specific bank, the scheduler chooses each next available signature by its current proportional deficit. Secret-dependent HMAC ranking is used only for deterministic ordering/tie breaking inside that rule. Consequently, robustness optimization is not trained on a steganalyzer and the transmitted prefix is prevented from collapsing onto only the most reliable signature class.
+
+\subsection{Authenticated coding and exact session balancing}
+
+The plaintext is encrypted with AES-GCM using associated data that include the authenticated sequence number. The protected envelope is framed and encoded with 128 Reed--Solomon parity bytes, then divided into $b=\log_2K=3$-bit symbols.
+
+To avoid permanently associating a biased coded-symbol distribution with particular visual clusters, NARCIS uses an exact cyclic keyed Gray mapping. Let $g(p)=p\oplus(p\!\gg\!1)$ be binary-reflected Gray order. A mapping subkey fixes a secret base $b_0\in\{0,\ldots,K-1\}$ and one orientation $r\in\{-1,+1\}$. For authenticated session sequence $q$,
+\begin{equation}
+ \mathrm{shift}_q=(b_0+q)\bmod K,
+\end{equation}
+\begin{equation}
+ \pi_q(g(p))=(\mathrm{shift}_q+r p)\bmod K.
+ \label{eq:mapping}
+\end{equation}
+For any fixed coded symbol, Eq.~\eqref{eq:mapping} visits every cluster exactly once over any $K$ consecutive sequence values. This is an algebraic balancing property, not an empirical detector claim.
+
+For each required mapped label, the sender chooses one five-cover group using the signature-balanced keyed scheduler and transmits the five unchanged images. A cover cannot be reused within one transmission. The receiver re-embeds each image, recovers five labels, takes their strict majority, inverts $\pi_q$, reconstructs the coded bitstream, applies Reed--Solomon decoding, and finally accepts the plaintext only if framing and AES-GCM verification succeed.
+
+\subsection{Finite-index feasibility}
+
+For protected envelope $c$, let $d_k(c)$ denote the number of group occurrences required for label $k$ after coding and session mapping, and $a_k$ the number of available groups in label bank $k$. The session is feasible when
+\begin{equation}
+ d_k(c)\le a_k \quad \text{for every }k.
+ \label{eq:feasible}
+\end{equation}
+This criterion is deliberately message-specific. Nominal alphabet capacity $\log_2 K$ says how many coded bits a label can represent; Eq.~\eqref{eq:feasible} asks whether the finite qualified index can actually realize the entire protected message without within-session cover reuse.
+
+\subsection{Protocol properties and component roles}
+
+Two exact properties delimit what is guaranteed before any experiment. First, for any fixed coded symbol $v$ and any starting sequence $q_0$, the multiset $\{\pi_{q_0+t}(v):0\le t<K\}$ contains every cluster label exactly once. This follows because the additive shift traverses all residues modulo $K$; Gray ordering and orientation only permute the fixed symbol positions. Second, under the no-reuse rule and a preconstructed group bank, Eq.~\eqref{eq:feasible} is necessary and sufficient for emitting the complete coded session: necessity follows because every occurrence consumes one distinct group of its mapped label; sufficiency follows by assigning any $d_k$ distinct available groups for each label $k$. These properties are used directly by the online encoder and are not inferred from timing or detector measurements.
+
+\begin{table}[t]
+\caption{Role of the principal components and the evidence that supports each role. No row is used to claim that the component itself is a new primitive.}
+\label{tab:roles}
+\small
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+Component & Protocol role & Evidence/guarantee \\
+\midrule
+Calibration-locked projection & Define an externally fixed $K=8$ label space & Selection uses calibration attacks only; holdouts remain unseen \\
+Complementary five-cover bank & Convert heterogeneous per-cover failures into majority decisions & Group failure signatures and 1,800/1,800 external calibration recoveries \\
+RS128 & Correct residual coded-byte errors & Up to 37 corrections in calibration and 64 on holdout crop \\
+Cyclic keyed Gray map & Remove persistent coded-symbol-to-cluster assignment & Exact $K$-session balancing property \\
+Signature-balanced scheduler & Avoid concentrating the transmitted prefix on one calibration-failure class & Proportional-deficit scheduling by construction; detector audit performed afterward \\
+AES-GCM + sequence/replay state & Authenticate accepted plaintext and session metadata & Standard AEAD semantics, explicit nonce discipline, stateful replay rejection \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The study does not infer a component-level causal performance gain from this table. An empirical removal ablation would answer a different question and is not used to support a superiority claim; the reported claims concern the frozen integrated protocol and the exact properties above.
