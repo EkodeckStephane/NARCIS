@@ -1,0 +1,28 @@
+\documentclass[10pt]{letter}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parskip}{2pt}
+\signature{Chantal Marguerite Mveh-Abia\\Corresponding author\\University of Yaoundé I\\\href{mailto:cmmveh@yahoo.fr}{cmmveh@yahoo.fr}}
+\address{Yaoundé, Cameroon}
+\begin{document}
+\begin{letter}{Editors\\ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)}
+\opening{Dear Editors,}
+
+We submit the research article entitled ``\textbf{ARCIS: Authenticated Robust Coverless Image Signaling with Finite-Index Feasibility}'' for consideration in \emph{ACM Transactions on Multimedia Computing, Communications, and Applications}.
+
+ARCIS studies selection-based coverless image communication as a finite-index authenticated signaling problem. Its contribution couples a calibration-locked codebook, complementary five-cover group banks, exact session-balanced keyed Gray mapping, authenticated framing, replay control, Reed--Solomon correction, and an explicit feasibility test for complete protected messages. Standard cryptographic and coding primitives are used as components; the scientific contribution is the integrated finite-index construction and its frozen external evaluation.
+
+The final operating point ($K=8$, five covers per coded symbol, 128 Reed--Solomon parity bytes) was fixed on BOSSBase development evidence before external validation on five Caltech-101 partitions. External calibration recovered 1,800/1,800 authenticated messages and exercised every cover in each 7,000-image index. Eight unseen holdout transformations yielded 1,163/1,200 authenticated recoveries (96.92\%), with all 37 failures concentrated in the strongest 12\% central-crop condition. A repeated image-disjoint audit produced mean macro-AUC 0.504 for SRM-lite/ExtraTrees, 0.513 for GLCM/logistic regression, and 0.527 for a 30-head CNN. A frozen execution of the official DiffStega benchmark completed all 100 UniStega cases and independently reproduced correct-recovery PSNR at 23.274 dB versus 23.290 dB in the reference paper.
+
+The manuscript explicitly limits its claims: it does not claim universal undetectability, universal robustness, or direct numerical superiority over generative steganography. It reports the 12\% crop boundary, measurable learned-selection leakage, the single external natural-image corpus, and the evaluated warden scope. It also cites recent TOMM work and closely related multimedia-security literature.
+
+The manuscript is original, is not under consideration elsewhere, and all authors have approved the submitted version. The author order is Arthur Ulrich Ewane; Juvet Karnel Sadié; Stéphane Gaël R. Ekodeck; Serge Alain Ebélé; Vivien Loïck Beyala Kamgang; Damaris Belle M. Fotso; and Chantal Marguerite Mveh-Abia. Chantal Marguerite Mveh-Abia is the corresponding author.
+
+We believe the work fits TOMM through its combination of multimedia representation, robust image communication, security evaluation, and reproducible empirical analysis.
+
+\closing{Sincerely,}
+\end{letter}
+\end{document}
