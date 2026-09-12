@@ -1,0 +1,26 @@
+Target journal
+ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)
+
+Article title
+ARCIS: Authenticated Robust Coverless Image Signaling with Finite-Index Feasibility
+
+Acronym
+ARCIS = Authenticated Robust Coverless Image Signaling
+
+Authors (order)
+1. Arthur Ulrich Ewane
+2. Juvet Karnel Sadié
+3. Stéphane Gaël R. Ekodeck
+4. Serge Alain Ebélé
+5. Vivien Loïck Beyala Kamgang
+6. Damaris Belle M. Fotso
+7. Chantal Marguerite Mveh-Abia (corresponding author)
+
+Corresponding author email
+cmmveh@yahoo.fr
+
+Keywords
+coverless image steganography; cover selection; covert communication; multimedia security; authenticated encryption; finite-index feasibility; error correction; steganalysis
+
+Abstract
+Selection-based coverless communication preserves carrier pixels, while reliability and statistical inconspicuousness depend on the selected-index distribution and the image channel. We present ARCIS (Authenticated Robust Coverless Image Signaling), a protocol that treats finite-index feasibility, channel robustness, session balancing, authentication, and selection detectability as joint constraints. ARCIS combines a learned normalized image descriptor, calibration-locked quantile codebooks, complementary five-cover group banks, exact session-balanced keyed Gray mapping, AES-GCM authenticated framing, replay control, and Reed-Solomon correction. The final operating point (K=8, group size 5, 128 Reed-Solomon parity bytes) was fixed on BOSSBase development evidence before external evaluation on five Caltech-101 partitions. The development lineage achieved 1,800/1,800 calibration recoveries across five seeds while exercising essentially the full index. External Caltech calibration recovered 1,800/1,800 authenticated messages. Eight unseen holdout transformations yielded 1,163/1,200 recoveries (96.92%); the 37 failures were concentrated in the 12% central-crop condition, while each of the other seven holdouts achieved 150/150. A repeated image-disjoint detector audit yielded mean macro-AUC 0.504 for SRM-lite/ExtraTrees, 0.513 for GLCM/logistic regression, and 0.527 for a 30-head CNN, supporting a low but measurable selection-leakage characterization. A frozen execution of the official DiffStega benchmark completed all 100 UniStega cases; independently reproduced correct-recovery PSNR reached 23.274 dB versus 23.290 dB in the original paper. Family-specific metrics preserve the distinct semantics of generated-image reconstruction and authenticated finite-index byte signaling.
