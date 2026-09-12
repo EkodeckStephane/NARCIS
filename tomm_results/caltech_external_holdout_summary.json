@@ -1,0 +1,31 @@
+{
+  "dataset": "Caltech-101",
+  "status": "external_holdout_complete",
+  "protocol": "canonical K=8 group-bank schedule; group_size=5; RS128; 30 authenticated sessions/seed; payloads 8/32/64 bytes; sequences 0..29",
+  "seeds": [11, 29, 47, 71, 101],
+  "aggregate": {
+    "trials": 1200,
+    "successes": 1163,
+    "success_rate": 0.9691666666666666,
+    "maximum_rs_corrections": 64
+  },
+  "per_seed": {
+    "11": {"trials": 240, "successes": 240, "success_rate": 1.0, "maximum_rs_corrections": 55},
+    "29": {"trials": 240, "successes": 214, "success_rate": 0.8916666666666667, "maximum_rs_corrections": 64},
+    "47": {"trials": 240, "successes": 240, "success_rate": 1.0, "maximum_rs_corrections": 37},
+    "71": {"trials": 240, "successes": 231, "success_rate": 0.9625, "maximum_rs_corrections": 64},
+    "101": {"trials": 240, "successes": 238, "success_rate": 0.9916666666666667, "maximum_rs_corrections": 63}
+  },
+  "by_attack": {
+    "gaussian_9_holdout": {"trials": 150, "successes": 150, "success_rate": 1.0, "mean_cover_label_accuracy": 0.9642135323242534, "minimum_cover_label_accuracy": 0.940948275862069, "maximum_rs_corrections": 0},
+    "gaussian_15_holdout": {"trials": 150, "successes": 150, "success_rate": 1.0, "mean_cover_label_accuracy": 0.9495891247077083, "minimum_cover_label_accuracy": 0.9112068965517242, "maximum_rs_corrections": 2},
+    "blur_1.2_holdout": {"trials": 150, "successes": 150, "success_rate": 1.0, "mean_cover_label_accuracy": 0.9584645574014886, "minimum_cover_label_accuracy": 0.9018939393939394, "maximum_rs_corrections": 0},
+    "blur_1.8_holdout": {"trials": 150, "successes": 150, "success_rate": 1.0, "mean_cover_label_accuracy": 0.9278512415517639, "minimum_cover_label_accuracy": 0.843560606060606, "maximum_rs_corrections": 5},
+    "crop_08_holdout": {"trials": 150, "successes": 150, "success_rate": 1.0, "mean_cover_label_accuracy": 0.706639780087747, "minimum_cover_label_accuracy": 0.6413793103448275, "maximum_rs_corrections": 34},
+    "crop_12_holdout": {"trials": 150, "successes": 113, "success_rate": 0.7533333333333333, "mean_cover_label_accuracy": 0.6030802634907992, "minimum_cover_label_accuracy": 0.5254310344827586, "maximum_rs_corrections": 64},
+    "rotate_5_holdout": {"trials": 150, "successes": 150, "success_rate": 1.0, "mean_cover_label_accuracy": 0.9228242284691233, "minimum_cover_label_accuracy": 0.8958333333333334, "maximum_rs_corrections": 0},
+    "rotate_9_holdout": {"trials": 150, "successes": 150, "success_rate": 1.0, "mean_cover_label_accuracy": 0.8602018593777833, "minimum_cover_label_accuracy": 0.8060344827586207, "maximum_rs_corrections": 26}
+  },
+  "failure_localization": "All 37 authenticated-message failures occur under the unseen 12% crop holdout. The other seven holdout transformations are 150/150 each.",
+  "claim_boundary": "This supports strong but bounded external channel robustness. It explicitly does not support universal robustness to cropping or arbitrary geometric transformations."
+}
