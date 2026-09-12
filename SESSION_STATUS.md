@@ -1,72 +1,45 @@
-# NARCIS Session Status
+# ARCIS Session Status
 
-## Status
+## Current status
 
-- Submission status: submitted.
-- Target journal: Signal Processing (Elsevier/EURASIP).
-- Article type: Original Research Article.
-- Current action: wait for editorial and reviewer feedback.
-- Session recorded: 10 June 2026, Africa/Douala.
+- Current method/article name: **ARCIS — Authenticated Robust Coverless Image Signaling**.
+- Current title: **ARCIS: Authenticated Robust Coverless Image Signaling with Finite-Index Feasibility**.
+- Target journal: **ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)**.
+- Submission status: **not yet submitted**; the submission package is frozen for a final author reread.
+- Canonical manuscript directory: `paper/ACM_TOMM/`.
 
-## Submitted work
+The repository itself keeps the historical name `NARCIS`, and the Python namespace remains `src/narcis/`, to preserve reproducibility and stable paths.
 
-Title:
+## Frozen protocol
 
-> NARCIS: Authenticated Neural Coverless Image Signaling with
-> Attack-Qualified Codebooks and Error Correction
+- `K = 8`.
+- Group size = 5 covers per coded symbol.
+- Reed–Solomon parity = 128 bytes.
+- BOSSBase 1.01 = development evidence.
+- Caltech-101 = external frozen evaluation.
+- Five deterministic seeds: 11, 29, 47, 71, 101.
 
-The manuscript positions NARCIS as an end-to-end coverless communication
-protocol based on unchanged natural images, attack-qualified codebooks,
-AES-GCM protection, Reed--Solomon correction, keyed symbol assignment, and
-authenticated recovery.
+## Frozen headline evidence
 
-## Main reported evidence
+- BOSSBase development calibration: 1,800/1,800 authenticated recoveries.
+- BOSSBase index participation: 7,995–8,000 unique covers per seed.
+- Caltech-101 external calibration: 1,800/1,800 authenticated recoveries.
+- Caltech-101 unseen holdouts: 1,163/1,200 (96.92%).
+- The 37 holdout failures are all in the unseen 12% central-crop condition; the other seven holdouts achieve 150/150 each.
+- Final image-disjoint detector means: 0.5040 (SRM-lite/ExtraTrees), 0.5128 (GLCM/logistic regression), 0.5266 (30-head CNN).
+- Frozen DiffStega execution: 100/100 UniStega cases completed; correct-recovery PSNR 23.274 dB reproduced versus 23.290 dB published.
 
-- BOSSBase and Caltech-101 evaluations with five deterministic partitions per
-  dataset.
-- 1,575/1,575 authenticated message-condition recoveries.
-- Mean symbol accuracy: 98.74% on BOSSBase and 98.59% on Caltech-101.
-- Net plaintext rate: 0.184 to 1.213 bits/cover for the tested payload sizes.
-- Matched BOSSBase ablation: 100% success with attack qualification versus
-  67.62% without it.
-- Selection leakage is reported by dataset and detector, including the weak
-  Caltech-101 seed-47 signal.
+## Canonical submission assets
 
-## Submission assets
+- `paper/ACM_TOMM/ARCIS_TOMM.tex`
+- `paper/ACM_TOMM/ARCIS_references.bib`
+- `paper/ACM_TOMM/COVER_LETTER_ARCIS_TOMM.tex`
+- `paper/ACM_TOMM/SUBMISSION_CHECKLIST.md`
+- `paper/ACM_TOMM/SCHOLARONE_METADATA.txt`
+- `paper/ACM_TOMM/REVISION_MANIFEST.md`
 
-- `paper/NARCIS.tex` and `paper/NARCIS.pdf`
-- `paper/NARCIS_LaTeX_Source.zip`
-- `paper/NARCIS_Highlights.docx`
-- `paper/NARCIS_Highlights.txt`
-- `paper/Graphical_Abstract.tex`
-- `paper/Graphical_Abstract.pdf`
-- `paper/Graphical_Abstract.png`
-- `paper/cover_letter.tex` and `paper/cover_letter.pdf`
-- Figures `paper/figures/Fig_01.pdf` through `Fig_09.pdf`
+Older Signal Processing and IEEE/TMM assets are retained only as historical revisions.
 
-## Validation state
+## Next action
 
-- Manuscript compiled to 13 pages.
-- No undefined figure references or citations were detected.
-- All nine manuscript figures are labelled and cited.
-- Graphical abstract is implemented in editable TikZ and exported as vector
-  PDF and 300 dpi PNG.
-- Five highlights satisfy the Elsevier 85-character limit.
-- Test suite result: 23 tests passed.
-- The standalone LaTeX archive was extracted and compiled successfully.
-
-## Resume point
-
-When the editorial decision arrives:
-
-1. Preserve the complete decision letter and reviewer comments verbatim.
-2. Classify every request as scientific, experimental, editorial, or formal.
-3. Build a point-by-point response matrix with manuscript locations and
-   supporting evidence.
-4. Reproduce or extend experiments only where the reviewer request affects a
-   claim or acceptance risk.
-5. Update the manuscript, response letter, fact check, figures, source archive,
-   and GitHub repository together.
-
-Do not infer acceptance from the current submission status. The next phase
-starts only from the actual editor and reviewer reports.
+Perform the final human reread of the ACM TOMM PDF. Any post-reread correction should update the `.tex`, compiled PDF, portal metadata/checklist where affected, and this repository snapshot together before submission.
