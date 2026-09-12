@@ -1,0 +1,11 @@
+\section{Reproducibility and Artifact Traceability}
+\label{sec:repro}
+
+The public NARCIS artifact records dataset provenance, frozen seeds, checkpoint hashes, calibration/holdout protocols, group-bank construction, exact session mapping, detector schedules, raw detector tables, workflow identifiers, DiffStega commit/model revisions, commands, output manifests, and SHA-256 hashes. Canonical manuscript-facing numerical results are generated from machine-readable files in \texttt{tomm\_results/}. The DiffStega evidence bundle has SHA-256 \texttt{32d0e975eb197adb0d1d2f7c537b04b4fab84af45a51148eaf15872b40de1f46}. The external detector CNN workflow completed 20/20 jobs and persisted 3,000 per-head AUC rows plus 100 repetition-level macro-AUC rows. Detailed execution logs remain in the artifact rather than in the article narrative.
+
+The code repository is \url{https://github.com/EkodeckStephane/NARCIS}. The immutable submission snapshot is recorded in the accompanying submission README after final compilation and audit.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+NARCIS treats selection-based coverless image communication as a finite-index authenticated signaling problem. Its final protocol combines a learned invariant descriptor, calibration-locked $K=8$ quantile codebooks, complementary five-cover group banks, signature-balanced keyed selection, exact cyclic Gray cluster balancing, AES-GCM authenticated sessions, replay control, and Reed--Solomon correction. On five externally frozen Caltech-101 partitions, all 1,800 calibration messages authenticate. Across 1,200 unseen holdout trials, 1,163 authenticate; all 37 failures occur under 12\% central crop, making the robustness boundary explicit. The final detector battery places SRM-lite near chance, GLCM at mean AUC 0.513, and a trained CNN at 0.527, so the supported security statement is low but measurable selection leakage under the evaluated threat model, not undetectability. A frozen 100-case DiffStega execution provides a reproducible external reference while preserving the distinction between generated-image reconstruction and finite-index authenticated byte signaling. The remaining research problem is therefore not to erase the observed limits in wording, but to reduce strong-crop failure and learned selection leakage under broader external corpora and wardens.
