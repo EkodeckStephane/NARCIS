@@ -1,0 +1,91 @@
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.5cm,ymin=22.5,ymax=23.5,xtick={1,2},xticklabels={Reprod.,Published},ylabel={Correct-recovery PSNR (dB)},ymajorgrids=true]
+\addplot+[ybar,bar width=17pt] coordinates {(1,23.274)(2,23.290)};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[t]{.46\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth,height=4.5cm,ymin=0,ymax=1,xtick={1,2,3},xticklabels={SSIM,LPIPS,ID},ylabel={Unit-scale metric},legend style={font=\scriptsize,at={(0.5,1.03)},anchor=south,legend columns=2}]
+\addplot+[ybar,bar width=7pt] coordinates {(1,.672)(2,.183)(3,.888)};
+\addplot+[ybar,bar width=7pt] coordinates {(1,.769)(2,.266)(3,.893)};
+\legend{Reproduced,Published}
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\caption{DiffStega correct-recovery reproduction. PSNR agrees closely with the published value; SSIM, LPIPS, and face-ID similarity retain the observed independent-metric differences.}
+\Description{Paired charts comparing reproduced and published DiffStega correct-recovery metrics. PSNR values are nearly identical at 23.274 and 23.290 dB; other metrics show larger differences.}
+\label{fig:diffstega}
+\end{figure}
+
+\subsection{Consolidated evidence view}
+\begin{table}[t]
+\caption{Consolidated evidence stack for the TOMM manuscript.}
+\label{tab:evidence}
+\small
+\begin{tabularx}{\textwidth}{p{2.2cm}p{2.8cm}Y Y}
+\toprule
+Evidence layer & Scale & Principal outcomes & Manuscript role\\
+\midrule
+BOSSBase development & 5 seeds; 1,800 calibration trials & 1,800/1,800 recovery; 7,995--8,000 unique covers; development AUC 0.514--0.518 aggregate & Method and operating-point evidence\\
+Caltech calibration & 5 seeds; 1,800 trials & 1,800/1,800 recovery; all 7,000 covers used/seed; max RS 37 & External feasibility and calibrated robustness\\
+Caltech holdout & 5 seeds; 1,200 trials & 1,163/1,200 recovery; seven attacks 150/150; crop 12\% 113/150 & External generalization boundary\\
+Final steganalysis & 3 detectors; 100 repeated splits each & Mean AUC 0.504, 0.513, 0.527 & Selection-leakage characterization\\
+DiffStega reproduction & 100 UniStega cases; 700 PNGs & 100/100 complete; PSNR 23.274 vs. 23.290 published & Executable recent reference\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Discussion}
+\subsection{What the external evidence establishes}
+A single frozen protocol transfers across five Caltech partitions with fixed $K$, group size, parity, projection-ranking rule, mapping, and detector settings. Moderate Gaussian noise, blur, 8\% crop, and 9-degree rotation remain fully recoverable at the authenticated-message level. The 12\% crop condition reaches the 64-byte RS correction radius and concentrates the 37 message failures. Reed--Solomon coding therefore contributes directly to observed robustness: crop 8\% requires as many as 34 corrected byte positions, while the strongest crop reaches the decoder limit.
+
+The group-bank mechanism also demonstrates the value of complementary cover failures. A five-cover group can remain majority-correct when individual members fail on different transformations. This enables every final external schedule to exercise all 7,000 covers while attaining perfect calibration recovery. The result supports channel qualification at the communication-unit level and preserves broad index participation.
+
+\subsection{Detectability as a separate security axis}
+The detector hierarchy reveals three levels of evidence. SRM-lite residual statistics remain close to chance, GLCM detects a weak texture/selection shift, and the CNN identifies the strongest signal. This ordering is consistent with selection leakage acting primarily as a distributional effect rather than as a pixel-embedding artifact. The supported characterization is low but measurable selection leakage under the matched-index warden.
+
+The CNN mean AUC of 0.527 describes this specific selected-vs.-remainder discrimination problem. Sequence-level traffic features, temporal metadata, semantic profiling, and adaptive deployment-specific wardens would extend the threat model beyond the present image-content audit.
+
+\subsection{Why the exact cyclic map matters}
+Finite protected messages can produce nonuniform coded-symbol frequencies. A fixed symbol-to-cluster permutation would translate message-level skew into persistent visual-cluster skew. The cyclic keyed Gray map removes that persistent assignment deterministically: over each complete $K$-session cycle, every coded symbol visits every visual cluster exactly once. This algebraic property complements the empirical signature-balanced group scheduler and reduces one avoidable source of repeated-session bias before detector evaluation.
+
+\subsection{Development-to-external transfer}
+The BOSSBase and Caltech results provide a transfer picture. BOSSBase development evidence reaches 1,800/1,800 calibration recoveries across five seeds, near-complete index participation, and aggregate development AUCs close to 0.5. The externally frozen Caltech protocol then reaches the same 1,800/1,800 calibration recovery while exercising every cover in each 7,000-image index. Holdout performance remains high at 96.92\%, while the 12\% crop reveals the principal transfer boundary. This pattern supports freezing protocol design before external evaluation and reporting both successful transfer and the strongest observed failure regime.
+
+\subsection{Relation to recent coverless and generative work}
+\method and Guo--Ping address complementary priorities. Guo--Ping optimize robust/high-capacity mapping under their published datasets and attack protocol~\cite{guo2026capacity}; \method emphasizes finite protected-message feasibility, authenticated recovery, complete-index usage, and explicit detector auditing at a fixed external alphabet $K=8$. DiffStega demonstrates a generative regime in which a secret image is reconstructed with diffusion models~\cite{yang2024diffstega}. The completed 100-case reproduction strengthens empirical positioning by making the recent comparator executable under a frozen environment, while reconstruction metrics and finite-index signaling metrics remain in their respective semantic domains.
+
+\section{Limitations and Threats to Validity}
+\textbf{External validity.} Caltech-101 provides one external natural-image corpus, while BOSSBase supports development. Validation on newer large native-resolution corpora, social-media recompression pipelines, and heterogeneous acquisition devices would broaden domain evidence.
+
+\textbf{Channel boundary.} The robustness claim covers the declared transformation families and strengths. The 12\% crop condition defines the strongest observed boundary of the present protocol. Perspective warps, larger crops, occlusion, color transformations, arbitrary resampling chains, and learned image editing provide natural directions for broader evaluation.
+
+\textbf{Warden boundary.} The SRM-lite, GLCM, and CNN battery spans residual, texture, and learned selected-vs.-remainder discrimination. Traffic-analysis features, semantic side information, temporal correlation, and adaptive deployment-specific wardens would extend this security evaluation. Repeated-split intervals summarize variability because the splits overlap.
+
+\textbf{Cryptographic boundary.} AES-GCM, HMAC, and Reed--Solomon coding are standard components. The contribution lies in their integration with the finite-index signaling protocol and explicit session-balancing and feasibility construction. The public benchmark key/nonce derivation serves reproducibility; operational deployment can substitute institutionally managed keys and nonces.
+
+\textbf{Comparator boundary.} DiffStega executes at the frozen upstream commit. Metric extraction uses an independent environment because the public benchmark package and the paper's metric-production pipeline are separate artifacts. Two metric-only package versions differ from preregistered versions (\texttt{huggingface-hub} 0.36.2 versus 0.20.3 and \texttt{pyiqa} 0.1.15 versus 0.1.13); the manuscript reports the resulting values as independently reproduced metrics.
+
+\section{Reproducibility and Artifact Traceability}
+The project artifact records dataset provenance, frozen seeds, checkpoint hashes, calibration/holdout protocols, group-bank construction, exact session mapping, detector schedules, raw detector tables, workflow identifiers, DiffStega commit/model revisions, commands, output manifests, and SHA-256 hashes. Canonical manuscript-facing numerical results are generated from machine-readable result files. The DiffStega evidence bundle has SHA-256 \texttt{32d0e975eb19\allowbreak 7adb0d1d2f7c\allowbreak 537b04b4fab8\allowbreak 4af45a51148e\allowbreak af15872b40de\allowbreak 1f46}. The external detector CNN workflow completed 20/20 jobs and persisted 3,000 per-head AUC rows plus 100 repetition-level macro-AUC rows.
+
+The public code and evidence repository is \url{https://github.com/EkodeckStephane/NARCIS}. The archived submission snapshot records the manuscript sources, bibliography, protocol freezes, and evidence lineage used for the reported headline results.
+
+\section{Conclusion}
+\method formulates selection-based coverless image communication as a finite-index authenticated signaling problem. Its final protocol combines a learned invariant descriptor, calibration-locked $K=8$ quantile codebooks, complementary five-cover group banks, signature-balanced keyed selection, exact cyclic Gray cluster balancing, AES-GCM authenticated sessions, replay control, and Reed--Solomon correction.
+
+The completed evidence stack spans development, external robustness, selection detectability, and executable baseline reproduction. Across five BOSSBase development seeds, the frozen $K=8$ lineage reaches 1,800/1,800 calibration recoveries while exercising 7,995--8,000 covers per seed. Across five externally frozen Caltech-101 partitions, all 1,800 calibration messages authenticate and every 7,000-cover index is exercised. The 1,200 unseen holdout trials yield 1,163 authenticated recoveries (96.92\%); seven transformations achieve 150/150 and the 12\% crop yields 113/150, defining the strongest observed channel boundary. Final mean macro-AUCs are 0.504 for SRM-lite, 0.513 for GLCM, and 0.527 for the trained CNN, supporting a low measurable selection-leakage characterization. The frozen 100-case DiffStega execution completes all cases and reproduces correct-recovery PSNR at 23.274 dB versus 23.290 dB in the reference paper.
+
+These results establish a reproducible operating point with strong bounded channel robustness, explicit finite-index feasibility, complete-index participation, authenticated recovery, and detector-scoped security evidence. The next research frontier is stronger geometric resilience together with further reduction of learned selection leakage across broader external image domains and deployment wardens.
+
+\begin{acks}
+This work received no external financial support. The authors thank their respective institutions for research support.
+\end{acks}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{ARCIS_references}
+
+\end{document}
