@@ -1,0 +1,35 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{What the external evidence establishes}
+
+The calibration result shows that a single frozen protocol transfers across five Caltech partitions without partition-specific changes to $K$, group size, parity, projection ranking, mapping, or detector settings. The holdout result goes further by exposing the channel boundary: moderate Gaussian noise, blur, 8\% crop, and 9-degree rotation remain fully recoverable at the authenticated-message level, whereas 12\% crop exceeds the error-correction margin in 37 trials. Reed--Solomon coding is therefore not a decorative component; crop 8\% requires as many as 34 corrected byte positions, and the strongest crop reaches the 64-position correction radius.
+
+The group-bank mechanism also clarifies why individual-cover stability is not the only useful quantity. A five-cover group can remain majority-correct when member errors are complementary. This allows the final external schedule to use all 7,000 covers in every partition while still attaining perfect calibration recovery. The result supports the design principle that channel qualification can be performed at the decision unit actually transmitted---a group---rather than by retaining only covers that are individually invariant to every attack.
+
+\subsection{Detectability as a separate security axis}
+
+The detector hierarchy is informative. SRM-lite residual statistics do not find a practically meaningful separation, while GLCM detects a weak texture/selection shift and the CNN finds the strongest signal. This ordering is consistent with selection leakage being a distributional property rather than a pixel-embedding artefact. The result should not be softened into an undetectability claim. Under the tested matched-index warden, NARCIS is weakly but measurably detectable.
+
+Conversely, AUC 0.527 is not evidence that an arbitrary Internet warden can recover payloads or even reliably flag single transmissions in a different deployment distribution. The experiment measures one explicit selected-vs.-remainder discrimination problem. It does not include sequence-level traffic features, temporal metadata, semantic profiling, or adaptive wardens trained after observing the secret selection key. Those are distinct threat models.
+
+\subsection{Why the exact cyclic map matters}
+
+Secret payload/framing bits are not guaranteed to be uniformly distributed at every finite message length. A fixed symbol-to-cluster permutation could therefore create persistent cluster-frequency skew even if group selection is balanced inside each cluster. The cyclic keyed Gray map removes that persistent assignment deterministically: over each full $K$-session cycle, each coded symbol visits every visual cluster exactly once. This property does not make the selected image distribution identical to the cover-index distribution, but it removes one avoidable source of repeated-session cluster bias before any empirical detector is run.
+
+\subsection{Relation to recent coverless and generative work}
+
+NARCIS and Guo--Ping address complementary priorities. Guo--Ping optimize robust/high-capacity mapping under their published datasets and attack protocol \cite{guo2026capacity}; NARCIS makes finite protected-message feasibility and authenticated recovery explicit, at a lower fixed alphabet $K=8$ in the external campaign. DiffStega demonstrates a different generative regime in which a secret image is reconstructed with diffusion models \cite{yang2024diffstega}. The faithful 100-case reproduction strengthens the empirical positioning because the comparator is executable, but the semantic mismatch prevents a responsible claim of numerical superiority.
+
+\section{Limitations and Threats to Validity}
+\label{sec:limitations}
+
+\paragraph{External validity.} Caltech-101 is one external natural-image corpus. BOSSBase influenced method development and is therefore not counted as untouched confirmation. Validation on newer large native-resolution corpora, social-media recompression pipelines, and heterogeneous acquisition devices would test a broader domain.
+
+\paragraph{Channel boundary.} Robustness is bounded to the declared transformations and strengths. The 12\% crop result is an observed failure boundary, not an outlier to discard. More severe cropping, perspective warps, arbitrary resampling chains, occlusion, color transformations, and learned image editing are not covered by the present claim.
+
+\paragraph{Warden boundary.} The SRM-lite, GLCM, and CNN battery covers residual, texture, and learned selected-vs.-non-selected discrimination. It does not prove security against every steganalyzer or traffic-analysis adversary. Repeated-split intervals are descriptive because splits overlap.
+
+\paragraph{Cryptographic boundary.} AES-GCM and HMAC are used as standard primitives; NARCIS does not introduce new cryptography. Benchmark key/nonce derivation is public reproducibility machinery, not a production KMS design. Cryptographic payload protection does not imply statistical secrecy of the carrier sequence.
+
+\paragraph{Comparator boundary.} DiffStega is faithfully executed at its frozen upstream commit, but metric extraction is independent because the repository does not ship the paper's metric scripts. Two metric-only package versions differ from the preregistered versions. The resulting values are therefore reproduction diagnostics, not a claim of exact table replication.
