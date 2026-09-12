@@ -87,10 +87,22 @@ Repeated-split intervals are descriptive because the splits overlap.
 - Damaris Belle M. Fotso carries her verified University of Yaoundé I/LIRIMA affiliation, email, and ORCID `0009-0001-8736-0644`.
 - BOSSBase results are explicitly labeled development evidence; Caltech-101 carries external claims.
 - Headline values map to canonical machine-readable evidence.
-- The manuscript now contains dedicated visualizations for cyclic session balancing, BOSSBase development diagnostics, Caltech calibration/index use, holdout robustness by attack and partition, detector performance, CNN partition variability, and DiffStega reproduction.
+- The manuscript contains nine dedicated scientific figures and nine tables covering protocol structure, cyclic balancing, development diagnostics, external calibration/index use, holdout robustness, detector behavior, CNN partition variability, DiffStega reproduction, and consolidated evidence.
+
+## Mechanical submission audit
+
+GitHub Actions run **34708394790** (run 116), head commit `304ffe980cccd9f2217488f4836a2525bc8ba97d`, completed successfully on both jobs:
+- unit tests and TOMM preflight: **PASS**;
+- ACM manuscript compilation: **PASS**;
+- cover-letter compilation: **PASS**;
+- unresolved citation/reference guard: **PASS**;
+- `Overfull \\hbox` guard: **PASS**;
+- submission-PDF artifact upload: **PASS**.
+
+Artifact `NARCIS-TOMM-submission-pdfs` has ID **10301903911**, size **600,494 bytes**, and digest `sha256:327ab7d665c5d55e39c2d310d3aa3dcfbd3f5096d181cf15efc9b7b658368a81`.
 
 ## Final audit verdict
 
-**CLAIM / CODE / DATA = PASS, subject to the final enriched-manuscript CI build.**
+**CLAIM / CODE / DATA = PASS.**
 
-The scientific claims remain aligned with the frozen code/data evidence. The final CI gate verifies LaTeX compilation, reference resolution, layout overflow, and both submission PDFs after the manuscript enrichment.
+The enriched manuscript is aligned with the frozen code/data evidence and has passed the strengthened mechanical submission gate.
