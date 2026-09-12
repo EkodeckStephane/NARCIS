@@ -1,66 +1,69 @@
-# Final Experimental Report
+# ARCIS Final Experimental Report — ACM TOMM Freeze
 
-## Evaluation Scope
+This document records the aggregate numerical freeze used by the current ACM TOMM manuscript. Earlier NARCIS/K=16 reports remain part of the development history but are superseded for the current article.
 
-NARCIS is evaluated on two natural-image corpora with five deterministic
-partitions each:
+## Operating point and evaluation separation
 
-| Dataset | Channel representation | Train/index | Messages/seed | Trials |
-|---|---|---:|---:|---:|
-| BOSSBase 1.01 | Native 512 x 512 grayscale | 2,000 / 8,000 | 10 | 1,050 |
-| Caltech-101 | Centre-fitted 256 x 256 RGB | 1,500 / 7,000 | 5 | 525 |
+| Item | Frozen value |
+|---|---|
+| Alphabet | `K = 8` |
+| Covers per coded symbol | 5 |
+| Reed–Solomon parity | 128 bytes |
+| Seeds | 11, 29, 47, 71, 101 |
+| Development corpus | BOSSBase 1.01 |
+| External corpus | Caltech-101 |
+| Caltech training/index per seed | 1,500 / 7,000 image-disjoint images |
+| Calibration transformations | 12 |
+| Unseen holdout transformations | 8 |
 
-Both campaigns use five training epochs, 12 calibration attacks, eight
-holdout strengths, the clean channel, eight-byte plaintexts, and 128
-Reed-Solomon parity bytes.
+The operating point was fixed from BOSSBase development evidence before the externally frozen Caltech-101 campaign.
 
-## End-to-End Results
+## Development evidence — BOSSBase
 
-| Metric | BOSSBase | Caltech-101 |
+- 1,800/1,800 authenticated calibration recoveries across five seeds.
+- 7,995–8,000 unique covers exercised per seed.
+- The development lineage uses the same `K=8`, group-size-5, RS128 construction subsequently frozen for external validation.
+
+## External calibration — Caltech-101
+
+- 1,800/1,800 authenticated recoveries.
+- All 7,000 indexed covers are exercised in every partition.
+- Maximum reported Reed–Solomon correction demand in calibration: 37 byte positions.
+
+## External unseen holdouts — Caltech-101
+
+- Overall: **1,163/1,200 authenticated recoveries (96.92%)**.
+- Seven holdout transformations: **150/150 each**.
+- Unseen 12% central crop: **113/150**.
+- All 37 holdout failures occur in the 12% crop condition.
+- The observed maximum correction demand reaches the 64-byte correction radius in the strongest holdout regime.
+
+The 12% crop is therefore reported as an empirical channel boundary rather than hidden by an average robustness claim.
+
+## Final selection-detectability audit
+
+| Detector | Mean macro-AUC | Reported mean |
 |---|---:|---:|
-| Authenticated recoveries | 1,050 / 1,050 | 525 / 525 |
-| Mean symbol accuracy | 98.7368% | 98.5857% |
-| Worst symbol accuracy | 81.6092% | 79.8851% |
-| Maximum corrected byte positions | 61 | 63 |
-| Feasible bits/cover | 3-4 | 4 on every seed |
+| SRM-lite + ExtraTrees | 0.5040 | 0.504 |
+| GLCM + logistic regression | 0.5128 | 0.513 |
+| 30-head CNN | 0.5266 | 0.527 |
 
-The unseen 12% crop was the hardest condition on both datasets. The unseen
-9-degree rotation was the second most difficult condition.
+The CNN value describes a low but measurable selected-vs.-remainder signal under the declared audit. It is not evidence of universal detectability or undetectability.
 
-## Selection Detectability
+## DiffStega frozen reproduction
 
-| Dataset | Global logistic | Residual ExtraTrees | Selection CNN |
-|---|---:|---:|---:|
-| BOSSBase | 0.518 [0.489, 0.547] | 0.514 [0.486, 0.543] | 0.515 [0.463, 0.566] |
-| Caltech-101 | 0.531 [0.504, 0.557] | 0.533 [0.504, 0.562] | 0.530 [0.481, 0.579] |
+- Official upstream commit: `73cd7cb8d102f4fc0f5bb168a71cfb948077d89a`.
+- UniStega cases executed: 100/100.
+- Generated PNG outputs: 700.
+- Independently reproduced correct-recovery PSNR: **23.274 dB**.
+- Value reported in the DiffStega paper: **23.290 dB**.
 
-The two classical Caltech-101 detectors identify a small dataset-specific
-selection shift. The five-partition CNN interval includes 0.5, but 20 repeated
-fits on seed 47 give 0.533 [0.517, 0.548]. This is a weak matched-index
-selection leak, not evidence of universal undetectability.
+ARCIS and DiffStega have different communication semantics. ARCIS evaluates authenticated finite-index byte signaling with unchanged indexed natural images; DiffStega evaluates secret-image reconstruction through a generative diffusion pipeline. Metrics are therefore kept family-specific.
 
-## Ablation and Sensitivity
+## Claim boundaries
 
-Removing attack qualification reduced controlled CIFAR-100 message success
-from 100% to 43.65%. The matched BOSSBase seed-11 ablation fell from 210/210
-to 142/210 recoveries without qualification. A calibration-locked direction
-search increased the minimum stable bucket from 92 to 161 and recovered
-210/210 targeted trials. This single-partition result does not replace the
-five-seed PC1 campaign.
+The current evidence supports the declared finite-index feasibility, authenticated recovery, channel-robustness, index-usage, and selection-detectability claims at the frozen operating point. It does not support claims of universal robustness, universal undetectability, maximum capacity, or direct numerical superiority across different coverless/generative families.
 
-With 128 Reed-Solomon parity symbols per block and `K=16`, the implemented net
-rate is 0.184, 0.646, and 1.213 bits/cover for 8-, 32-, and 128-byte
-plaintexts. The 128-byte case spans two RS blocks.
+## Canonical manuscript snapshot
 
-## Reproducibility
-
-Consolidated evidence is stored in:
-
-- `bossbase_results_rs128_final/`;
-- `bossbase_sensitivity/`;
-- `q1_extension_results/`;
-- `q1_reviewer_results/`;
-- `paper/figures/`.
-
-The graphical abstract is available as
-`paper/Graphical_Abstract.tex`, `.pdf`, and `.png`.
+The current article and its submission metadata are in `paper/ACM_TOMM/`. Historical result folders and older manuscript revisions remain in the repository for provenance but must not be substituted for this TOMM freeze when quoting headline results.
