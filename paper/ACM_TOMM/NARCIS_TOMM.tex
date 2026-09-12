@@ -1,170 +1,74 @@
 \documentclass[manuscript]{acmart}
 
-% ACM review submission scaffold for NARCIS.
-% Numerical abstract/results are intentionally not copied from the historical
-% IEEE/Elsevier versions until the TOMM validation gates have been rerun.
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 
 \acmJournal{TOMM}
-
 \title{NARCIS: Authenticated Neural Coverless Image Signaling with Attack-Qualified Codebooks and Error Correction}
 
 \author{Arthur Ulrich Ewane}
 \orcid{0009-0001-6722-2842}
-\affiliation{%
-  \institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}
-  \city{Yaound\'e}
-  \country{Cameroon}}
+\affiliation{\institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}\city{Yaound\'e}\country{Cameroon}}
 \email{ulrich.ewane@facsciences-uy1.cm}
 
 \author{St\'ephane Ga\"el R. Ekodeck}
 \orcid{0000-0002-8094-8832}
-\affiliation{%
-  \institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}
-  \city{Yaound\'e}
-  \country{Cameroon}}
-\affiliation{%
-  \institution{UMMISCO, IRD France Nord}
-  \city{Bondy}
-  \country{France}}
-\affiliation{%
-  \institution{Sorbonne Universit\'e, UMI 209 UMMISCO}
-  \city{Paris}
-  \country{France}}
+\affiliation{\institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}\city{Yaound\'e}\country{Cameroon}}
+\affiliation{\institution{UMMISCO, IRD France Nord}\city{Bondy}\country{France}}
+\affiliation{\institution{Sorbonne Universit\'e, UMI 209 UMMISCO}\city{Paris}\country{France}}
 \email{stephane-gael.ekodeck@facsciences-uy1.cm}
 
 \author{Serge Alain Eb\'el\'e}
 \orcid{0000-0001-7036-7068}
-\affiliation{%
-  \institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}
-  \city{Yaound\'e}
-  \country{Cameroon}}
-\affiliation{%
-  \institution{UMMISCO, IRD France Nord}
-  \city{Bondy}
-  \country{France}}
-\affiliation{%
-  \institution{Sorbonne Universit\'e, UMI 209 UMMISCO}
-  \city{Paris}
-  \country{France}}
+\affiliation{\institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}\city{Yaound\'e}\country{Cameroon}}
+\affiliation{\institution{UMMISCO, IRD France Nord}\city{Bondy}\country{France}}
+\affiliation{\institution{Sorbonne Universit\'e, UMI 209 UMMISCO}\city{Paris}\country{France}}
 \email{serge-alain.ebele@facsciences-uy1.cm}
 
 \author{Vivien Lo\"ick Beyala Kamgang}
 \orcid{0000-0002-3644-1866}
-\affiliation{%
-  \institution{RTU Mathematics and Computer Science, The University of Bertoua}
-  \city{Bertoua}
-  \country{Cameroon}}
-\affiliation{%
-  \institution{RUFCEA (UR-IFIA), University of Dschang}
-  \city{Dschang}
-  \country{Cameroon}}
+\affiliation{\institution{RTU Mathematics and Computer Science, The University of Bertoua}\city{Bertoua}\country{Cameroon}}
+\affiliation{\institution{RUFCEA (UR-IFIA), University of Dschang}\city{Dschang}\country{Cameroon}}
 \email{vivsxx@univ-bertoua.cm}
 
 \author{Chantal Marguerite Mveh-Abia}
 \orcid{0009-0005-9398-1067}
 \authornote{Corresponding author.}
-\affiliation{%
-  \institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}
-  \city{Yaound\'e}
-  \country{Cameroon}}
-\affiliation{%
-  \institution{Department of Computer Engineering, National Advanced School of Engineering, University of Yaound\'e I}
-  \city{Yaound\'e}
-  \country{Cameroon}}
+\affiliation{\institution{Department of Computer Science, University of Yaound\'e I, LIRIMA, TEAM GRIMCAPE}\city{Yaound\'e}\country{Cameroon}}
+\affiliation{\institution{Department of Computer Engineering, National Advanced School of Engineering, University of Yaound\'e I}\city{Yaound\'e}\country{Cameroon}}
 \email{cmmveh@yahoo.fr}
 
 \renewcommand{\shortauthors}{Ewane et al.}
 
 \begin{abstract}
-The final TOMM abstract will be generated only after the revised end-to-end
-campaign has passed the preregistered validation gates in
-\texttt{TOMM\_REVISION\_STATUS.md}. This prevents historical detectability,
-projection, and payload results from being presented as outcomes of the
-revised protocol before they have been re-executed.
+Selection-based coverless communication avoids pixel modification, but unchanged carriers alone do not guarantee reliable or statistically inconspicuous communication. A finite shared image index can become infeasible for a protected message after channel qualification, and repeated secret-dependent selection can itself create a detectable distribution shift. We present NARCIS, an authenticated neural coverless image-signaling protocol that treats these two effects as protocol constraints rather than post-hoc diagnostics. NARCIS combines a learned normalized image descriptor, calibration-locked quantile codebooks, complementary five-cover group banks, an exact session-balanced keyed Gray mapping, AES-GCM authenticated framing, replay control, and Reed--Solomon correction. The final operating point ($K=8$, group size 5, 128 Reed--Solomon parity bytes) was fixed on a development corpus before external evaluation on five Caltech-101 partitions. Across twelve calibration transformations, NARCIS recovered 1,800/1,800 authenticated messages. On eight unseen holdout transformations it recovered 1,163/1,200 (96.92\%); all 37 failures occurred under a 12\% central crop, while the other seven holdouts were 150/150 each. A repeated image-disjoint detector audit yielded mean macro-AUC 0.504 for SRM-lite/ExtraTrees, 0.513 for GLCM/logistic regression, and 0.527 for a 30-head CNN, establishing low but measurable selection leakage rather than undetectability. A frozen execution of the official DiffStega benchmark completed all 100 UniStega cases; its independently reproduced correct-recovery PSNR was 23.274 dB versus 23.290 dB reported by the original paper. Because DiffStega reconstructs secret images whereas NARCIS transmits authenticated byte strings through unchanged indexed images, family-specific metrics are reported without a cross-family superiority claim.
 \end{abstract}
 
-\ccsdesc[500]{Information systems~Multimedia information systems}
 \ccsdesc[500]{Security and privacy~Cryptography}
+\ccsdesc[500]{Information systems~Multimedia information systems}
 \ccsdesc[300]{Computing methodologies~Neural networks}
-
-\keywords{coverless image steganography, covert communication, multimedia security, robust image descriptors, authenticated encryption, error correction, steganalysis}
+\keywords{coverless image steganography, cover selection, covert communication, multimedia security, authenticated encryption, error correction, steganalysis}
 
 \begin{document}
 \maketitle
 
-\section{Introduction}
-\label{sec:introduction}
+\input{sections/01_introduction_related}
+\input{sections/02_system_method}
+\input{sections/03_experimental_results}
+\input{sections/04_discussion_limitations}
+\input{sections/05_repro_conclusion}
 
-NARCIS is repositioned as an end-to-end multimedia covert-communication
-protocol rather than as an isolated image-feature construction. The revision
-distinguishes three complementary requirements: robust multimedia transport,
-message-level protection, and empirical resistance to selection-oriented
-steganalysis. Recent TOMM work demonstrates that capacity, extraction
-accuracy, and anti-detectability must be evaluated jointly in generative
-steganography \cite{zhou2025pgs}, while TOMM steganalysis research emphasizes
-robustness to cover mismatch and heterogeneous image sources
-\cite{li2023siairnet}. Distribution preservation is also an explicit concern
-in generative image steganography \cite{sun2024guidance}, and adversarial
-embedding work shows that security conclusions depend on the steganalyst used
-in evaluation \cite{wang2024adversarial}.
-
-The revised NARCIS manuscript will therefore report only operating points that
-are simultaneously feasible for the protected payload, qualified under the
-declared image channel, evaluated under multiple selection detectors, and
-validated end-to-end through authenticated decryption. Its media-authentication
-layer is positioned separately from semi-fragile watermarking approaches such
-as FaceSigns \cite{neekhara2024facesigns}: NARCIS authenticates the protected
-message and session while transmitting unchanged indexed images, whereas
-semi-fragile watermarking embeds authentication information into media pixels.
-
-\section{Positioning Against Recent Coverless Multimedia Communication}
-\label{sec:positioning}
-
-Recent coverless steganography spans fundamentally different carrier models.
-DiffStega is a training-free diffusion-based framework that reconstructs a
-secret image through a password-dependent reference image and prompt-guided
-diffusion process \cite{yang2024diffstega}. Its operating unit is therefore a
-generated image and recovered visual content. NARCIS instead communicates a
-protected byte string by selecting unchanged images from a finite shared
-index. The TOMM evaluation treats DiffStega as an executable recent baseline,
-but compares only metrics that retain the same interpretation across these
-two carrier models; visual reconstruction quality is not equated with
-finite-index plaintext rate.
-
-Closer to the NARCIS selection setting, Guo and Ping combine pseudo-Zernike
-moments, stability-aware quantization, and stability-regularized representative
-selection to improve both robustness and nominal capacity
-\cite{guo2026capacity}. Their method is the principal conceptual comparator
-for stability-aware cover selection. Because no verified official
-implementation has been located, its published measurements remain labeled as
-literature results under the original datasets and attacks rather than being
-presented as a matched reimplementation.
-
-Geometric robustness remains a major failure mode for retrieval and
-hash-based coverless methods. Tan et al. use deep unsupervised hashing with
-attention and Transformer components to strengthen recovery under geometric
-attacks \cite{tan2026hashing}. Meng et al. take a complementary receiver-side
-approach: classify the encountered image attack and restore the received image
-before applying the underlying coverless decoder \cite{meng2025restoration}.
-These works motivate two distinct TOMM evaluation requirements for NARCIS:
-strong holdout geometric transformations and explicit reporting of complete
-message recovery rather than nominal descriptor accuracy alone.
-
-A separate threat comes from the selection mechanism itself. Even unchanged
-covers can become distinguishable when transmission preferentially samples a
-statistically atypical subset of the shared index. The revised protocol
-therefore evaluates both conventional residual/global detectors and a
-texture-oriented GLCM detector following the cover-selection steganalysis
-framework of Cao et al. \cite{cao2025glcm}. This detector battery is used as an
-evaluation instrument; detector outcomes are not used to tune a projection on
-holdout data.
-
-% The remainder of the historical manuscript is migrated only after the fresh
-% TOMM validation results have been generated and audited. Keeping this file
-% deliberately claim-light prevents stale IEEE/Elsevier numbers from becoming
-% the new ACM submission by formatting alone.
+\begin{acks}
+This research received no external funding. The authors declare no competing interests.
+\end{acks}
 
 \bibliographystyle{ACM-Reference-Format}
-\bibliography{tomm_positioning,external_comparators}
+\bibliography{narcis_core,tomm_positioning,external_comparators}
 
 \end{document}
