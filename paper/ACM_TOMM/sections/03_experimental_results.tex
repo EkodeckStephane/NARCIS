@@ -1,19 +1,19 @@
 \section{Experimental Design}
 \label{sec:experiment}
 
-\subsection{Development/external split}
+\subsection{Development and external evidence}
 
-BOSSBase 1.01 (10,000 512$\times$512 grayscale images) is the development corpus used to choose the final protocol family and operating point. It is therefore not used as untouched external evidence in the headline TOMM claims. External validation uses the official Caltech-101 distribution, containing 9,144 readable source images. For each seed in $\{11,29,47,71,101\}$, a deterministic permutation assigns 1,500 images to descriptor training and the next 7,000 disjoint images to the cover index. Caltech images are converted uniformly to RGB before the 256$\times$256 channel fit.
+BOSSBase 1.01 provides the development corpus for protocol design and operating-point selection. The final development lineage uses the same $K=8$, group-size-5, RS128, 30-session construction later frozen for external validation. Caltech-101 supplies the external corpus, with 9,144 readable source images. For each seed in $\{11,29,47,71,101\}$, a deterministic permutation assigns 1,500 images to descriptor training and the next 7,000 images to the cover index. These two sets are image-disjoint. Caltech images are converted uniformly to RGB before the 256$\times$256 channel fit.
 
-The frozen external operating point is $K=8$, group size five, 128 parity bytes, and 30 authenticated sessions per partition. Ten deterministic plaintexts are generated at each of 8, 32, and 64 bytes; global authenticated sequences are 0--9, 10--19, and 20--29 respectively. A public deterministic benchmark root derives partition-specific keys and nonces, so the experiment is reproducible while making no production key-management claim.
+The frozen external operating point uses $K=8$, group size five, 128 parity bytes, and 30 authenticated sessions per partition. Ten deterministic plaintexts are generated at each of 8, 32, and 64 bytes; authenticated sequences are 0--9, 10--19, and 20--29 respectively. A public deterministic benchmark root derives partition-specific keys and nonces for reproducibility; deployment key management remains a separate operational layer.
 
 \subsection{Calibration and holdout channel tests}
 
-The twelve calibration transformations are exactly those listed in Section~\ref{sec:method}. The holdout set is never used for projection or group-bank construction and contains eight intermediate/stronger transformations: Gaussian noise 9 and 15; blur 1.2 and 1.8; central crop 8\% and 12\%; and rotations 5 and 9 degrees. Each of 30 sessions is evaluated under every transformation for each of five partitions, yielding 1,800 calibration trials and 1,200 holdout trials. Trial success requires exact authenticated plaintext recovery; a high symbol-accuracy value without successful AEAD verification is a failure.
+The twelve calibration transformations are those listed in Section~\ref{sec:method}. The holdout set is reserved for external robustness testing and contains eight intermediate/stronger transformations: Gaussian noise 9 and 15; blur 1.2 and 1.8; central crop 8\% and 12\%; and rotations 5 and 9 degrees. Each of 30 sessions is evaluated under every transformation for each of five partitions, yielding 1,800 calibration trials and 1,200 holdout trials. Trial success requires exact authenticated plaintext recovery, so symbol accuracy and error-correction counts remain diagnostic quantities beneath the final message-level criterion.
 
 \subsection{Selection-detectability audit}
 
-The final detector audit reconstructs the complete 30-session selected-cover schedule for every external partition. For each partition and each of 20 repetitions, a 65/35 image-disjoint train/test split is created with split seed $10{,}000s+r$. The same split is used across all 30 session heads. We report macro-AUC across heads for three frozen detectors:
+The detector audit reconstructs the complete 30-session selected-cover schedule for every external partition. For each partition and each of 20 repetitions, a 65/35 image-disjoint train/test split is created with split seed $10{,}000s+r$. The same split is used across all 30 session heads. We report macro-AUC across heads for three frozen detectors:
 
 \begin{enumerate}
 \item a 52-dimensional residual/SRM-lite representation with a native multi-output ExtraTrees classifier (300 trees, square-root feature sampling, balanced classes);
@@ -21,74 +21,205 @@ The final detector audit reconstructs the complete 30-session selected-cover sch
 \item a lightweight 30-output CNN trained for eight epochs with AdamW ($10^{-3}$, weight decay $10^{-4}$), batch size 32, and binary cross-entropy with logits.
 \end{enumerate}
 
-There are 100 repeated splits per detector. Because splits overlap within a partition, intervals over those repetitions are descriptive rather than confirmatory independent-sample confidence intervals; we do not report a naive one-sample repeated-split $t$-test.
+The design yields 100 repeated splits per detector. Split overlap makes repetition-level intervals descriptive; the article therefore interprets the distribution of AUC values directly and reserves confirmatory independent-sample inference for designs with independent resampling units.
 
 \subsection{Frozen DiffStega reproduction}
 
-DiffStega \cite{yang2024diffstega} is executed from official commit \texttt{73cd7cb8d102f4fc0f5bb168a71cfb948077d89a} on the official 100-case UniStega corpus (30 similar-prompt, 42 content-prompt, 28 style-prompt cases). The environment uses Python 3.11.5, PyTorch 2.1.0+cu121, CUDA 12.1, and a Tesla T4. All upstream benchmark commands and model identifiers remain frozen. The benchmark produces 700 PNG files and no evaluation error.
+DiffStega \cite{yang2024diffstega} is executed from official commit \texttt{73cd7cb8d102f4fc0f5bb168a71cfb948077d89a} on the official 100-case UniStega corpus (30 similar-prompt, 42 content-prompt, 28 style-prompt cases). The environment uses Python 3.11.5, PyTorch 2.1.0+cu121, CUDA 12.1, and a Tesla T4. The benchmark preserves the upstream commands, model identifiers, sampling steps, and password logic. Execution produces 700 PNG files across all 100 cases with zero evaluation errors.
 
-The upstream repository does not provide the metric-extraction scripts used for its paper tables. We therefore compute PSNR, SSIM, LPIPS, face ID similarity where applicable, CLIP score, and NIQE in an independent post-execution metric environment. Two package versions in that metric-only environment differ from the preregistered freeze (\texttt{huggingface-hub} 0.36.2 vs. 0.20.3 and \texttt{pyiqa} 0.1.15 vs. 0.1.13). Consequently, these are labeled \emph{independently reproduced metrics}; exact equality with the IJCAI table is neither expected nor claimed.
+The public repository supplies the benchmark implementation, while metric extraction for the paper tables is reconstructed independently. We compute PSNR, SSIM, LPIPS, face-ID similarity where applicable, CLIP score, and NIQE in a separate post-execution environment. Two metric-only package versions differ from the preregistered versions (\texttt{huggingface-hub} 0.36.2 versus 0.20.3 and \texttt{pyiqa} 0.1.15 versus 0.1.13). The resulting values are therefore labeled \emph{independently reproduced metrics}.
 
 \section{Results}
 \label{sec:results}
 
-\subsection{External calibration feasibility and recovery}
+\subsection{Development evidence on BOSSBase}
+\label{sec:bossdev}
 
-All five external partitions produce feasible group banks for all 30 authenticated sessions. Across five partitions, 30 sessions, and 12 calibration attacks, all 1,800 protected messages are recovered and authenticated. Maximum Reed--Solomon corrections in any calibration trial are 37, below the 64-byte correction radius implied by 128 parity bytes. Every 7,000-cover index is exercised over the complete schedule, which avoids the trivial security failure mode of permanently restricting communication to a small fixed subset.
+The frozen K=8 development lineage achieves 1,800/1,800 calibration recoveries across five BOSSBase seeds. Stable-cover counts range from 4,926 to 5,836 out of the 8,000-cover index. Four seeds exercise all 8,000 covers and seed 29 exercises 7,995; maximum calibration RS corrections remain at seven. Repeated-session global-statistic and 15-feature clean-index diagnostics remain close to chance, with aggregate means 0.5139 and 0.5184 respectively. These values serve as development evidence, while Caltech-101 carries the external claims.
 
 \begin{table}[t]
-\caption{External Caltech-101 calibration results under the frozen protocol. Projection selection uses calibration evidence only.}
-\label{tab:calibration}
+\caption{Frozen BOSSBase K=8 development evidence across five seeds. Global7 and Clean15 are development-stage selected-vs.-index AUC diagnostics.}
+\label{tab:boss-dev}
 \small
-\begin{tabular}{@{}rlrrr@{}}
+\begin{tabular}{@{}rrrrrrr@{}}
 \toprule
-Seed & Selected projection & Stable covers & Recovery & Max RS corr. \\
+Seed & Stable & Unique & Freq. CV & Global7 AUC & Clean15 AUC & Max RS \\
 \midrule
-11  & random\_04 & 4,184 & 360/360 & 5 \\
-29  & random\_04 & 3,795 & 360/360 & 37 \\
-47  & random\_15 & 4,756 & 360/360 & 0 \\
-71  & random\_20 & 3,933 & 360/360 & 11 \\
-101 & random\_28 & 4,167 & 360/360 & 0 \\
+11  & 5,836 & 8,000 & 0.262 & 0.5187 & 0.5231 & 0 \\
+29  & 5,193 & 7,995 & 0.253 & 0.5127 & 0.5182 & 6 \\
+47  & 4,926 & 8,000 & 0.257 & 0.5102 & 0.5184 & 0 \\
+71  & 5,369 & 8,000 & 0.257 & 0.5177 & 0.5171 & 0 \\
+101 & 5,135 & 8,000 & 0.252 & 0.5100 & 0.5150 & 7 \\
 \midrule
-All & -- & -- & 1800/1800 & 37 \\
+Mean & 5,292 & 7,999 & 0.256 & 0.5139 & 0.5184 & -- \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar,
+  ymin=0.50,ymax=0.53,
+  ylabel={Mean session AUC},
+  symbolic x coords={11,29,47,71,101},
+  xtick=data,
+  xlabel={Development seed},
+  width=0.82\textwidth,height=52mm,
+  bar width=7pt,
+  legend style={at={(0.5,1.02)},anchor=south,legend columns=2},
+  ymajorgrids=true,grid style={dashed}
+]
+\addplot coordinates {(11,0.518696) (29,0.512714) (47,0.510244) (71,0.517712) (101,0.509957)};
+\addplot coordinates {(11,0.523130) (29,0.518227) (47,0.518350) (71,0.517063) (101,0.515040)};
+\addplot[sharp plot,dashed,mark=none] coordinates {(11,0.5) (101,0.5)};
+\legend{Global7,Clean15}
+\end{axis}
+\end{tikzpicture}
+\caption{BOSSBase development-stage selection diagnostics for the frozen K=8 lineage. Both diagnostic families remain close to the 0.5 chance reference across seeds.}
+\Description{Grouped bars show Global7 and Clean15 AUC values between about 0.510 and 0.523 for five BOSSBase seeds, with a dashed chance line at 0.5.}
+\label{fig:boss-development-auc}
+\end{figure}
+
+A dedicated BOSSBase seed-11 holdout diagnostic recovers 240/240 authenticated messages. Under its 12\% crop holdout, mean symbol accuracy is 0.963, minimum symbol accuracy is 0.946, and the maximum RS correction count is 25. This development result anticipates the crop sensitivity later observed on the external corpus while preserving the methodological separation between design evidence and external validation.
+
+\subsection{External calibration feasibility, index use, and recovery}
+
+All five external partitions produce feasible group banks for all 30 authenticated sessions. Across five partitions, 30 sessions, and 12 calibration attacks, all 1,800 protected messages are recovered and authenticated. Maximum Reed--Solomon corrections in any calibration trial are 37. Every 7,000-cover index is exercised over the complete schedule, with mean cover-use frequency 11.471 per partition and frequency CV between 0.228 and 0.231.
+
+\begin{table}[t]
+\caption{External Caltech-101 calibration results under the frozen protocol.}
+\label{tab:calibration}
+\small
+\begin{tabular}{@{}rlrrrr@{}}
+\toprule
+Seed & Projection & Stable covers & Stable frac. & Recovery & Max RS \\
+\midrule
+11  & random\_04 & 4,184 & 0.598 & 360/360 & 5 \\
+29  & random\_04 & 3,795 & 0.542 & 360/360 & 37 \\
+47  & random\_15 & 4,756 & 0.679 & 360/360 & 0 \\
+71  & random\_20 & 3,933 & 0.562 & 360/360 & 11 \\
+101 & random\_28 & 4,167 & 0.595 & 360/360 & 0 \\
+\midrule
+All & -- & -- & 0.595 mean & 1800/1800 & 37 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\caption{External index-use diagnostics over the complete 30-session schedule. Every partition exercises all 7,000 available covers.}
+\label{tab:index-use}
+\small
+\begin{tabular}{@{}rrrrrr@{}}
+\toprule
+Seed & Unique covers & Min freq. & Mean freq. & Max freq. & Frequency CV \\
+\midrule
+11  & 7,000 & 3 & 11.471 & 21 & 0.2307 \\
+29  & 7,000 & 4 & 11.471 & 20 & 0.2299 \\
+47  & 7,000 & 3 & 11.471 & 21 & 0.2295 \\
+71  & 7,000 & 4 & 11.471 & 21 & 0.2307 \\
+101 & 7,000 & 4 & 11.471 & 21 & 0.2276 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+ group style={group size=2 by 1,horizontal sep=1.3cm},
+ width=0.47\textwidth,height=48mm,
+ symbolic x coords={11,29,47,71,101},xtick=data,
+ xlabel={Caltech seed},ymajorgrids=true,grid style={dashed}
+]
+\nextgroupplot[ybar,ymin=0.50,ymax=0.72,ylabel={Stable-cover fraction}]
+\addplot coordinates {(11,0.5977) (29,0.5421) (47,0.6794) (71,0.5619) (101,0.5953)};
+\nextgroupplot[ybar,ymin=0.22,ymax=0.235,ylabel={Cover-frequency CV}]
+\addplot coordinates {(11,0.23074) (29,0.22987) (47,0.22947) (71,0.23072) (101,0.22759)};
+\end{groupplot}
+\end{tikzpicture}
+\caption{External calibration diagnostics. Stable-cover fractions vary by partition, while complete-schedule cover-use dispersion remains tightly clustered.}
+\Description{Two bar charts show stable-cover fraction by seed from about 0.54 to 0.68 and cover-frequency coefficient of variation from about 0.228 to 0.231.}
+\label{fig:calibration-diagnostics}
+\end{figure}
+
+The calibration-selected schedules also yield mean global-seven-statistic AUC 0.5144 across seeds and mean 15-feature clean-index AUC 0.5235. These are retained as schedule diagnostics; Section~\ref{sec:results} later reports the stronger frozen SRM-lite, GLCM, and CNN audit used for the final detectability claim.
 
 \subsection{Unseen holdout robustness}
 
-The external holdout campaign recovers 1,163 of 1,200 authenticated messages (96.92\%). Failure is sharply localized: all 37 failures occur under the unseen 12\% central crop. The other seven transformations each recover 150/150 messages. This localization matters more than the aggregate alone; it identifies cropping beyond the calibration range as the dominant external-validity boundary.
+The external holdout campaign recovers 1,163 of 1,200 authenticated messages (96.92\%). The 37 unsuccessful trials are concentrated in the unseen 12\% central crop, which reaches the RS correction radius of 64 bytes. Each of the other seven transformations recovers 150/150 messages. Crop 8\% already lowers mean cover-label accuracy to 0.707, yet group majority and RS128 preserve all 150 authenticated messages; rotate $9^\circ$ similarly reaches mean label accuracy 0.860 while retaining full message recovery.
 
 \begin{table}[t]
-\caption{External holdout results. Cover-label accuracy is averaged before group majority/FEC; message success requires final authenticated plaintext recovery.}
+\caption{External holdout results. Cover-label accuracy is measured before group majority and FEC; message success requires final authenticated plaintext recovery.}
 \label{tab:holdout}
 \small
-\begin{tabular}{@{}lrrr@{}}
+\begin{tabular}{@{}lrrrr@{}}
 \toprule
-Holdout transformation & Auth. recovery & Mean label acc. & Max RS corr. \\
+Holdout transformation & Auth. recovery & Mean label acc. & Min label acc. & Max RS \\
 \midrule
-Gaussian $\sigma=9$  & 150/150 & 0.964 & 0 \\
-Gaussian $\sigma=15$ & 150/150 & 0.950 & 2 \\
-Blur 1.2              & 150/150 & 0.958 & 0 \\
-Blur 1.8              & 150/150 & 0.928 & 5 \\
-Crop 8\%              & 150/150 & 0.707 & 34 \\
-Crop 12\%             & 113/150 & 0.603 & 64 \\
-Rotate $5^\circ$      & 150/150 & 0.923 & 0 \\
-Rotate $9^\circ$      & 150/150 & 0.860 & 26 \\
+Gaussian $\sigma=9$  & 150/150 & 0.964 & 0.941 & 0 \\
+Gaussian $\sigma=15$ & 150/150 & 0.950 & 0.911 & 2 \\
+Blur 1.2              & 150/150 & 0.958 & 0.902 & 0 \\
+Blur 1.8              & 150/150 & 0.928 & 0.844 & 5 \\
+Crop 8\%              & 150/150 & 0.707 & 0.641 & 34 \\
+Crop 12\%             & 113/150 & 0.603 & 0.525 & 64 \\
+Rotate $5^\circ$      & 150/150 & 0.923 & 0.896 & 0 \\
+Rotate $9^\circ$      & 150/150 & 0.860 & 0.806 & 26 \\
 \midrule
-All holdouts           & 1163/1200 & -- & 64 \\
+All holdouts           & 1163/1200 & -- & -- & 64 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Per-partition authenticated success is 240/240, 214/240, 240/240, 231/240, and 238/240 for seeds 11, 29, 47, 71, and 101. Thus the strongest crop exposes partition variability even though seven other holdouts are uniformly recovered.
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+ group style={group size=1 by 2,vertical sep=1.0cm},
+ width=0.92\textwidth,height=46mm,
+ symbolic x coords={G9,G15,B1.2,B1.8,C8,C12,R5,R9},
+ xtick=data,
+ ymajorgrids=true,grid style={dashed}
+]
+\nextgroupplot[ybar,ymin=0.70,ymax=1.02,ylabel={Authenticated success},xticklabels={}]
+\addplot coordinates {(G9,1.0) (G15,1.0) (B1.2,1.0) (B1.8,1.0) (C8,1.0) (C12,0.7533) (R5,1.0) (R9,1.0)};
+\nextgroupplot[ybar,ymin=0.50,ymax=1.02,ylabel={Mean label accuracy},xlabel={Holdout transformation}]
+\addplot coordinates {(G9,0.9642) (G15,0.9496) (B1.2,0.9585) (B1.8,0.9279) (C8,0.7066) (C12,0.6031) (R5,0.9228) (R9,0.8602)};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Holdout robustness at message and pre-FEC label levels. G9/G15 denote Gaussian noise, B blur, C crop percentage, and R rotation degrees. The gap between label accuracy and authenticated recovery visualizes the protection supplied by majority grouping and RS128.}
+\Description{Two vertically aligned bar charts show authenticated message success and mean label accuracy for eight holdout transformations. Seven message-success bars equal one, while the 12 percent crop bar is about 0.753.}
+\label{fig:holdout-by-attack}
+\end{figure}
+
+Per-partition authenticated success is 240/240, 214/240, 240/240, 231/240, and 238/240 for seeds 11, 29, 47, 71, and 101. Maximum RS corrections are 55, 64, 37, 64, and 63 respectively.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+ ybar,ymin=0.86,ymax=1.01,
+ ylabel={Holdout authenticated success},
+ symbolic x coords={11,29,47,71,101},xtick=data,xlabel={Caltech seed},
+ width=0.78\textwidth,height=50mm,
+ nodes near coords,nodes near coords align={vertical},
+ ymajorgrids=true,grid style={dashed}
+]
+\addplot coordinates {(11,1.0) (29,0.891667) (47,1.0) (71,0.9625) (101,0.991667)};
+\end{axis}
+\end{tikzpicture}
+\caption{External holdout authenticated-message success by partition. The aggregate across all five partitions is 96.92\%.}
+\Description{Bar chart showing success rates of 1.0, 0.892, 1.0, 0.963, and 0.992 for Caltech seeds 11, 29, 47, 71, and 101.}
+\label{fig:holdout-by-seed}
+\end{figure}
 
 \subsection{Selection detectability}
 
-Table~\ref{tab:detectors} and Fig.~\ref{fig:detectors} summarize the final detector audit. SRM-lite remains essentially at chance. GLCM reveals a small, highly repeatable texture/selection shift. The trained CNN is the strongest evaluated warden, with mean macro-AUC 0.5266; every seed-level mean lies above 0.523. This is a modest but systematic signal. It falsifies any universal ``undetectable'' characterization and motivates the narrower statement that NARCIS has low detectability under the evaluated matched-index detector family.
+Table~\ref{tab:detectors} and Figs.~\ref{fig:detectors}--\ref{fig:cnn-seeds} summarize the final detector audit. SRM-lite remains close to chance, GLCM reveals a small repeatable texture/selection shift, and the trained CNN provides the strongest discrimination with mean macro-AUC 0.5266. The five CNN seed means range from 0.5232 to 0.5301, showing that the signal persists across external partitions. The resulting claim is low but measurable selection leakage under the evaluated matched-index warden.
 
 \begin{table}[t]
-\caption{Final repeated Caltech-101 selection-detector audit ($n=100$ overlapping image-disjoint splits per detector). Intervals are descriptive, not independent-sample inferential confidence intervals.}
+\caption{Final repeated Caltech-101 selection-detector audit ($n=100$ overlapping image-disjoint splits per detector). Intervals summarize repeated-split variability.}
 \label{tab:detectors}
 \small
 \begin{tabular}{@{}lrrrr@{}}
@@ -117,7 +248,7 @@ GLCM + logistic       & 0.5128 & 0.0017 & 0.5088--0.5162 & 0.5125--0.5132 \\
   nodes near coords,
   nodes near coords align={vertical},
   ymajorgrids=true,
-  grid style={dashed},
+  grid style={dashed}
 ]
 \addplot coordinates {(SRM-lite,0.504048) (GLCM,0.512833) (CNN,0.526603)};
 \addplot[sharp plot,dashed,mark=none] coordinates {(SRM-lite,0.5) (CNN,0.5)};
@@ -128,12 +259,42 @@ GLCM + logistic       & 0.5128 & 0.0017 & 0.5088--0.5162 & 0.5125--0.5132 \\
 \label{fig:detectors}
 \end{figure}
 
-\subsection{DiffStega reproduction and comparison boundary}
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+ ybar,ymin=0.515,ymax=0.535,
+ ylabel={CNN mean macro-AUC},
+ symbolic x coords={11,29,47,71,101},xtick=data,xlabel={Caltech seed},
+ width=0.80\textwidth,height=52mm,
+ ymajorgrids=true,grid style={dashed},
+ error bars/.cd,y dir=both,y explicit
+]
+\addplot+[error bars/.cd,y dir=both,y explicit] coordinates {
+ (11,0.523150) +- (0,0.002178)
+ (29,0.527023) +- (0,0.001813)
+ (47,0.530054) +- (0,0.001984)
+ (71,0.524239) +- (0,0.002911)
+ (101,0.528548) +- (0,0.002048)
+};
+\addplot[sharp plot,dashed,mark=none] coordinates {(11,0.5) (101,0.5)};
+\end{axis}
+\end{tikzpicture}
+\caption{CNN detector mean macro-AUC by external partition with one repeated-split standard deviation.}
+\Description{Five bars show CNN AUC means from about 0.523 to 0.530 with small error bars for the five Caltech seeds.}
+\label{fig:cnn-seeds}
+\end{figure}
 
-All 100 official UniStega cases complete under the frozen external execution. Table~\ref{tab:diffstega} compares the independently reproduced values with the published IJCAI reference. Correct-recovery PSNR is 23.274 dB, within 0.016 dB of the reported 23.290 dB. Face-ID similarity on 22 face cases is likewise close (0.888 vs. 0.893). Other metrics show larger offsets, which are retained rather than tuned away and are consistent with using an independent metric environment.
+The CNN evidence comprises 20/20 successful workflow jobs, 100 repetition-level macro-AUC rows, and 3,000 per-session-head AUC rows. This granularity supports both aggregate and partition-level inspection of the learned detector behavior.
+
+\subsection{DiffStega reproduction and execution evidence}
+
+All 100 official UniStega cases complete under the frozen external execution: 30 similar-prompt cases in 1:14:52, 42 content-prompt cases in 1:36:01, and 28 style-prompt cases in 54:35.80. The run produces 700 PNG files, with 22 face cases and zero face-detection failures in the independent metric pass.
+
+Table~\ref{tab:diffstega} compares independently reproduced values with the published IJCAI reference. Correct-recovery PSNR is 23.274 dB, within 0.016 dB of the reported 23.290 dB. Face-ID similarity on 22 face cases is 0.888 versus 0.893. The remaining differences are preserved as reproduction evidence under the disclosed independent metric environment.
 
 \begin{table}[t]
-\caption{DiffStega external reproduction. ``Reproduced'' values are independently computed from the 100-case official execution; ``Published'' values are reported by Yang et al. \cite{yang2024diffstega}.}
+\caption{DiffStega external reproduction. Reproduced values come from the frozen 100-case execution; published values are reported by Yang et al. \cite{yang2024diffstega}.}
 \label{tab:diffstega}
 \small
 \begin{tabular}{@{}llrr@{}}
@@ -152,10 +313,59 @@ Correct recovery & PSNR & 23.274 & 23.290 \\
                  & LPIPS & 0.183 & 0.266 \\
                  & Face ID similarity & 0.888 & 0.893 \\
 \midrule
-No password & PSNR & 18.495 & 18.491 \\
-Wrong password & PSNR & 17.613 & 17.530 \\
+No-password recovery & PSNR & 18.495 & 18.491 \\
+                     & SSIM & 0.535 & 0.595 \\
+                     & LPIPS & 0.408 & 0.457 \\
+                     & Face ID similarity & 0.346 & 0.331 \\
+\midrule
+Wrong-password recovery & PSNR & 17.613 & 17.530 \\
+                        & SSIM & 0.491 & 0.540 \\
+                        & LPIPS & 0.434 & 0.476 \\
+                        & Face ID similarity & 0.548 & 0.477 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-These values are not inserted into a ``NARCIS vs. DiffStega'' winner table. DiffStega's information object is a reconstructed secret image and its perceptual metrics quantify that reconstruction. NARCIS's primary outcome is exact authenticated recovery of a byte string from a finite natural-image index. Comparing PSNR with NARCIS's symbol rate or treating the two as equal-capacity systems would therefore be a category error.
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+ group style={group size=2 by 1,horizontal sep=1.4cm},
+ width=0.46\textwidth,height=48mm,
+ ymajorgrids=true,grid style={dashed}
+]
+\nextgroupplot[ybar,ymin=22.5,ymax=23.6,ylabel={Correct-recovery PSNR (dB)},symbolic x coords={Reprod.,Published},xtick=data]
+\addplot coordinates {(Reprod.,23.274) (Published,23.290)};
+\nextgroupplot[ybar,ymin=0,ymax=1.0,ylabel={Unit-scale metric},symbolic x coords={SSIM,LPIPS,ID},xtick=data,legend style={at={(0.5,1.02)},anchor=south,legend columns=2}]
+\addplot coordinates {(SSIM,0.672) (LPIPS,0.183) (ID,0.888)};
+\addplot coordinates {(SSIM,0.769) (LPIPS,0.266) (ID,0.893)};
+\legend{Reproduced,Published}
+\end{groupplot}
+\end{tikzpicture}
+\caption{DiffStega correct-recovery reproduction. PSNR agrees closely with the published value; SSIM, LPIPS, and face-ID similarity retain the observed independent-metric differences.}
+\Description{Two charts compare reproduced and published DiffStega correct-recovery metrics: nearly identical PSNR around 23.28 dB and paired bars for SSIM, LPIPS, and face identity similarity.}
+\label{fig:diffstega-reproduction}
+\end{figure}
+
+DiffStega and NARCIS retain distinct communication semantics. DiffStega evaluates reconstruction of a secret image through generative diffusion, whereas NARCIS evaluates authenticated byte recovery from a finite index of unchanged natural images. The comparison therefore establishes executable recent positioning and reproducibility while keeping family-specific performance metrics in their native domains.
+
+\subsection{Consolidated evidence view}
+
+Table~\ref{tab:evidence-summary} summarizes the complete evidence stack used by the final manuscript. It separates development, external channel validation, external detector validation, and external baseline reproduction so that each claim draws from the appropriate evidence layer.
+
+\begin{table}[t]
+\caption{Consolidated evidence stack for the final TOMM manuscript.}
+\label{tab:evidence-summary}
+\small
+\begin{tabularx}{\textwidth}{@{}lXXX@{}}
+\toprule
+Evidence layer & Scale & Principal outcomes & Manuscript role \\
+\midrule
+BOSSBase development & 5 seeds; 1,800 calibration trials & 1,800/1,800 recovery; 7,995--8,000 unique covers; development AUC 0.514--0.518 aggregate & Method and operating-point evidence \\
+Caltech calibration & 5 seeds; 1,800 trials & 1,800/1,800 recovery; all 7,000 covers used/seed; max RS 37 & External feasibility and calibrated robustness \\
+Caltech holdout & 5 seeds; 1,200 trials & 1,163/1,200 recovery; seven attacks 150/150; crop 12\% 113/150 & External generalization boundary \\
+Final steganalysis & 3 detectors; 100 repeated splits each & Mean AUC 0.504, 0.513, 0.527 & Selection-leakage characterization \\
+DiffStega reproduction & 100 UniStega cases; 700 PNGs & 100/100 complete; PSNR 23.274 vs. 23.290 published & Executable recent reference \\
+\bottomrule
+\end{tabularx}
+\end{table}
