@@ -1,0 +1,58 @@
+{
+  "status": "diffstega_external_reproduction_complete",
+  "evidence_bundle_sha256": "32d0e975eb197adb0d1d2f7c537b04b4fab84af45a51148eaf15872b40de1f46",
+  "upstream": {
+    "repository": "evtricks/DiffStega",
+    "commit": "73cd7cb8d102f4fc0f5bb168a71cfb948077d89a",
+    "tracked_source_changes": [],
+    "dataset": "official UniStega",
+    "dataset_archive_sha256": "768aaf95f8c7d06c5f568c79bebdbaaa4b8a7ab59c1a023a2f83a0c076f89096"
+  },
+  "execution": {
+    "gpu": "Tesla T4",
+    "python": "3.11.5",
+    "torch": "2.1.0+cu121",
+    "cuda_runtime": "12.1",
+    "cases": 100,
+    "subsets": {"similar": 30, "content": 42, "style": 28},
+    "all_cases_complete": true,
+    "evaluation_errors": 0,
+    "face_cases": 22,
+    "face_detection_failures": 0,
+    "generated_png_files": 700,
+    "subset_elapsed": {"similar": "1:14:52", "content": "1:36:01", "style": "54:35.80"}
+  },
+  "model_revisions": {
+    "h94/IP-Adapter": "018e402774aeeddd60609b4ecdb7e298259dc729",
+    "runwayml/stable-diffusion-v1-5": "451f4fe16113bff5a5d2269ed5ad43b0592e9a14",
+    "GraydientPlatformAPI/picx-real": "5cac84cdb359689917d61a2e76ef3859483aebca",
+    "openai/clip-vit-base-patch32": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268"
+  },
+  "independently_reproduced_global_metrics": {
+    "encrypted": {"psnr": 18.569363971667727, "ssim": 0.5289226837969027, "lpips": 0.4184868535399437, "id_similarity_n22": 0.34507999095049774, "clip_score": 28.9458419829607, "niqe": 3.900965574856033},
+    "correct_recovery": {"psnr": 23.274237857262364, "ssim": 0.6723575129087915, "lpips": 0.18263144426047803, "id_similarity_n22": 0.8880475434389982},
+    "no_password": {"psnr": 18.495233458194754, "ssim": 0.535286299926258, "lpips": 0.4076741382479668, "id_similarity_n22": 0.34629652987826953},
+    "wrong_password": {"psnr": 17.612598775528127, "ssim": 0.4907167614859453, "lpips": 0.4337469384074211, "id_similarity_n22": 0.5481120639226653}
+  },
+  "ijcai_2024_published_reference": {
+    "encrypted": {"psnr": 18.611, "ssim": 0.590, "lpips": 0.461, "id_similarity": 0.343, "clip_score": 29.446, "niqe": 3.408},
+    "correct_recovery": {"psnr": 23.290, "ssim": 0.769, "lpips": 0.266, "id_similarity": 0.893},
+    "no_password": {"psnr": 18.491, "ssim": 0.595, "lpips": 0.457, "id_similarity": 0.331},
+    "wrong_password": {"psnr": 17.530, "ssim": 0.540, "lpips": 0.476, "id_similarity": 0.477}
+  },
+  "metric_artifacts": {
+    "per_case_csv_sha256": "504e9cf8c26bf232dbf1fc33d2be8e265fcbef59f8c94e85055901aadab66c0a",
+    "summary_csv_sha256": "7ba39b06b17c58a7825dc72f76dfee2544a691c69cc50a4e13f3a4c7216867d6",
+    "consumed_files_json_sha256": "d32ad555291e10874c5c16bdb6a7dd1c4beef092328bfd90c9b724086650a2d6",
+    "pip_freeze_sha256": "0bd2c12b77ef67aaf65a08491e8495345b2a9a698b198d6da38fea2463ff0f32"
+  },
+  "disclosed_metric_environment_deviation": {
+    "predeclared_huggingface_hub": "0.20.3",
+    "observed_huggingface_hub": "0.36.2",
+    "predeclared_pyiqa": "0.1.13",
+    "observed_pyiqa": "0.1.15",
+    "scope": "independent post-execution metric environment only; the faithful DiffStega benchmark environment and upstream commands remained frozen",
+    "policy": "Values are labelled independently reproduced metrics. Exact equality with IJCAI tables is not claimed."
+  },
+  "comparison_boundary": "DiffStega reconstructs a secret image through pretrained diffusion models; NARCIS communicates an authenticated byte string through selection of unchanged indexed natural images. Perceptual reconstruction metrics and NARCIS finite-index plaintext rate are not treated as interchangeable quantities."
+}
