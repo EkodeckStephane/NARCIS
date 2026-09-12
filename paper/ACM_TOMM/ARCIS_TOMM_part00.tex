@@ -1,0 +1,95 @@
+\documentclass[acmsmall,review,screen]{acmart}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xspace}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows.meta,positioning,calc,fit}
+\pgfplotsset{compat=1.18}
+\setlength{\headheight}{19pt}
+
+\newcommand{\method}{ARCIS\xspace}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\setcopyright{none}
+\settopmatter{printfolios=true}
+\acmJournal{TOMM}
+\acmYear{2026}
+\acmMonth{9}
+
+\begin{document}
+
+\title{ARCIS: Authenticated Robust Coverless Image Signaling with Finite-Index Feasibility}
+
+\author{Arthur Ulrich Ewane}
+\affiliation{\institution{Department of Computer Science, University of Yaoundé I, LIRIMA, TEAM GRIMCAPE}\city{Yaoundé}\country{Cameroon}}
+\email{ulrich.ewane@facsciences-uy1.cm}
+
+\author{Juvet Karnel Sadié}
+\affiliation{\institution{University of Yaoundé I / UMMISCO, IRD France Nord / Sorbonne Université, UMI 209 UMMISCO}\city{Yaoundé / Bondy / Paris}\country{Cameroon / France}}
+\email{sadie.juvet@gmail.com}
+
+\author{Stéphane Gaël R. Ekodeck}
+\affiliation{\institution{University of Yaoundé I / UMMISCO, IRD France Nord / Sorbonne Université, UMI 209 UMMISCO}\city{Yaoundé / Bondy / Paris}\country{Cameroon / France}}
+\email{stephane-gael.ekodeck@facsciences-uy1.cm}
+
+\author{Serge Alain Ebélé}
+\affiliation{\institution{University of Yaoundé I / UMMISCO, IRD France Nord / Sorbonne Université, UMI 209 UMMISCO}\city{Yaoundé / Bondy / Paris}\country{Cameroon / France}}
+\email{serge-alain.ebele@facsciences-uy1.cm}
+
+\author{Vivien Loïck Beyala Kamgang}
+\affiliation{\institution{The University of Bertoua / RUFCEA (UR-IFIA), University of Dschang}\city{Bertoua / Dschang}\country{Cameroon}}
+\email{vivsxx@univ-bertoua.cm}
+
+\author{Damaris Belle M. Fotso}
+\affiliation{\institution{Department of Computer Science, University of Yaoundé I, LIRIMA}\city{Yaoundé}\country{Cameroon}}
+\email{makwate.fotso@facsciences-uy1.cm}
+
+\author{Chantal Marguerite Mveh-Abia}
+\authornote{Corresponding author.}
+\affiliation{\institution{University of Yaoundé I: Department of Computer Science, LIRIMA, TEAM GRIMCAPE; Department of Computer Engineering, National Advanced School of Engineering}\city{Yaoundé}\country{Cameroon}}
+\email{cmmveh@yahoo.fr}
+
+\begin{abstract}
+Selection-based coverless communication preserves carrier pixels, while reliability and statistical inconspicuousness depend on the selected-index distribution and the image channel. We present \method (Authenticated Robust Coverless Image Signaling), a protocol that treats finite-index feasibility, channel robustness, session balancing, authentication, and selection detectability as joint constraints. \method combines a learned normalized image descriptor, calibration-locked quantile codebooks, complementary five-cover group banks, exact session-balanced keyed Gray mapping, AES-GCM authenticated framing, replay control, and Reed--Solomon correction. The final operating point ($K=8$, group size 5, 128 Reed--Solomon parity bytes) was fixed on BOSSBase development evidence before external evaluation on five Caltech-101 partitions. The development lineage achieved 1,800/1,800 calibration recoveries across five seeds while exercising essentially the full index. External Caltech calibration recovered 1,800/1,800 authenticated messages. Eight unseen holdout transformations yielded 1,163/1,200 recoveries (96.92\%); the 37 failures were concentrated in the 12\% central-crop condition, while each of the other seven holdouts achieved 150/150. A repeated image-disjoint detector audit yielded mean macro-AUC 0.504 for SRM-lite/ExtraTrees, 0.513 for GLCM/logistic regression, and 0.527 for a 30-head CNN, supporting a low but measurable selection-leakage characterization. A frozen execution of the official DiffStega benchmark completed all 100 UniStega cases; independently reproduced correct-recovery PSNR reached 23.274 dB versus 23.290 dB in the original paper. Family-specific metrics preserve the distinct semantics of generated-image reconstruction and authenticated finite-index byte signaling.
+\end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+ <concept><concept_id>10002978.10003006</concept_id><concept_desc>Security and privacy~Cryptography</concept_desc><concept_significance>500</concept_significance></concept>
+ <concept><concept_id>10002951.10003227</concept_id><concept_desc>Information systems~Multimedia information systems</concept_desc><concept_significance>300</concept_significance></concept>
+ <concept><concept_id>10010147.10010257.10010293</concept_id><concept_desc>Computing methodologies~Neural networks</concept_desc><concept_significance>300</concept_significance></concept>
+</ccs2012>
+\end{CCSXML}
+\ccsdesc[500]{Security and privacy~Cryptography}
+\ccsdesc[300]{Information systems~Multimedia information systems}
+\ccsdesc[300]{Computing methodologies~Neural networks}
+
+\keywords{coverless image steganography, cover selection, covert communication, multimedia security, authenticated encryption, finite-index feasibility, error correction, steganalysis}
+
+\maketitle
+
+\section{Introduction}
+Image steganography traditionally hides information by modifying a carrier, whereas coverless approaches communicate through selection, indexing, semantic mapping, or generation. Selection preserves the original pixels, shifting the principal security question toward the distribution of transmitted images and the reliability of their labels after channel perturbations. Recent surveys accordingly separate cover-selection design from detectability and emphasize evaluation criteria that reflect the selected-carrier distribution~\cite{azam2025review,kombrink2025survey}.
+
+A finite shared index adds a second protocol constraint. Every protected message induces a concrete multiplicity demand over codebook symbols. Robust communication therefore requires enough qualified carrier groups for every requested symbol across the complete protected envelope. Stability-aware quantization and representative selection improve robust cover choice~\cite{guo2026capacity}, while restoration and deep-hashing methods strengthen geometric robustness~\cite{meng2025restoration,tan2026hashing}. \method complements these directions by placing finite-index feasibility, authenticated message recovery, and selection detectability inside one end-to-end evaluation unit.
+
+\method couples a channel-aware quantile codebook with complementary five-cover groups whose majority-failure signatures are characterized on calibration transformations. A proportional-deficit scheduler preserves the natural signature mixture of each label bank, while an exact cyclic keyed Gray mapping balances coded symbols across visual clusters over every full $K$-session cycle. AES-GCM binds payload and session state, Reed--Solomon coding absorbs residual byte errors, and authenticated plaintext recovery becomes the final success criterion. The scientific contribution is this integrated finite-index construction and its externally frozen evaluation rather than any individual standard primitive.
+
+The validation separates development evidence from external evidence. BOSSBase 1.01~\cite{bas2011boss} supports design and operating-point selection. The final protocol then evaluates Caltech-101~\cite{caltech101,feifei2004caltech} with $K=8$, five covers per coded symbol, 128 Reed--Solomon parity bytes, and 30 authenticated sessions per partition. The external campaign combines twelve calibration transformations, eight unseen holdout transformations, complete-index usage measurements, and repeated selection-steganalysis with SRM-lite, GLCM, and CNN detectors. A frozen execution of DiffStega~\cite{yang2024diffstega} supplies an executable recent reference under its native reconstruction metrics.
+
+The resulting evidence spans robustness, usage, and detectability. The BOSSBase development lineage achieves 1,800/1,800 calibration recoveries over five seeds, with 7,995--8,000 unique covers exercised per seed and repeated-session detector AUCs close to chance. On external Caltech partitions, calibration reaches 1,800/1,800 authenticated recoveries and exercises all 7,000 covers in every partition. Unseen holdouts reach 1,163/1,200 authenticated recoveries (96.92\%), with the strongest 12\% crop defining the observed channel boundary. Final mean macro-AUCs are 0.504 for SRM-lite, 0.513 for GLCM, and 0.527 for the CNN. DiffStega completes all 100 official UniStega cases, with independently reproduced correct-recovery PSNR of 23.274 dB compared with 23.290 dB in the reference paper.
+
+The article does not claim universal undetectability, universal robustness, or direct numerical superiority over generative steganography. Its claims are bounded to the declared finite-index protocol, channel families, external corpus, and evaluated wardens.
+
+\section{Related Work and Positioning}
+\subsection{Selection, retrieval, and robust coverless communication}
+Early coverless systems mapped image content or object configurations to symbols without modifying carriers. Multi-object recognition illustrates semantic cover selection~\cite{luo2021multiobject}. Recent reviews organize cover-selection strategies and their security implications~\cite{azam2025review,kombrink2025survey}. Guo and Ping~\cite{guo2026capacity} use stability-aware pseudo-Zernike quantization and representative selection to balance robustness and nominal capacity. \method focuses on a complementary question: whether the complete authenticated coded demand can be realized by a fixed qualified shared index and recovered at the plaintext level.
+
+Geometric perturbations remain a central challenge. Meng et al.~\cite{meng2025restoration} restore attacked images before the underlying coverless decoder, while Tan et al.~\cite{tan2026hashing} use deep unsupervised hashing to improve resistance to geometric attacks. \method incorporates calibration transformations directly into codebook and group-bank construction, while eight stronger or intermediate transformation values remain holdouts. The observed 12\% crop boundary is therefore reported as an explicit external-validity result.
+
+\subsection{Generative steganography and multimedia security}
+Generative approaches communicate through synthesized content. DiffStega reconstructs a secret image through prompt- and password-conditioned diffusion~\cite{yang2024diffstega}. Guidance-feature-distribution steganography embeds information in a generative feature distribution~\cite{sun2024guidance}, while progressive generative steganography in TOMM studies capacity, extraction, and detectability during high-resolution generation~\cite{zhou2025progressive}. \method instead operates on an indexed natural-image carrier set and measures exact authenticated byte recovery. Each family is therefore reported with its native information object and metrics.
