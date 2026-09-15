@@ -22,7 +22,7 @@ The final operating point is frozen before Caltech outcomes. Five deterministic 
 The enriched manuscript exposes development-to-external transfer: BOSSBase K=8 development results, complete-index usage, external calibration, holdout generalization, partition variability, detector variability, and DiffStega reproduction appear as separate evidence layers.
 
 ## Gate 6 — Article structure, prose, figures, tables: PASS
-The abstract follows problem → gap → method → evidence → bounded conclusion. The article contains **nine figures and nine tables**: protocol pipeline, exact cyclic mapping, BOSSBase development diagnostics, calibration/index-use diagnostics, holdout robustness by attack, holdout robustness by partition, detector comparison, CNN partition variability, DiffStega reproduction, plus corresponding evidence tables. Scientific figures are TikZ/PGFPlots-native and include ACM accessibility descriptions where required. The strengthened ACM CI build passes compilation, reference resolution, and overflow checks.
+The abstract follows problem → gap → method → evidence → bounded conclusion. The article contains **nine figures and nine tables**: protocol pipeline, exact cyclic mapping, BOSSBase development diagnostics, calibration/index-use diagnostics, holdout robustness by attack, holdout robustness by partition, detector comparison, CNN partition variability, DiffStega reproduction, plus corresponding evidence tables. Scientific figures are TikZ/PGFPlots-native and include ACM accessibility descriptions where required. The final compiled review manuscript has **18 pages**; the strengthened ACM CI build passes compilation, reference resolution, and overflow checks.
 
 ## Gate 7 — Scope and operational claims: PASS
 The supported security wording is **low but measurable selection leakage** under the evaluated warden. Robustness is strong and bounded to the declared channel, with the 12% crop result defining the strongest observed boundary. Production key management, broader traffic analysis, and additional external image domains are separated as future deployment/research extensions.
@@ -34,7 +34,7 @@ The repository contains protocol freezes, dataset/checkpoint provenance, canonic
 Critical recent references were checked against primary/publisher records. The JoCS bibliographic record is corrected to Chang Ren and Bin Wu, *Cybersecurity* 7, article 73 (2024), DOI `10.1186/s42400-024-00299-5`. Title and seven-author order are synchronized across manuscript/status/cover-letter assets.
 
 ## Gate 10 — Submission readiness: PASS
-GitHub Actions run **34708394790** (run 116), head commit `304ffe980cccd9f2217488f4836a2525bc8ba97d`, passed both the scientific/code job and the strengthened ACM manuscript job. The manuscript and cover letter compile successfully; the workflow's unresolved-reference/citation and `Overfull \\hbox` guards pass; both submission PDFs are exported in artifact `NARCIS-TOMM-submission-pdfs`.
+Final GitHub Actions run **35021173166** (run 121), manuscript head commit `4b4cf7f888904719fc2187178ad3ddbe256df023`, passed both the scientific/code job and the strengthened ACM manuscript job. The 18-page manuscript and 1-page cover letter compile successfully; unresolved-reference/citation and `Overfull \\hbox` guards pass; both submission PDFs are exported in artifact `NARCIS-TOMM-submission-pdfs` (ID **10417935612**, digest `sha256:c1e25e34ce949d6159d06bd4c3fdf47292b6e7062266ff07b62128ef96711612`).
 
 ## Senior Reviewer Q1/Rang A prescreen
 

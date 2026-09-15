@@ -24,6 +24,7 @@ The TOMM manuscript integrates the canonical K=8/group-size-5/RS128 lineage at h
 
 ## Manuscript content
 
+- **18-page** final ACM review manuscript plus **1-page** cover letter.
 - **Nine scientific figures**: protocol pipeline, cyclic K=8 session mapping, BOSSBase development diagnostics, Caltech calibration/index-use diagnostics, holdout robustness by attack, holdout robustness by partition, detector comparison, CNN partition variability, and DiffStega reproduction.
 - **Nine tables**: SOTA positioning, component roles, BOSSBase development, external calibration, index usage, holdouts, detector statistics, DiffStega reproduction, and consolidated evidence.
 - Security wording: **low but measurable selection leakage/detectability**.
@@ -47,7 +48,7 @@ Juvet Karnel Sadié uses the same University of Yaoundé I/LIRIMA/TEAM GRIMCAPE,
 
 ## Mechanical validation
 
-GitHub Actions run **34708394790** (run 116), head commit `304ffe980cccd9f2217488f4836a2525bc8ba97d`, completed with both jobs green:
+Final GitHub Actions run **35021173166** (run 121), manuscript head commit `4b4cf7f888904719fc2187178ad3ddbe256df023`, completed with both jobs green:
 
 - unit tests + TOMM preflight: **PASS**;
 - ACM manuscript build: **PASS**;
@@ -56,4 +57,4 @@ GitHub Actions run **34708394790** (run 116), head commit `304ffe980cccd9f221748
 - `Overfull \\hbox` guard: **PASS**;
 - submission-PDF artifact export: **PASS**.
 
-Artifact `NARCIS-TOMM-submission-pdfs`: ID **10301903911**, size **600,494 bytes**, digest `sha256:327ab7d665c5d55e39c2d310d3aa3dcfbd3f5096d181cf15efc9b7b658368a81`.
+Artifact `NARCIS-TOMM-submission-pdfs`: ID **10417935612**, size **600,493 bytes**, digest `sha256:c1e25e34ce949d6159d06bd4c3fdf47292b6e7062266ff07b62128ef96711612`.

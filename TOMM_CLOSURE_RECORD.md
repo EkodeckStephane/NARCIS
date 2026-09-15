@@ -39,6 +39,7 @@ Juvet Karnel Sadié carries the same three affiliations as Stéphane Gaël R. Ek
 ## Final manuscript content controls
 
 - ACM `acmart` review-manuscript format.
+- **18-page** compiled manuscript and **1-page** cover letter.
 - **Nine scientific figures** using TikZ/PGFPlots, covering the protocol pipeline, cyclic session mapping, BOSSBase development diagnostics, calibration/index-use diagnostics, holdout robustness by attack and partition, detector comparison, CNN partition variability, and DiffStega reproduction.
 - **Nine tables** covering positioning, component roles, development results, external calibration, index usage, holdouts, detector statistics, DiffStega reproduction, and consolidated evidence.
 - Positive/affirmative scientific phrasing used throughout, with boundary statements retained where scientifically necessary.
@@ -48,7 +49,7 @@ Juvet Karnel Sadié carries the same three affiliations as Stéphane Gaël R. Ek
 
 ## Mechanical validation
 
-Strengthened GitHub Actions run **34708394790** (run 116), head commit `304ffe980cccd9f2217488f4836a2525bc8ba97d`, completed successfully:
+Final GitHub Actions run **35021173166** (run 121), manuscript head commit `4b4cf7f888904719fc2187178ad3ddbe256df023`, completed successfully on September 15, 2026:
 
 - unit tests: **PASS**;
 - TOMM preflight: **PASS**;
@@ -58,7 +59,7 @@ Strengthened GitHub Actions run **34708394790** (run 116), head commit `304ffe98
 - `Overfull \\hbox` guard: **PASS**;
 - submission-PDF artifact upload: **PASS**.
 
-Artifact `NARCIS-TOMM-submission-pdfs`: ID **10301903911**, size **600,494 bytes**, digest `sha256:327ab7d665c5d55e39c2d310d3aa3dcfbd3f5096d181cf15efc9b7b658368a81`.
+Artifact `NARCIS-TOMM-submission-pdfs`: ID **10417935612**, size **600,493 bytes**, digest `sha256:c1e25e34ce949d6159d06bd4c3fdf47292b6e7062266ff07b62128ef96711612`.
 
 ## Gate decision
 

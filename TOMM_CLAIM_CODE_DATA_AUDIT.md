@@ -91,15 +91,16 @@ Repeated-split intervals are descriptive because the splits overlap.
 
 ## Mechanical submission audit
 
-GitHub Actions run **34708394790** (run 116), head commit `304ffe980cccd9f2217488f4836a2525bc8ba97d`, completed successfully on both jobs:
+Final GitHub Actions run **35021173166** (run 121), manuscript head commit `4b4cf7f888904719fc2187178ad3ddbe256df023`, completed successfully on both jobs:
 - unit tests and TOMM preflight: **PASS**;
 - ACM manuscript compilation: **PASS**;
-- cover-letter compilation: **PASS**;
+- compiled manuscript: **18 pages**;
+- cover-letter compilation: **PASS**, **1 page**;
 - unresolved citation/reference guard: **PASS**;
 - `Overfull \\hbox` guard: **PASS**;
 - submission-PDF artifact upload: **PASS**.
 
-Artifact `NARCIS-TOMM-submission-pdfs` has ID **10301903911**, size **600,494 bytes**, and digest `sha256:327ab7d665c5d55e39c2d310d3aa3dcfbd3f5096d181cf15efc9b7b658368a81`.
+Artifact `NARCIS-TOMM-submission-pdfs` has ID **10417935612**, size **600,493 bytes**, and digest `sha256:c1e25e34ce949d6159d06bd4c3fdf47292b6e7062266ff07b62128ef96711612`.
 
 ## Final audit verdict
 
