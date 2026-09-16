@@ -1,0 +1,24 @@
+{
+  "method": "controlled fixed-upstream RS-parity ablation; codebook/group banks fixed from calibration, coded payload rescheduled for each parity level",
+  "parities": {
+    "0": {"successes": 829, "trials": 1200, "success_rate": 0.6908333333333333, "mean_transmitted_images_per_session": 970.0, "by_attack_successes": {"gaussian_9_holdout": 150, "gaussian_15_holdout": 144, "blur_1.2_holdout": 150, "blur_1.8_holdout": 115, "crop_08_holdout": 62, "crop_12_holdout": 0, "rotate_5_holdout": 150, "rotate_9_holdout": 58}},
+    "32": {"successes": 1064, "trials": 1200, "success_rate": 0.8866666666666667, "mean_transmitted_images_per_session": 1396.6666666666667, "by_attack_successes": {"gaussian_9_holdout": 150, "gaussian_15_holdout": 150, "blur_1.2_holdout": 150, "blur_1.8_holdout": 150, "crop_08_holdout": 143, "crop_12_holdout": 21, "rotate_5_holdout": 150, "rotate_9_holdout": 150}},
+    "64": {"successes": 1115, "trials": 1200, "success_rate": 0.9291666666666667, "mean_transmitted_images_per_session": 1825.0, "by_attack_successes": {"gaussian_9_holdout": 150, "gaussian_15_holdout": 150, "blur_1.2_holdout": 150, "blur_1.8_holdout": 150, "crop_08_holdout": 150, "crop_12_holdout": 65, "rotate_5_holdout": 150, "rotate_9_holdout": 150}},
+    "96": {"successes": 1145, "trials": 1200, "success_rate": 0.9541666666666667, "mean_transmitted_images_per_session": 2250.0, "by_attack_successes": {"gaussian_9_holdout": 150, "gaussian_15_holdout": 150, "blur_1.2_holdout": 150, "blur_1.8_holdout": 150, "crop_08_holdout": 150, "crop_12_holdout": 95, "rotate_5_holdout": 150, "rotate_9_holdout": 150}},
+    "128": {"successes": 1163, "trials": 1200, "success_rate": 0.9691666666666666, "mean_transmitted_images_per_session": 2676.6666666666665, "by_attack_successes": {"gaussian_9_holdout": 150, "gaussian_15_holdout": 150, "blur_1.2_holdout": 150, "blur_1.8_holdout": 150, "crop_08_holdout": 150, "crop_12_holdout": 113, "rotate_5_holdout": 150, "rotate_9_holdout": 150}}
+  },
+  "payload_cost": {
+    "0": {"8": {"mean_covers": 615.0, "bits_per_image": 0.1040650406504065}, "32": {"mean_covers": 935.0, "bits_per_image": 0.2737967914438503}, "64": {"mean_covers": 1360.0, "bits_per_image": 0.3764705882352941}},
+    "32": {"8": {"mean_covers": 1040.0, "bits_per_image": 0.06153846153846154}, "32": {"mean_covers": 1360.0, "bits_per_image": 0.18823529411764706}, "64": {"mean_covers": 1790.0, "bits_per_image": 0.2860335195530726}},
+    "64": {"8": {"mean_covers": 1470.0, "bits_per_image": 0.04353741496598639}, "32": {"mean_covers": 1790.0, "bits_per_image": 0.1430167597765363}, "64": {"mean_covers": 2215.0, "bits_per_image": 0.2311512415349887}},
+    "96": {"8": {"mean_covers": 1895.0, "bits_per_image": 0.033773087071240104}, "32": {"mean_covers": 2215.0, "bits_per_image": 0.11557562076749435}, "64": {"mean_covers": 2640.0, "bits_per_image": 0.19393939393939394}},
+    "128": {"8": {"mean_covers": 2320.0, "bits_per_image": 0.027586206896551724}, "32": {"mean_covers": 2640.0, "bits_per_image": 0.09696969696969697}, "64": {"mean_covers": 3070.0, "bits_per_image": 0.16677524429967427}}
+  },
+  "per_seed": {
+    "11": {"0": {"successes": 159, "trials": 240}, "32": {"successes": 215, "trials": 240}, "64": {"successes": 231, "trials": 240}, "96": {"successes": 240, "trials": 240}, "128": {"successes": 240, "trials": 240}},
+    "29": {"0": {"successes": 153, "trials": 240}, "32": {"successes": 203, "trials": 240}, "64": {"successes": 210, "trials": 240}, "96": {"successes": 211, "trials": 240}, "128": {"successes": 214, "trials": 240}},
+    "47": {"0": {"successes": 193, "trials": 240}, "32": {"successes": 225, "trials": 240}, "64": {"successes": 240, "trials": 240}, "96": {"successes": 240, "trials": 240}, "128": {"successes": 240, "trials": 240}},
+    "71": {"0": {"successes": 159, "trials": 240}, "32": {"successes": 210, "trials": 240}, "64": {"successes": 216, "trials": 240}, "96": {"successes": 223, "trials": 240}, "128": {"successes": 231, "trials": 240}},
+    "101": {"0": {"successes": 165, "trials": 240}, "32": {"successes": 211, "trials": 240}, "64": {"successes": 218, "trials": 240}, "96": {"successes": 231, "trials": 240}, "128": {"successes": 238, "trials": 240}}
+  }
+}
