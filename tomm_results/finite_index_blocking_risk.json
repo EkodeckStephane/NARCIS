@@ -1,0 +1,13 @@
+{
+  "status": "analytical_model",
+  "assumption": "Conditional planning model: protected coded symbols are modeled as i.i.d. uniform over K labels. This is motivated by encrypted payload symbols but is an explicit idealization, not an empirical independence theorem.",
+  "deterministic_condition": "For a realized demand vector d and available group capacities a, complete-session emission is feasible iff d_k <= a_k for every label k under within-session unique group use.",
+  "exact_formula": "P_block = 1 - (m!/K^m) * [z^m] prod_k sum_{j=0}^{a_k} z^j/j! .",
+  "bound": "P_block <= sum_k P(Binomial(m,1/K) > a_k); for balanced capacities this is K times one binomial tail.",
+  "protocol": {"index_size": 7000, "K": 8, "covers_per_label": 875, "group_size": 5, "groups_per_label": 175},
+  "rows": [
+    {"payload_bytes": 8, "coded_groups_m": 464, "K": 8, "per_label_group_capacity_a": 175, "exact_blocking_probability": "5.04249030091090356047369820118504293769000766288321E-43", "union_bound_binomial_tail": "5.04249030091090356047369820118504293769000766288321E-43", "expected_demand_per_label": 58.0, "capacity_margin_over_mean": 117.0},
+    {"payload_bytes": 32, "coded_groups_m": 528, "K": 8, "per_label_group_capacity_a": 175, "exact_blocking_probability": "1.63715110875327868571907072201319611797336926676948E-34", "union_bound_binomial_tail": "1.63715110875327868571907072201319611797336926676948E-34", "expected_demand_per_label": 66.0, "capacity_margin_over_mean": 109.0},
+    {"payload_bytes": 64, "coded_groups_m": 614, "K": 8, "per_label_group_capacity_a": 175, "exact_blocking_probability": "1.14281454165735820138046704929192877040946854474856E-25", "union_bound_binomial_tail": "1.14281454165735820138046704929192877041082153438526E-25", "expected_demand_per_label": 76.75, "capacity_margin_over_mean": 98.25}
+  ]
+}
