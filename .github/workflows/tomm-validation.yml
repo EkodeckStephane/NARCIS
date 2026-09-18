@@ -2,7 +2,7 @@ name: TOMM revision validation
 
 on:
   push:
-    branches: [arcis-tomm-final-sync]
+    branches: [arcis-tomm-final-sync, arcis-tomm-d1-d7]
   pull_request:
     branches: [main]
   workflow_dispatch:
