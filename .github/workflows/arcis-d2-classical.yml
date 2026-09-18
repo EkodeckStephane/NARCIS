@@ -1,0 +1,43 @@
+name: ARCIS D2 classical detector audit
+on:
+  workflow_dispatch:
+  push:
+    branches: [arcis-tomm-d1-d7]
+    paths:
+      - 'tools/tomm_final_classical_from_frozen_payload.py'
+      - 'tools/.tomm_frozen_payload/**'
+      - '.github/workflows/arcis-d2-classical.yml'
+jobs:
+  audit:
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        seed: [11, 29, 47, 71, 101]
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11', cache: pip}
+      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0 torchvision==0.25.0
+          python -m pip install 'cryptography>=45' 'numpy>=2.2' 'pandas>=2.2' 'Pillow>=11' 'reedsolo>=1.7' 'scikit-learn>=1.6' 'scipy>=1.15'
+      - name: Fetch Caltech-101
+        run: |
+          mkdir -p data
+          curl --fail --location --retry 6 --retry-all-errors 'https://data.caltech.edu/records/mzrjq-6wc02/files/caltech-101.zip?download=1' -o data/caltech.zip
+          test "$(sha256sum data/caltech.zip | awk '{print $1}')" = '331234750fc7f77520e50d9565e8b6907b03565e30320da1401130db08c61f91'
+          unzip -q data/caltech.zip -d data/x
+          tar -xzf "$(find data/x -name 101_ObjectCategories.tar.gz | head -1)" -C data
+          echo "CALTECH_ROOT=$(find data -type d -name 101_ObjectCategories | head -1)" >> "$GITHUB_ENV"
+      - name: Run D2 audit
+        env: {PYTHONPATH: src}
+        run: python tools/tomm_final_classical_from_frozen_payload.py --dataset-root "$CALTECH_ROOT" --output "arcis_d2/seed_${{ matrix.seed }}" --seed "${{ matrix.seed }}" --repeats 20
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arcis-d2-classical-seed-${{ matrix.seed }}
+          path: arcis_d2/seed_${{ matrix.seed }}
+          retention-days: 30
