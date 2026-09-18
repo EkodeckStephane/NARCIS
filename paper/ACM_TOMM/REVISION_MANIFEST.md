@@ -2,8 +2,8 @@
 
 ## Identity
 
-- Title: **ARCIS: Authenticated Robust Coverless Image Signaling with Finite-Index Feasibility**
-- Acronym: **ARCIS = Authenticated Robust Coverless Image Signaling**
+- Title: **ARCIS: Authenticated Robust Cover-Selection Image Signaling with Finite-Index Feasibility**
+- Acronym: **ARCIS = Authenticated Robust Cover-Selection Image Signaling**
 - Target: **ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)**
 - Corresponding author: **Chantal Marguerite Mveh-Abia**
 - Status: submission-ready snapshot pending final author reread.
@@ -51,3 +51,7 @@ The manuscript records the evidence-bundle SHA-256:
 ## Repository continuity
 
 The repository retains the historical name `EkodeckStephane/NARCIS` and implementation namespace `src/narcis/` to preserve reproducibility. ARCIS is the current protocol/article name.
+
+
+## Final scientific closure
+RS-parity ablation, communication cost, conditional blocking-risk analysis, and the demotion of DiffStega from headline comparison are incorporated in the current ARCIS/TOMM freeze.

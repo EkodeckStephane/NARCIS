@@ -1,0 +1,19 @@
+{
+  "status": "derived_from_frozen_caltech_session_manifests",
+  "protocol": {"K": 8, "group_size": 5, "rs_parity_bytes": 128, "index_size": 7000},
+  "derivation_note": "Image counts are read from the frozen 30-session manifests for each of five Caltech-101 partitions. Byte-level media volume is not inferred because actual transmitted image-file encodings are not stored in these manifests.",
+  "by_payload": {
+    "8": {"payload_bytes": 8, "payload_bits": 64, "aead_envelope_bytes": 36, "framed_pre_rs_bytes": 46, "rs_parity_bytes": 128, "rs_encoded_bytes": 174, "symbol_padding_bits": 0, "coded_symbol_bits_after_padding": 1392, "coded_symbols_groups": 464, "group_size_covers": 5, "transmitted_images": 2320, "payload_bits_per_transmitted_image": 0.027586206896551724, "payload_bytes_per_transmitted_image": 0.0034482758620689655, "payload_fraction_of_rs_codeword": 0.04597701149425287, "pre_rs_fraction_of_rs_codeword": 0.26436781609195403, "observed_sessions": 50},
+    "32": {"payload_bytes": 32, "payload_bits": 256, "aead_envelope_bytes": 60, "framed_pre_rs_bytes": 70, "rs_parity_bytes": 128, "rs_encoded_bytes": 198, "symbol_padding_bits": 0, "coded_symbol_bits_after_padding": 1584, "coded_symbols_groups": 528, "group_size_covers": 5, "transmitted_images": 2640, "payload_bits_per_transmitted_image": 0.09696969696969697, "payload_bytes_per_transmitted_image": 0.012121212121212121, "payload_fraction_of_rs_codeword": 0.16161616161616163, "pre_rs_fraction_of_rs_codeword": 0.35353535353535354, "observed_sessions": 50},
+    "64": {"payload_bytes": 64, "payload_bits": 512, "aead_envelope_bytes": 92, "framed_pre_rs_bytes": 102, "rs_parity_bytes": 128, "rs_encoded_bytes": 230, "symbol_padding_bits": 2, "coded_symbol_bits_after_padding": 1842, "coded_symbols_groups": 614, "group_size_covers": 5, "transmitted_images": 3070, "payload_bits_per_transmitted_image": 0.16677524429967427, "payload_bytes_per_transmitted_image": 0.020846905537459284, "payload_fraction_of_rs_codeword": 0.2782608695652174, "pre_rs_fraction_of_rs_codeword": 0.4434782608695652, "observed_sessions": 50}
+  },
+  "mean_transmitted_images_per_session": 2676.6666666666665,
+  "total_sessions": 150,
+  "source_files": {
+    "caltech_seed_11_validation.json": "82fbad8cb764fd9d64ce0db89dcae6aa34e89cacb2e0f9500cf89ea77bb62327",
+    "caltech_seed_29_validation.json": "89e614ff0500985baf3dcf88403b244f9321e501f1e99e011b43306b9b0029ef",
+    "caltech_seed_47_validation.json": "e5655f0aa0eb649c02a91a8ef3d12b6af1f6bdfc3db28660aaad7be65b04035d",
+    "caltech_seed_71_validation.json": "8a8fa6fb9319750463166d65b2b9ca435926c24211c7a90f891bb9c8f398fec1",
+    "caltech_seed_101_validation.json": "68b11a39ece22449e53ef99ad02e84bd9b963ff1933d3e1b3d71837543aa29bf"
+  }
+}

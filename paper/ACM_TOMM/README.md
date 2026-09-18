@@ -2,7 +2,7 @@
 
 This directory is the canonical manuscript snapshot for:
 
-**ARCIS: Authenticated Robust Coverless Image Signaling with Finite-Index Feasibility**
+**ARCIS: Authenticated Robust Cover-Selection Image Signaling with Finite-Index Feasibility**
 
 Target: **ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)**.
 

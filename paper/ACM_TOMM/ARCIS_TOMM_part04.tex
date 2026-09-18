@@ -19,6 +19,50 @@
 \label{fig:holdoutseed}
 \end{figure}
 
+\subsection{RS-parity ablation and communication cost}
+The controlled parity ablation shows that RS coding materially changes authenticated holdout recovery. With no RS parity, group-majority decoding alone recovers 829/1,200 trials (69.08\%). Recovery rises to 1,064/1,200 (88.67\%) at RS32, 1,115/1,200 (92.92\%) at RS64, 1,145/1,200 (95.42\%) at RS96, and 1,163/1,200 (96.92\%) at RS128. Mean transmitted images per session rise from 970 without parity to 1,396.7, 1,825, 2,250, and 2,676.7. At RS128, 8-, 32-, and 64-byte plaintexts require 2,320, 2,640, and 3,070 transmitted images, corresponding to 0.0276, 0.0970, and 0.1668 useful bits per transmitted image.
+\begin{table}[t]
+\caption{Controlled external RS-parity ablation.}
+\label{tab:rsablation}
+\small
+\begin{tabular}{rrrr}
+\toprule
+Parity bytes & Auth. recovery & Success & Mean images/session\\
+\midrule
+0&829/1,200&69.08\%&970.0\\
+32&1,064/1,200&88.67\%&1,396.7\\
+64&1,115/1,200&92.92\%&1,825.0\\
+96&1,145/1,200&95.42\%&2,250.0\\
+128&1,163/1,200&96.92\%&2,676.7\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[t]
+\caption{Implemented RS128 communication cost by plaintext size.}
+\label{tab:commcost}
+\small
+\begin{tabular}{rrrr}
+\toprule
+Plaintext & Coded groups & Images sent & Net bits/image\\
+\midrule
+8 B&464&2,320&0.0276\\
+32 B&528&2,640&0.0970\\
+64 B&614&3,070&0.1668\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=.82\textwidth,height=5cm,xmin=850,xmax=2820,ymin=.65,ymax=1.0,xlabel={Mean transmitted images/session},ylabel={Authenticated holdout success},ymajorgrids=true,xmajorgrids=true]
+\addplot+[mark=*] coordinates {(970,.6908)(1396.7,.8867)(1825,.9292)(2250,.9542)(2676.7,.9692)};
+\end{axis}
+\end{tikzpicture}
+\caption{Measured reliability--communication tradeoff in the frozen external parity ablation.}
+\Description{Line plot showing authenticated holdout success increasing from 0.6908 at 970 transmitted images per session with RS0 to 0.9692 at 2676.7 images with RS128.}
+\label{fig:rstradeoff}
+\end{figure}
+
 \subsection{Selection detectability}
 Table~\ref{tab:detectors} summarizes the final detector audit. SRM-lite remains close to chance, GLCM reveals a small repeatable texture/selection shift, and the trained CNN provides the strongest discrimination with mean macro-AUC 0.5266. The five CNN seed means lie between 0.5232 and 0.5301, showing that the signal persists across external partitions. The supported characterization is therefore low but measurable selection leakage under the evaluated matched-index warden.
 
@@ -51,45 +95,3 @@ GLCM + logistic&0.5128&0.0017&0.5088--0.5162&0.5125--0.5132\\
 \end{figure}
 
 The CNN evidence comprises 20/20 successful workflow jobs, 100 repetition-level macro-AUC rows, and 3,000 per-session-head AUC rows. This granularity supports both aggregate and partition-level inspection of learned detector behavior.
-
-\subsection{DiffStega reproduction and execution evidence}
-All 100 official UniStega cases complete under the frozen external execution: 30 similar-prompt cases in 1:14:52, 42 content-prompt cases in 1:36:01, and 28 style-prompt cases in 54:35.80. The run produces 700 PNG files, with 22 face cases and zero face-detection failures in the independent metric pass.
-
-Table~\ref{tab:diffstega} compares independently reproduced values with the published IJCAI reference. Correct-recovery PSNR is 23.274 dB, within 0.016 dB of the reported 23.290 dB. Face-ID similarity on 22 face cases is 0.888 versus 0.893. Remaining differences are preserved as reproduction evidence under the disclosed independent metric environment. DiffStega and \method retain distinct communication semantics: DiffStega evaluates reconstruction of a secret image through generative diffusion, whereas \method evaluates authenticated byte recovery from a finite index of unchanged natural images.
-
-\begin{table}[t]
-\caption{DiffStega external reproduction. Reproduced values come from the frozen 100-case execution; published values are reported by Yang et al.~\cite{yang2024diffstega}.}
-\label{tab:diffstega}
-\small
-\begin{tabular}{llrr}
-\toprule
-Condition & Metric & Reproduced & Published\\
-\midrule
-Encrypted&PSNR&18.569&18.611\\
-&SSIM&0.529&0.590\\
-&LPIPS&0.418&0.461\\
-&Face ID similarity&0.345&0.343\\
-&CLIP score&28.946&29.446\\
-&NIQE&3.901&3.408\\
-\midrule
-Correct recovery&PSNR&23.274&23.290\\
-&SSIM&0.672&0.769\\
-&LPIPS&0.183&0.266\\
-&Face ID similarity&0.888&0.893\\
-\midrule
-No-password recovery&PSNR&18.495&18.491\\
-&SSIM&0.535&0.595\\
-&LPIPS&0.408&0.457\\
-&Face ID similarity&0.346&0.331\\
-\midrule
-Wrong-password recovery&PSNR&17.613&17.530\\
-&SSIM&0.491&0.540\\
-&LPIPS&0.434&0.476\\
-&Face ID similarity&0.548&0.477\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\begin{minipage}[t]{.36\textwidth}

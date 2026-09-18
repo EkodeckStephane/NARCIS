@@ -24,6 +24,35 @@ Nominal alphabet capacity $\log_2 K$ gives coded bits per label, while this cond
 
 Two exact properties hold before experimental evaluation. First, for any fixed coded symbol $v$ and starting sequence $q_0$, the multiset $\{\pi_{q_0+t}(v):0\le t<K\}$ contains every cluster label exactly once. Second, under unique-cover usage and a preconstructed group bank, the finite-index inequality is necessary and sufficient for emitting the complete coded session: each occurrence consumes one distinct group of its mapped label, and any feasible demand vector can be assigned distinct available groups label by label.
 
+
+For planning before a concrete payload is known, the deterministic condition can be lifted to a conditional blocking-risk model. Let $m$ be the number of coded symbol groups and assume, explicitly as an engineering idealization, that encrypted coded symbols are i.i.d. uniform over the $K$ labels. Then
+\begin{equation}
+(D_0,\ldots,D_{K-1})\sim\mathrm{Multinomial}\!\left(m;\frac{1}{K},\ldots,\frac{1}{K}\right),
+\end{equation}
+and
+\begin{equation}
+P_{\mathrm{block}}=\Pr(\exists k:D_k>a_k).
+\end{equation}
+For arbitrary label capacities,
+\begin{equation}
+P_{\mathrm{ok}}=\frac{m!}{K^m}[z^m]\prod_{k=0}^{K-1}\left(\sum_{j=0}^{a_k}\frac{z^j}{j!}\right),\qquad P_{\mathrm{block}}=1-P_{\mathrm{ok}}.
+\end{equation}
+This is a declared planning model, not a cryptographic independence claim. For the balanced 7,000-image external index, each label has $a_k=175$ disjoint five-cover groups.
+\begin{table}[t]
+\caption{Conditional finite-index blocking risk under the i.i.d.-uniform coded-symbol planning model.}
+\label{tab:blockrisk}
+\small
+\begin{tabular}{rrrrr}
+\toprule
+Payload & Groups $m$ & $\mathbb{E}[D_k]$ & Capacity $a_k$ & $P_{\mathrm{block}}$\\
+\midrule
+8 B & 464 & 58.00 & 175 & $5.04\times10^{-43}$\\
+32 B & 528 & 66.00 & 175 & $1.64\times10^{-34}$\\
+64 B & 614 & 76.75 & 175 & $1.14\times10^{-25}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \begin{table}[t]
 \caption{Role of principal components and evidence supporting each role.}
 \label{tab:roles}
@@ -51,11 +80,11 @@ The frozen external operating point uses $K=8$, group size five, 128 parity byte
 \subsection{Calibration and holdout channel tests}
 The twelve calibration transformations are those listed above. The holdout set contains eight intermediate or stronger transformations: Gaussian noise 9 and 15; blur 1.2 and 1.8; central crop 8\% and 12\%; and rotations 5 and 9 degrees. Each of 30 sessions is evaluated under every transformation for each of five partitions, yielding 1,800 calibration trials and 1,200 holdout trials. Trial success requires exact authenticated plaintext recovery, so symbol accuracy and error-correction counts remain diagnostic quantities beneath the final message-level criterion.
 
+\subsection{Frozen RS-parity ablation and communication accounting}
+The learned representation, projection-selection rule, codebook, complementary group banks, session keys, payloads, and holdout label predictions are held fixed while RS parity is evaluated at 0, 32, 64, 96, and 128 bytes. The coded payload is rescheduled at each level because FEC expansion changes the required 3-bit symbol demand. Communication cost is the number of unchanged natural images transmitted; since each coded symbol consumes a five-cover group, an $m$-group session sends $5m$ images.
+
 \subsection{Selection-detectability audit}
 The detector audit reconstructs the complete 30-session selected-cover schedule for every external partition. For each partition and each of 20 repetitions, a 65/35 image-disjoint train/test split is created. The same split is used across three detector families: SRM-lite residual features with ExtraTrees, GLCM texture features with logistic regression, and a 30-head CNN audit. Reported AUCs are macro-averaged at repetition level; repeated-split intervals describe empirical variability because splits overlap and are not interpreted as independent inferential confidence intervals.
-
-\subsection{Frozen DiffStega reproduction}
-The DiffStega comparison executes the public upstream implementation at commit \texttt{73cd7cb8d102\allowbreak f4fc0f5bb168\allowbreak a71cfb948077\allowbreak d89a} on all 100 UniStega cases: 30 similar-prompt, 42 content-prompt, and 28 style-prompt cases. The execution produces 700 PNG outputs. Metric extraction is performed independently and preserves the distinct semantics of secret-image reconstruction. The evidence bundle is identified by SHA-256 \texttt{32d0e975eb19\allowbreak 7adb0d1d2f7c\allowbreak 537b04b4fab8\allowbreak 4af45a51148e\allowbreak af15872b40de\allowbreak 1f46}.
 
 \section{Results}
 \subsection{Development evidence on BOSSBase}

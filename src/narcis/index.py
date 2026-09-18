@@ -1,5 +1,5 @@
 from collections import defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
@@ -110,21 +110,36 @@ class QuantileCodebook:
 class CoverIndex:
     buckets: dict[int, list[str]]
     labels: dict[str, int]
+    weights: dict[str, float] = field(default_factory=dict)
 
     @classmethod
     def build(
-        cls, paths: list[str], labels: np.ndarray
+        cls,
+        paths: list[str],
+        labels: np.ndarray,
+        weights: np.ndarray | list[float] | None = None,
     ) -> "CoverIndex":
+        if weights is not None and len(weights) != len(paths):
+            raise ValueError("weights must match the number of paths")
         buckets: dict[int, list[str]] = defaultdict(list)
         label_map: dict[str, int] = {}
-        for path, label in zip(paths, labels, strict=True):
+        weight_map: dict[str, float] = {}
+        for offset, (path, label) in enumerate(zip(paths, labels, strict=True)):
             numeric = int(label)
             buckets[numeric].append(path)
             label_map[path] = numeric
-        return cls(dict(buckets), label_map)
+            if weights is not None:
+                weight = float(weights[offset])
+                if not np.isfinite(weight) or weight <= 0:
+                    raise ValueError("cover weights must be finite and positive")
+                weight_map[path] = weight
+        return cls(dict(buckets), label_map, weight_map)
 
     def minimum_bucket_size(self, expected_labels: int) -> int:
         return min(len(self.buckets.get(label, [])) for label in range(expected_labels))
+
+    def selection_weight(self, path: str) -> float:
+        return float(self.weights.get(path, 1.0))
 
 
 @torch.no_grad()

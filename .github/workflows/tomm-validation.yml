@@ -1,0 +1,80 @@
+name: TOMM revision validation
+
+on:
+  push:
+    branches: [arcis-tomm-final-sync]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -r requirements.txt
+
+      - name: Compile frozen TOMM execution tools
+        run: |
+          python -m py_compile \
+            tools/diffstega_gpu_preflight.py \
+            tools/evaluate_diffstega_outputs.py \
+            tools/tomm_final_cnn_from_frozen_payload.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          notebook = json.loads(Path('notebooks/TOMM_DiffStega_Free_GPU.ipynb').read_text(encoding='utf-8'))
+          assert notebook['nbformat'] == 4
+          assert len(notebook['cells']) >= 5
+          print({'notebook_cells': len(notebook['cells']), 'valid_json': True})
+          PY
+          bash -n tools/run_diffstega_frozen_gpu.sh
+          bash -n tools/bootstrap_diffstega_free_gpu.sh
+          bash -n tools/run_diffstega_metrics_frozen.sh
+
+      - name: Run unit tests
+        env:
+          PYTHONPATH: src
+        run: python -m pytest -q
+
+      - name: TOMM preflight without datasets
+        env:
+          PYTHONPATH: src
+        run: python run_tomm_validation.py --stage preflight --output tomm_results_ci
+
+  acm-latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install TeX Live ACM dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-bibtex-extra \
+            texlive-publishers
+          kpsewhich acmart.cls
+          kpsewhich libertine.sty
+          kpsewhich zi4.sty
+          kpsewhich newtxmath.sty
+
+      - name: Compile ACM TOMM scaffold
+        working-directory: paper/ACM_TOMM
+        run: |
+          pdflatex -interaction=nonstopmode -halt-on-error ARCIS_TOMM.tex
+          bibtex ARCIS_TOMM
+          pdflatex -interaction=nonstopmode -halt-on-error ARCIS_TOMM.tex
+          pdflatex -interaction=nonstopmode -halt-on-error ARCIS_TOMM.tex
