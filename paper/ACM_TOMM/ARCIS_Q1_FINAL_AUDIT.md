@@ -1,11 +1,20 @@
-# ARCIS — Final Q1 Scientific-Article Audit
+# ARCIS — Final Q1 / Senior Reviewer Audit after D1--D7
 
 Target: **ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)**  
 Manuscript: **ARCIS: Authenticated Robust Cover-Selection Image Signaling under Finite-Index Constraints**
 
-**Gate 10: PASS for the bounded-claim scientific package.**  
-**Senior Reviewer prescreen: no critical or major scientific defect remains.**
+## Gate result
+**Gate 10: PASS for the current evidence-bounded manuscript.**  
+**Senior Reviewer prescreen: PASS.**
 
-Evidence now includes the external 1,800/1,800 calibration result, 1,163/1,200 holdout result, five-level RS-parity ablation, explicit communication accounting, conditional finite-index blocking-risk analysis, and detector-scoped leakage evidence. DiffStega is secondary positioning evidence, not a headline ranking baseline.
+The central claims are supported by released code/results and by the final D1--D7 closure. The manuscript now separates whole-message authenticated recovery from heterogeneous SOTA robustness metrics, uses paired inference for the RS study, uses five external partitions rather than overlapping splits as the detector inference unit, quantifies the communication/traffic side channel, makes finite-index sufficiency explicit, and attributes the cyclic balancing invariant to the session shift rather than to Gray ordering.
 
-Remaining actions are author-side: final reread, author/affiliation/e-mail confirmation, corresponding-author confirmation, CRediT, funding, competing-interest and portal metadata.
+## Remaining reviewer-sensitive points
+The current RS128 operating point is traffic-intensive, and this is now a quantified deployment result rather than an implicit cost. External image-domain evidence consists of BOSSBase development plus Caltech-101 validation. Guo--Ping remains the closest natural-image-selection comparator, but the published robustness percentage is kept under its native recovery semantics rather than treated as equivalent to ARCIS exact authenticated whole-message success.
+
+These points define future generalization and deployment work; they no longer create unsupported central claims in the manuscript.
+
+## Validation
+- D2 final-schedule classical detector workflow: **PASS**, all five partition jobs.
+- TOMM source validation: **PASS**, unit tests, preflight and ACM LaTeX compilation.
+- Defensive-phrase scan on manuscript/cover/metadata: **PASS**.
