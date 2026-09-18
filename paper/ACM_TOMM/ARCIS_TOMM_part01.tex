@@ -1,21 +1,21 @@
 
 Authentication also has several multimedia meanings. FaceSigns~\cite{neekhara2024facesigns} embeds semi-fragile authentication information into media. \method keeps indexed covers unchanged and authenticates the protected payload and session state, providing a complementary carrier-preserving authentication model.
 
-\begin{table}[t]
-\caption{Positioning of representative recent approaches. Each row retains the semantics of its native communication object and evaluation protocol.}
+\begin{table*}[t]
+\caption{Positioning of representative recent approaches. Quantitative regime entries retain their native units, while the recovery-event column makes the success semantics explicit before numerical interpretation.}
 \label{tab:positioning}
-\small
-\begin{tabularx}{\textwidth}{p{2.1cm}Y Y Y}
+\footnotesize
+\begin{tabularx}{\textwidth}{p{2.0cm}p{3.0cm}p{3.0cm}p{3.5cm}Y}
 \toprule
-Approach & Carrier / information object & Robustness mechanism & Security/evaluation emphasis\\
+Approach & Carrier / information object & Native quantitative regime & Recovery event & Evaluation emphasis\\
 \midrule
-Guo--Ping~\cite{guo2026capacity} & Selected natural images / symbols & Stable PZM quantization and representative selection & Robustness and nominal capacity\\
-Meng et al.~\cite{meng2025restoration} & Existing coverless schemes & Attack classification and image restoration & Geometric robustness\\
-DiffStega~\cite{yang2024diffstega} & Generated images / secret image & Diffusion inversion and reconstruction & Perceptual recovery, password sensitivity, steganalysis\\
-\method & Unchanged indexed natural images / authenticated byte string & Calibration-locked codebook, complementary group bank, RS128 & Finite-index feasibility, exact authenticated recovery, selection detectability\\
+Guo--Ping~\cite{guo2026capacity} & Selected natural images / symbolic code & Reported 10-, 14-, and 15-bit nominal-capacity settings on Holidays, VOC, and ImageNet & Robustness evaluated with the source paper's native recovery metric & Stability-aware quantization, representative selection, robust nominal capacity\\
+Meng et al.~\cite{meng2025restoration} & Existing coverless schemes & Restoration-based evaluation over geometric perturbations & Recovery of the underlying coverless decoder after restoration & Geometric robustness\\
+DiffStega~\cite{yang2024diffstega} & Generated images / secret image & UniStega secret-image reconstruction regime & Secret-image reconstruction under the generative protocol & Perceptual recovery, password sensitivity, steganalysis\\
+\method & Unchanged indexed natural images / authenticated byte string & $K=8$; five covers/coded symbol; 8/32/64-byte plaintexts; 1,200 external holdout trials & Exact authenticated whole-plaintext recovery after majority decoding, RS correction, and AES-GCM verification & Finite-index feasibility, authenticated recovery, traffic cost, selection detectability\\
 \bottomrule
 \end{tabularx}
-\end{table}
+\end{table*}
 
 \subsection{Steganalysis of selection policies}
 Selection steganalysis tests whether the emitted subset differs statistically from the available carrier population. CNN-based image steganalysis can exploit subtle distributional differences~\cite{li2023siamese}; adversarial embedding work likewise shows that the evaluated steganalyst materially shapes the security conclusion~\cite{wang2024adversarial}. Cao, Wang, and Zhang analyze cover-selection steganography directly and show that texture statistics can expose selection bias~\cite{cao2025selection}. \method therefore evaluates the selected-vs.-remainder distinction with residual, texture, and learned detectors under image-disjoint train/test splits.
@@ -29,10 +29,10 @@ The benchmark uses deterministic public key/nonce derivation to make every run r
 \subsection{Channel and warden}
 The image channel applies lossy compression, additive Gaussian noise, blur, resizing, central cropping, and small rotations. Calibration and holdout transformation values are disjoint. The receiver decodes directly from the received image stream under the declared channel family.
 
-For detectability, a matched-index warden is used: for each authenticated session, images selected by that session form the positive class and the remaining images in the same frozen index form the negative class. Training and test image identities are disjoint. This measures selection leakage relative to the shared-index distribution. Sequence-level traffic features, temporal metadata, semantic profiling, and cross-platform behavioral traces remain outside the present image-content audit.
+The evaluation distinguishes image-content observability from session-level traffic observability. For the image-content audit, a matched-index warden treats images selected by an authenticated session as the positive class and the remaining images in the same frozen index as the negative class; training and test image identities are disjoint. At the transport layer, an observer can also count transmitted images and observe timing. Because the implemented RS128 sessions use 2,320, 2,640, and 3,070 images for 8-, 32-, and 64-byte plaintexts, respectively, raw session volume carries payload-length-class information unless deployment traffic shaping is applied.
 
-\subsection{Security goals and claim boundary}
-\method separates cryptographic protection from empirical carrier-selection security. AES-GCM provides payload confidentiality/integrity and metadata authentication under its standard AEAD assumptions and nonce discipline~\cite{dworkin2007gcm}; the replay guard rejects sequence numbers at or below the highest accepted value for a sender. Reed--Solomon coding~\cite{reed1960codes} corrects residual byte errors within its decoding budget. Selection leakage is measured independently through the detector battery. Traffic-analysis resistance and broader steganographic secrecy are outside the present claim.
+\subsection{Security goals and observation layers}
+\method separates cryptographic protection, empirical carrier-selection security, and observable session traffic. AES-GCM provides payload confidentiality/integrity and metadata authentication under its standard AEAD assumptions and nonce discipline~\cite{dworkin2007gcm}; the replay guard rejects sequence numbers at or below the highest accepted value for a sender. Reed--Solomon coding~\cite{reed1960codes} corrects residual byte errors within its decoding budget. The detector battery quantifies image-content selection discrimination, while the measured image counts quantify the session-volume side channel. Fixed-volume batching, cover-count padding, dummy-cover insertion, and timing shaping provide deployment mechanisms for reducing length-class exposure.
 
 \section{ARCIS Protocol}
 \begin{figure}[t]
@@ -42,7 +42,7 @@ For detectability, a matched-index warden is used: for each authenticated sessio
 \node[box,right=of enc] (code) {Calibration-locked\\projection + $K=8$ quantiles};
 \node[box,right=of code] (bank) {Five-cover group bank\\+ failure signatures};
 \node[box,below=10mm of enc] (auth) {AES-GCM + framing\\+ RS128};
-\node[box,right=of auth] (map) {Session-balanced\\keyed Gray map};
+\node[box,right=of auth] (map) {Keyed cyclic map\\Gray-indexed order};
 \node[box,right=of map] (sel) {Signature-balanced\\keyed group selection};
 \node[box,below=10mm of sel] (chan) {Image channel};
 \node[box,left=of chan] (maj) {Majority labels\\+ RS decode};
@@ -52,7 +52,7 @@ For detectability, a matched-index warden is used: for each authenticated sessio
 \draw[arr] (sel)--(chan); \draw[arr] (chan)--(maj); \draw[arr] (maj)--(plain);
 \end{tikzpicture}
 \caption{\method separates offline channel-aware index construction (top) from online protected transmission and recovery (bottom). The external-validation operating point is frozen before Caltech-101 outcomes are inspected.}
-\Description{Flow diagram showing descriptor learning, a calibration-locked K=8 codebook, five-cover group-bank construction, authenticated Reed-Solomon framing, a keyed Gray map, signature-balanced cover-group selection, the image channel, majority decoding, and authenticated plaintext acceptance.}
+\Description{Flow diagram showing descriptor learning, a calibration-locked K=8 codebook, five-cover group-bank construction, authenticated Reed-Solomon framing, a keyed cyclic map with Gray-indexed symbol order, signature-balanced cover-group selection, the image channel, majority decoding, and authenticated plaintext acceptance.}
 \label{fig:pipeline}
 \end{figure}
 
@@ -84,12 +84,11 @@ During emission, groups of a requested label are partitioned by failure signatur
 \subsection{Authenticated coding and exact session balancing}
 The plaintext is encrypted with AES-GCM using associated data that include the authenticated sequence number. The protected envelope is framed and encoded with 128 Reed--Solomon parity bytes, then divided into $b=\log_2K=3$-bit symbols.
 
-\method uses an exact cyclic keyed Gray mapping to distribute each coded symbol across visual clusters over sessions. Let $g(p)=p\oplus(p\gg1)$ be binary-reflected Gray order. A mapping subkey fixes a secret base $b_0\in\{0,\ldots,K-1\}$ and an orientation $r\in\{-1,+1\}$. For authenticated session sequence $q$,
-\begin{align}
-\mathrm{shift}_q &= (b_0+q)\bmod K,\\
-\pi_q(g(p)) &= (\mathrm{shift}_q+rp)\bmod K.
-\end{align}
-For any fixed coded symbol, the map visits every cluster exactly once over any $K$ consecutive sequence values. For each required mapped label, the sender chooses one five-cover group using the signature-balanced keyed scheduler and transmits the five unchanged images. Each cover appears at most once inside one transmission. The receiver re-embeds each image, recovers five labels, takes their strict majority, inverts $\pi_q$, reconstructs the coded bitstream, applies Reed--Solomon decoding, and accepts plaintext only after framing and AES-GCM verification.
+Let $\sigma$ be a fixed keyed bijection of the $K$ coded symbols onto positions $\{0,\ldots,K-1\}$. The implementation uses a Gray-indexed order: if $g(p)=p\oplus(p\gg1)$ is the binary-reflected Gray sequence, then $\sigma(g(p))=p$. A mapping subkey fixes a secret base $b_0\in\{0,\ldots,K-1\}$ and an orientation $r\in\{-1,+1\}$. For authenticated session sequence $q$,
+\begin{equation}
+\pi_q(i)=\bigl(b_0+q+r\,\sigma(i)\bigr)\bmod K.
+\end{equation}
+For any fixed symbol $i$ and any starting sequence $q_0$, the $K$ values $\pi_{q_0+t}(i)$, $0\le t<K$, are all distinct modulo $K$ and therefore cover every visual cluster exactly once. The exact balancing invariant follows from the cyclic shift in $q$; the Gray-indexed bijection specifies the implementation-level symbol ordering. For each required mapped label, the sender chooses one five-cover group using the signature-balanced keyed scheduler and transmits the five unchanged images. Each cover appears at most once inside one transmission. The receiver re-embeds each image, recovers five labels, takes their strict majority, inverts $\pi_q$, reconstructs the coded bitstream, applies Reed--Solomon decoding, and accepts plaintext only after framing and AES-GCM verification.
 
 \begin{figure}[t]
 \centering

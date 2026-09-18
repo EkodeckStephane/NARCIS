@@ -20,23 +20,23 @@
 \end{figure}
 
 \subsection{RS-parity ablation and communication cost}
-The controlled parity ablation shows that RS coding materially changes authenticated holdout recovery. With no RS parity, group-majority decoding alone recovers 829/1,200 trials (69.08\%). Recovery rises to 1,064/1,200 (88.67\%) at RS32, 1,115/1,200 (92.92\%) at RS64, 1,145/1,200 (95.42\%) at RS96, and 1,163/1,200 (96.92\%) at RS128. Mean transmitted images per session rise from 970 without parity to 1,396.7, 1,825, 2,250, and 2,676.7. At RS128, 8-, 32-, and 64-byte plaintexts require 2,320, 2,640, and 3,070 transmitted images, corresponding to 0.0276, 0.0970, and 0.1668 useful bits per transmitted image.
-\begin{table}[t]
-\caption{Controlled external RS-parity ablation.}
+The controlled parity ablation shows a monotone reliability--traffic tradeoff. With no RS parity, group-majority decoding alone recovers 829/1,200 trials (69.08\%, exact 95\% CI 66.38--71.69\%). Recovery rises to 1,064/1,200 (88.67\%, 86.74--90.41\%) at RS32, 1,115/1,200 (92.92\%, 91.32--94.30\%) at RS64, 1,145/1,200 (95.42\%, 94.08--96.53\%) at RS96, and 1,163/1,200 (96.92\%, 95.77--97.82\%) at RS128. In the paired trial outcomes, the four adjacent transitions contain 235/0, 51/0, 30/0, and 18/0 gain/loss discordances, respectively; every adjacent exact McNemar contrast remains significant after Holm adjustment ($p_{\mathrm{Holm}}\le7.63\times10^{-6}$). The RS0--RS128 endpoint comparison contains 334 gains and zero losses ($p_{\mathrm{exact}}=5.71\times10^{-101}$). Mean transmitted images per session rise from 970 to 1,396.7, 1,825, 2,250, and 2,676.7. At RS128, 8-, 32-, and 64-byte plaintexts require 2,320, 2,640, and 3,070 transmitted images, corresponding to 0.0276, 0.0970, and 0.1668 useful bits per transmitted image.
+\begin{table*}[t]
+\caption{Controlled external RS-parity ablation. Confidence intervals are exact Clopper--Pearson intervals; gain/loss counts compare each row with the preceding parity level on the same 1,200 trials.}
 \label{tab:rsablation}
 \small
-\begin{tabular}{rrrr}
+\begin{tabular}{rrrrr}
 \toprule
-Parity bytes & Auth. recovery & Success & Mean images/session\\
+Parity bytes & Auth. recovery & Exact 95\% CI & Mean images/session & Paired gain/loss\\
 \midrule
-0&829/1,200&69.08\%&970.0\\
-32&1,064/1,200&88.67\%&1,396.7\\
-64&1,115/1,200&92.92\%&1,825.0\\
-96&1,145/1,200&95.42\%&2,250.0\\
-128&1,163/1,200&96.92\%&2,676.7\\
+0&829/1,200 (69.08\%)&66.38--71.69\%&970.0&---\\
+32&1,064/1,200 (88.67\%)&86.74--90.41\%&1,396.7&235/0\\
+64&1,115/1,200 (92.92\%)&91.32--94.30\%&1,825.0&51/0\\
+96&1,145/1,200 (95.42\%)&94.08--96.53\%&2,250.0&30/0\\
+128&1,163/1,200 (96.92\%)&95.77--97.82\%&2,676.7&18/0\\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 \begin{table}[t]
 \caption{Implemented RS128 communication cost by plaintext size.}
 \label{tab:commcost}

@@ -22,7 +22,7 @@ d_k(c)\le a_k \qquad \text{for every }k.
 \end{equation}
 Nominal alphabet capacity $\log_2 K$ gives coded bits per label, while this condition tests complete-message realizability under finite group availability and within-session unique-cover usage.
 
-Two exact properties hold before experimental evaluation. First, for any fixed coded symbol $v$ and starting sequence $q_0$, the multiset $\{\pi_{q_0+t}(v):0\le t<K\}$ contains every cluster label exactly once. Second, under unique-cover usage and a preconstructed group bank, the finite-index inequality is necessary and sufficient for emitting the complete coded session: each occurrence consumes one distinct group of its mapped label, and any feasible demand vector can be assigned distinct available groups label by label.
+Two exact properties hold before experimental evaluation. First, for any fixed coded symbol $v$ and starting sequence $q_0$, the multiset $\{\pi_{q_0+t}(v):0\le t<K\}$ contains every cluster label exactly once. Second, under unique-cover usage and a preconstructed group bank, the finite-index inequality is necessary and sufficient for emitting the complete coded session. Necessity follows because the $d_k(c)$ occurrences mapped to label $k$ must occupy distinct groups, so $d_k(c)>a_k$ forces a collision by the pigeonhole principle. For sufficiency, when $d_k(c)\le a_k$ for every label, choose an injection from the $d_k(c)$ occurrences into the $a_k$ groups of label $k$. Label banks are disjoint and groups partition their corresponding cover buckets, so the union of these label-wise injections assigns one distinct group to every coded occurrence and yields a complete transmission without within-session cover reuse.
 
 
 For planning before a concrete payload is known, the deterministic condition can be lifted to a conditional blocking-risk model. Let $m$ be the number of coded symbol groups and assume, explicitly as an engineering idealization, that encrypted coded symbols are i.i.d. uniform over the $K$ labels. Then
@@ -37,7 +37,7 @@ For arbitrary label capacities,
 \begin{equation}
 P_{\mathrm{ok}}=\frac{m!}{K^m}[z^m]\prod_{k=0}^{K-1}\left(\sum_{j=0}^{a_k}\frac{z^j}{j!}\right),\qquad P_{\mathrm{block}}=1-P_{\mathrm{ok}}.
 \end{equation}
-This is a declared planning model, not a cryptographic independence claim. For the balanced 7,000-image external index, each label has $a_k=175$ disjoint five-cover groups.
+The multinomial formulation serves as an engineering planning model for pre-session blocking risk under the stated uniform-symbol assumption. For the balanced 7,000-image external index, each label has $a_k=175$ disjoint five-cover groups.
 \begin{table}[t]
 \caption{Conditional finite-index blocking risk under the i.i.d.-uniform coded-symbol planning model.}
 \label{tab:blockrisk}
@@ -64,7 +64,7 @@ Component & Protocol role & Evidence/guarantee\\
 Calibration-locked projection & Define an externally fixed $K=8$ label space & Selection uses calibration attacks; holdouts remain reserved for validation\\
 Complementary five-cover bank & Convert heterogeneous per-cover failures into majority decisions & Group failure signatures and 1,800/1,800 external calibration recoveries\\
 RS128 & Correct residual coded-byte errors & Up to 37 corrections in calibration and 64 on holdout crop\\
-Cyclic keyed Gray map & Balance coded-symbol-to-cluster assignment & Exact $K$-session algebraic balancing property\\
+Keyed cyclic map with Gray-indexed order & Balance coded-symbol-to-cluster assignment & Exact $K$-session balancing follows from the cyclic shift; Gray order fixes the implementation-level symbol ordering\\
 Signature-balanced scheduler & Preserve calibration-failure-signature mixture during keyed selection & Proportional-deficit scheduling followed by independent detector audit\\
 AES-GCM + sequence/replay state & Authenticate accepted plaintext and session metadata & Standard AEAD semantics, explicit nonce discipline, stateful replay rejection\\
 \bottomrule
@@ -81,10 +81,10 @@ The frozen external operating point uses $K=8$, group size five, 128 parity byte
 The twelve calibration transformations are those listed above. The holdout set contains eight intermediate or stronger transformations: Gaussian noise 9 and 15; blur 1.2 and 1.8; central crop 8\% and 12\%; and rotations 5 and 9 degrees. Each of 30 sessions is evaluated under every transformation for each of five partitions, yielding 1,800 calibration trials and 1,200 holdout trials. Trial success requires exact authenticated plaintext recovery, so symbol accuracy and error-correction counts remain diagnostic quantities beneath the final message-level criterion.
 
 \subsection{Frozen RS-parity ablation and communication accounting}
-The learned representation, projection-selection rule, codebook, complementary group banks, session keys, payloads, and holdout label predictions are held fixed while RS parity is evaluated at 0, 32, 64, 96, and 128 bytes. The coded payload is rescheduled at each level because FEC expansion changes the required 3-bit symbol demand. Communication cost is the number of unchanged natural images transmitted; since each coded symbol consumes a five-cover group, an $m$-group session sends $5m$ images.
+The learned representation, projection-selection rule, codebook, complementary group banks, session keys, payloads, and holdout label predictions are held fixed while RS parity is evaluated at 0, 32, 64, 96, and 128 bytes. The coded payload is rescheduled at each level because FEC expansion changes the required 3-bit symbol demand. Communication cost is the number of unchanged natural images transmitted; since each coded symbol consumes a five-cover group, an $m$-group session sends $5m$ images. The same 1,200 partition--session--attack trials are reused at every parity level. Exact Clopper--Pearson intervals quantify each recovery proportion, and exact paired McNemar tests compare the four adjacent parity levels together with the RS0--RS128 endpoint contrast; Holm adjustment controls multiplicity across these five prespecified comparisons.
 
 \subsection{Selection-detectability audit}
-The detector audit reconstructs the complete 30-session selected-cover schedule for every external partition. For each partition and each of 20 repetitions, a 65/35 image-disjoint train/test split is created. The same split is used across three detector families: SRM-lite residual features with ExtraTrees, GLCM texture features with logistic regression, and a 30-head CNN audit. Reported AUCs are macro-averaged at repetition level; repeated-split intervals describe empirical variability because splits overlap and are not interpreted as independent inferential confidence intervals.
+The detector audit reconstructs the complete 30-session selected-cover schedule for every external partition. For each partition and each of 20 repetitions, a 65/35 image-disjoint train/test split is created and reused across SRM-lite residual features with ExtraTrees, GLCM texture features with logistic regression, and a 30-head CNN. AUC is macro-averaged across the 30 session heads within each split. Statistical reporting is hierarchical: the 20 repetitions characterize within-partition split variability, whereas the five external partition means form the replication level for between-partition summaries and confidence intervals. This separation prevents overlapping splits from being treated as independent external replications.
 
 \section{Results}
 \subsection{Development evidence on BOSSBase}
