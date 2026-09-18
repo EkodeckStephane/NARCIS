@@ -1,0 +1,75 @@
+{
+  "analysis": "hierarchical detector inference on the certified final ARCIS schedule",
+  "workflow_run_id": 35349137812,
+  "workflow_commit": "73a2e9128f7c7439848c65d41fd4ab1719591241",
+  "inference_unit": "five external Caltech-101 partition means; 20 image-disjoint repeated splits per partition quantify within-partition stability",
+  "correction": "Holm across the three detector-family tests against chance AUC 0.5",
+  "detectors": {
+    "SRM-lite": {
+      "partition_means": {
+        "11": 0.5048847623245207,
+        "29": 0.5013847917439221,
+        "47": 0.505192237650636,
+        "71": 0.504706899171961,
+        "101": 0.5040730259959221
+      },
+      "mean": 0.5040483433773923,
+      "between_partition_sd": 0.0015440938308482316,
+      "ci95_t_n5": [
+        0.5021310976577795,
+        0.5059655890970052
+      ],
+      "range": [
+        0.5013847917439221,
+        0.505192237650636
+      ],
+      "p_two_sided": 0.004225961075957773,
+      "holm_p": 0.004225961075957773,
+      "mean_within_partition_sd": 0.0018230922083826442
+    },
+    "GLCM": {
+      "partition_means": {
+        "11": 0.5126708827752432,
+        "29": 0.5123309629459671,
+        "47": 0.5119993402486465,
+        "71": 0.5138055974252518,
+        "101": 0.5133606365558687
+      },
+      "mean": 0.5128334839901955,
+      "between_partition_sd": 0.0007412247794486059,
+      "ci95_t_n5": [
+        0.5119131318669776,
+        0.5137538361134133
+      ],
+      "range": [
+        0.5119993402486465,
+        0.5138055974252518
+      ],
+      "p_two_sided": 0.0000026589089101659723,
+      "holm_p": 0.000007976726730497916,
+      "mean_within_partition_sd": 0.001612743944858059
+    },
+    "CNN": {
+      "partition_means": {
+        "11": 0.5231504607384523,
+        "29": 0.5270229506056732,
+        "47": 0.530053606023985,
+        "71": 0.5242388266321195,
+        "101": 0.5285482800919894
+      },
+      "mean": 0.5266028248184439,
+      "between_partition_sd": 0.0028886198258311,
+      "ci95_t_n5": [
+        0.5230161295762118,
+        0.530189520060676
+      ],
+      "range": [
+        0.5231504607384523,
+        0.530053606023985
+      ],
+      "p_two_sided": 0.000032844688871157965,
+      "holm_p": 0.00006568937774231593,
+      "mean_within_partition_sd": 0.0021870542845904718
+    }
+  }
+}

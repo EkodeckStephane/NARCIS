@@ -64,34 +64,34 @@ Plaintext & Coded groups & Images sent & Net bits/image\\
 \end{figure}
 
 \subsection{Selection detectability}
-Table~\ref{tab:detectors} summarizes the final detector audit. SRM-lite remains close to chance, GLCM reveals a small repeatable texture/selection shift, and the trained CNN provides the strongest discrimination with mean macro-AUC 0.5266. The five CNN seed means lie between 0.5232 and 0.5301, showing that the signal persists across external partitions. The supported characterization is therefore low but measurable selection leakage under the evaluated matched-index warden.
+Table~\ref{tab:detectors} reports the detector audit at the external-partition level. Each of the five Caltech partitions contributes one mean obtained from its 20 image-disjoint repetitions; the repetitions quantify within-partition split stability, while statistical inference uses the five partition means. All three detector families remain close to the 0.5 chance reference in absolute effect size, with mean excess AUC of 0.0040 for SRM-lite, 0.0128 for GLCM, and 0.0266 for the CNN. The corresponding partition-mean ranges are 0.5014--0.5052, 0.5120--0.5138, and 0.5232--0.5301.
 
-\begin{table}[t]
-\caption{Final repeated Caltech-101 selection-detector audit ($n=100$ overlapping image-disjoint splits per detector). Intervals summarize repeated-split variability.}
+\begin{table*}[t]
+\caption{Hierarchical Caltech-101 selection-detector audit. Each row uses the five independent partition means as the external replication level; the 20 repeated splits within each partition quantify split stability. Confidence intervals are two-sided Student-$t$ intervals over $n=5$ partition means. Holm-adjusted $p$-values test the partition means against chance AUC 0.5 across the three detector families.}
 \label{tab:detectors}
 \small
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrrrrrr}
 \toprule
-Detector & Mean AUC & SD & Min--Max & Descriptive 95\% interval\\
+Detector & Mean AUC & $\Delta$ vs. 0.5 & Between-part. SD & Partition range & 95\% CI ($n=5$) & Holm $p$\\
 \midrule
-SRM-lite + ExtraTrees&0.5040&0.0023&0.4969--0.5088&0.5036--0.5045\\
-GLCM + logistic&0.5128&0.0017&0.5088--0.5162&0.5125--0.5132\\
-30-head CNN&0.5266&0.0034&0.5186--0.5340&0.5259--0.5273\\
+SRM-lite + ExtraTrees & 0.5040 & +0.0040 & 0.0015 & 0.5014--0.5052 & 0.5021--0.5060 & 0.00423\\
+GLCM + logistic & 0.5128 & +0.0128 & 0.0007 & 0.5120--0.5138 & 0.5119--0.5138 & $7.98\times10^{-6}$\\
+30-head CNN & 0.5266 & +0.0266 & 0.0029 & 0.5232--0.5301 & 0.5230--0.5302 & $6.57\times10^{-5}$\\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \begin{figure}[t]
 \centering
 \begin{tikzpicture}
-\begin{axis}[width=.72\textwidth,height=5cm,ymin=.495,ymax=.535,xtick={1,2,3},xticklabels={SRM-lite,GLCM,CNN},ylabel={Mean macro-AUC},ymajorgrids=true]
+\begin{axis}[width=.72\textwidth,height=5cm,ymin=.495,ymax=.535,xtick={1,2,3},xticklabels={SRM-lite,GLCM,CNN},ylabel={Mean partition AUC},ymajorgrids=true]
 \addplot+[ybar,bar width=17pt] coordinates {(1,.5040)(2,.5128)(3,.5266)};
 \addplot[domain=.7:3.3,dashed] {.5};
 \end{axis}
 \end{tikzpicture}
-\caption{Mean macro-AUC of the frozen detector battery. The dashed reference is chance AUC 0.5.}
-\Description{Three-bar chart with mean AUC 0.504 for SRM-lite, 0.513 for GLCM, and 0.527 for CNN; a dashed line marks chance at 0.5.}
+\caption{Mean of the five external partition-level macro-AUC values. The dashed reference is chance AUC 0.5.}
+\Description{Three-bar chart with mean partition AUC 0.504 for SRM-lite, 0.513 for GLCM, and 0.527 for CNN; a dashed line marks chance at 0.5.}
 \label{fig:detectors}
 \end{figure}
 
-The CNN evidence comprises 20/20 successful workflow jobs, 100 repetition-level macro-AUC rows, and 3,000 per-session-head AUC rows. This granularity supports both aggregate and partition-level inspection of learned detector behavior.
+The final CNN evidence contains 100 repetition-level rows and 3,000 session-head AUC rows. The D2 classical-detector rerun uses the same certified final schedule and produces 100 additional repetition-level rows for SRM-lite and GLCM. This common schedule removes the earlier lineage ambiguity between detector runs and supports partition-level comparison across all three warden families.
