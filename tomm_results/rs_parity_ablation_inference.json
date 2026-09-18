@@ -1,0 +1,99 @@
+{
+  "analysis": "paired RS-parity inference on the same 1,200 external partition-session-attack trials at every parity level",
+  "confidence_intervals": "two-sided exact Clopper-Pearson 95%",
+  "multiplicity": "Holm adjustment across four adjacent parity contrasts plus the RS0-vs-RS128 endpoint contrast",
+  "aggregate": {
+    "0": {
+      "successes": 829,
+      "trials": 1200,
+      "rate": 0.6908333333333333,
+      "cp95": [
+        0.6638241457423175,
+        0.7169038073953324
+      ]
+    },
+    "32": {
+      "successes": 1064,
+      "trials": 1200,
+      "rate": 0.8866666666666667,
+      "cp95": [
+        0.8673592537950926,
+        0.9040544593387698
+      ]
+    },
+    "64": {
+      "successes": 1115,
+      "trials": 1200,
+      "rate": 0.9291666666666667,
+      "cp95": [
+        0.9131559663240489,
+        0.9430322357965114
+      ]
+    },
+    "96": {
+      "successes": 1145,
+      "trials": 1200,
+      "rate": 0.9541666666666667,
+      "cp95": [
+        0.9407567133929517,
+        0.9652884315630197
+      ]
+    },
+    "128": {
+      "successes": 1163,
+      "trials": 1200,
+      "rate": 0.9691666666666666,
+      "cp95": [
+        0.9577490930825183,
+        0.9781995120589706
+      ]
+    }
+  },
+  "exact_mcnemar": [
+    {
+      "a": 0,
+      "b": 32,
+      "gains": 235,
+      "losses": 0,
+      "discordant": 235,
+      "p_exact": 3.622271631530685e-71,
+      "p_holm": 1.448908652612274e-70
+    },
+    {
+      "a": 32,
+      "b": 64,
+      "gains": 51,
+      "losses": 0,
+      "discordant": 51,
+      "p_exact": 8.881784197001252e-16,
+      "p_holm": 2.6645352591003757e-15
+    },
+    {
+      "a": 64,
+      "b": 96,
+      "gains": 30,
+      "losses": 0,
+      "discordant": 30,
+      "p_exact": 1.862645149230957e-9,
+      "p_holm": 3.725290298461914e-9
+    },
+    {
+      "a": 96,
+      "b": 128,
+      "gains": 18,
+      "losses": 0,
+      "discordant": 18,
+      "p_exact": 0.00000762939453125,
+      "p_holm": 0.00000762939453125
+    },
+    {
+      "a": 0,
+      "b": 128,
+      "gains": 334,
+      "losses": 0,
+      "discordant": 334,
+      "p_exact": 5.714936956411375e-101,
+      "p_holm": 2.8574684782056875e-100
+    }
+  ]
+}
