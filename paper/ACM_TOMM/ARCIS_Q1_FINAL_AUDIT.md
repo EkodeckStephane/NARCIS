@@ -1,20 +1,21 @@
-# ARCIS — Final Q1 / Senior Reviewer Audit after D1--D7
+# ARCIS — Q1 / Senior Reviewer release-candidate audit
 
 Target: **ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)**  
 Manuscript: **ARCIS: Authenticated Robust Cover-Selection Image Signaling under Finite-Index Constraints**
 
 ## Gate result
-**Gate 10: PASS for the current evidence-bounded manuscript.**  
-**Senior Reviewer prescreen: PASS.**
+**Gate 10: HOLD until canonical-lineage closure and immutable release.**  
+**Senior Reviewer prescreen: HOLD on the same release-control items.**
 
-The central claims are supported by released code/results and by the final D1--D7 closure. The manuscript now separates whole-message authenticated recovery from heterogeneous SOTA robustness metrics, uses paired inference for the RS study, uses five external partitions rather than overlapping splits as the detector inference unit, quantifies the communication/traffic side channel, makes finite-index sufficiency explicit, and attributes the cyclic balancing invariant to the session shift rather than to Gray ordering.
+The manuscript-facing recovery, communication-cost, finite-index, and detector claims have been rewritten to respect the actual dependence structure. The five Caltech runs are seeded train--index resamplings of one corpus and are not treated as independent external replications. RS gain/loss counts are descriptive because attacks repeat within sessions. Detector means and resampling ranges are likewise descriptive.
 
-## Remaining reviewer-sensitive points
-The current RS128 operating point is traffic-intensive, and this is now a quantified deployment result rather than an implicit cost. External image-domain evidence consists of BOSSBase development plus Caltech-101 validation. Guo--Ping remains the closest natural-image-selection comparator, but the published robustness percentage is kept under its native recovery semantics rather than treated as equivalent to ARCIS exact authenticated whole-message success.
+## Active closure items
+- **A4 canonical lineage:** GitHub Actions run **35452993368** regenerates the five recorded Caltech checkpoints, verifies their SHA-256 hashes, reruns the authenticated channel, and recomputes the component ablations. A4 closes only if all five hashes match and the manuscript-facing canonical recovery totals remain consistent.
+- **A3 authenticated control plane:** the executable recheck performs authenticated metadata roundtrips for all sessions and explicit tamper/replay negative tests. The manuscript integration is finalized only after the canonical A4 run succeeds.
+- **Editorial synchronization:** ScholarOne metadata and the Cover Letter now use the seeded-resampling interpretation and no longer report independence-based five-run confidence intervals.
+- **A8 release:** main merge, immutable tag/release, and final release audit occur only after the preceding items pass.
 
-These points define future generalization and deployment work; they no longer create unsupported central claims in the manuscript.
+## Reviewer-sensitive scope
+The RS128 operating point remains traffic-intensive and is reported as a measured deployment constraint. External image-domain evidence consists of BOSSBase development plus Caltech-101 validation through overlapping seeded resamplings. Guo--Ping remains the closest natural-image-selection comparator, but source-paper robustness is kept under its native recovery semantics rather than treated as equivalent to ARCIS exact authenticated whole-message success.
 
-## Validation
-- D2 final-schedule classical detector workflow: **PASS**, all five partition jobs.
-- TOMM source validation: **PASS**, unit tests, preflight and ACM LaTeX compilation.
-- Defensive-phrase scan on manuscript/cover/metadata: **PASS**.
+No final PASS is recorded in this file before the canonical A4 manifests and final release status are verified.
