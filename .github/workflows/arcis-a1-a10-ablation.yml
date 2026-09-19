@@ -27,7 +27,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0 torchvision==0.25.0
-          python -m pip install 'cryptography>=45' 'numpy>=2.2' 'pandas>=2.2' 'Pillow>=11' 'psutil>=7' 'reedsolo>=1.7' 'scikit-learn>=1.6' 'scipy>=1.15'
+          python -m pip install 'cryptography>=45' 'numpy>=2.2' 'pandas>=2.2' 'Pillow>=11' 'psutil>=7' 'pytest>=8' 'reedsolo>=1.7' 'scikit-learn>=1.6' 'scipy>=1.15'
           python -m pip freeze | sort > requirements-tomm-freeze.txt
       - name: Unit tests
         env: {PYTHONPATH: src}
@@ -47,17 +47,17 @@ jobs:
         run: |
           python tools/tomm_final_channel_recheck.py \
             --dataset-root "$CALTECH_ROOT" \
-            --checkpoint-root "arcis_a1_a10/checkpoints_\${{ matrix.seed }}" \
-            --output "arcis_a1_a10/seed_\${{ matrix.seed }}" \
-            --seed "\${{ matrix.seed }}" \
+            --checkpoint-root "arcis_a1_a10/checkpoints_${{ matrix.seed }}" \
+            --output "arcis_a1_a10/seed_${{ matrix.seed }}" \
+            --seed "${{ matrix.seed }}" \
             --epochs 5 \
             --component-ablation
-          cp requirements-tomm-freeze.txt "arcis_a1_a10/seed_\${{ matrix.seed }}/requirements-tomm-freeze.txt"
+          cp requirements-tomm-freeze.txt "arcis_a1_a10/seed_${{ matrix.seed }}/requirements-tomm-freeze.txt"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: arcis-a1-a10-seed-\${{ matrix.seed }}
+          name: arcis-a1-a10-seed-${{ matrix.seed }}
           path: |
-            arcis_a1_a10/seed_\${{ matrix.seed }}
+            arcis_a1_a10/seed_${{ matrix.seed }}
           if-no-files-found: error
           retention-days: 30
