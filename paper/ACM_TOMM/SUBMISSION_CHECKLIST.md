@@ -20,12 +20,13 @@
 - Abstract follows Context → Objective → Methods → Results → Conclusion.
 - Main text and Cover Letter use the same seeded-resampling interpretation.
 - ScholarOne metadata, title, acronym, author order, abstract, keywords and corresponding-author metadata are synchronized.
+- A3 control-plane evidence is synchronized across manuscript, ScholarOne and Cover Letter.
 - Independence-based five-run confidence intervals and McNemar significance claims are absent from the current TOMM narrative.
 
 ## Release-control checks
-- [ ] A4: all five regenerated checkpoint SHA-256 values match the recorded fresh campaign and canonical recovery totals agree.
-- [ ] A3: authenticated metadata roundtrip, tamper rejection, and replay rejection are explicitly integrated in the manuscript.
-- [ ] Final TOMM source validation succeeds at the release-candidate head.
+- [x] A4: archived canonical checkpoint bundle verified byte-for-byte; all five checkpoint SHA-256 values match the recorded fresh campaign; canonical holdout aggregate is 1,163/1,200.
+- [x] A3: 150/150 metadata roundtrips; all tested tamper, replay, and wrong-receiver cases rejected; evidence integrated in manuscript.
+- [ ] Final TOMM source validation succeeds at the final release-candidate head.
 - [ ] A8: release-candidate branch merged to `main`.
 - [ ] A8: immutable tag/release created and recorded in the revision manifest.
 
