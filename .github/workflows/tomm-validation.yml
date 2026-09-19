@@ -2,7 +2,7 @@ name: TOMM revision validation
 
 on:
   push:
-    branches: [main, arcis-tomm-final-sync, arcis-tomm-d1-d7, arcis-a1-a10-repair]
+    branches: [main, arcis-tomm-final-sync, arcis-tomm-d1-d7, arcis-a1-a10-repair, arcis-a5-canonical-benchmark]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -33,7 +33,9 @@ jobs:
             tools/evaluate_diffstega_outputs.py \
             tools/tomm_final_cnn_from_frozen_payload.py \
             tools/verify_a3_control_plane.py \
-            tools/verify_a4_canonical_lineage.py
+            tools/verify_a4_canonical_lineage.py \
+            tools/a5_cached_component_ablation.py \
+            tools/verify_a5_component_ablation.py
           python - <<'PY'
           import json
           from pathlib import Path
@@ -90,6 +92,27 @@ jobs:
               assert row["maximum_rs_corrections"] == expected_row["maximum_rs_corrections"]
 
           print({"A4_static_consistency": "PASS", "holdout_sha256": digest})
+          PY
+
+      - name: Verify A5 canonical component-ablation closure
+        env:
+          PYTHONPATH: src
+        run: |
+          python tools/verify_a5_component_ablation.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          source = json.loads(Path("tomm_results/GUO_PING_2026_SOURCE_AUDIT.json").read_text(encoding="utf-8"))
+          assert source["status"] == "PRIMARY_SOURCE_REVIEWED"
+          assert source["published_parameters"]["N"] == 18
+          assert source["published_parameters"]["J"] == 128
+          assert source["published_parameters"]["Delta"] == 40
+          assert source["published_parameters"]["w_center"] == 0.7
+          assert source["published_parameters"]["w_stab"] == 0.3
+          assert source["published_parameters"]["datasets"]["Holidays"]["average_robustness_percent"] == 99.54
+          assert source["published_parameters"]["datasets"]["VOC2012"]["average_robustness_percent"] == 98.64
+          assert source["published_parameters"]["datasets"]["ImageNet2012_validation_subset"]["average_robustness_percent"] == 97.19
+          print({"Guo_Ping_2026_primary_source_audit": "PASS"})
           PY
 
       - name: TOMM preflight without datasets
