@@ -1,24 +1,29 @@
-# ARCIS Final Experimental Report — ACM TOMM D1--D7 Freeze
+# ARCIS Final Experimental Report — ACM TOMM release candidate
 
 ## Frozen operating point
-`K=8`, five covers/coded symbol, RS128; BOSSBase development and five image-disjoint Caltech-101 external partitions.
+ARCIS uses `K=8`, five covers per coded symbol, and RS128 at the final operating point. BOSSBase 1.01 is the development corpus. Caltech-101 is the external corpus.
+
+For each Caltech seed in `{11, 29, 47, 71, 101}`, a deterministic permutation assigns 1,500 images to descriptor training and the next 7,000 images to the cover index. Training and index sets are image-disjoint within each run. The five runs are seeded train--index resamplings of the same 9,144-image corpus, not independent external replications: pairwise index overlap is 5,320--5,371 images (76.0--76.7%), and 2,374 images occur in all five indexes.
 
 ## External recovery
 - Calibration: **1,800/1,800** authenticated recoveries.
-- Holdout: **1,163/1,200 (96.92%)**.
-- Seven holdout transformations: **150/150** each.
+- Held-out attack parameterizations: **1,163/1,200 (96.92%)**.
+- Seven of the eight held-out parameterizations: **150/150** each.
 - 12% crop: **113/150**; all 37 holdout failures occur there.
+- Per-resampling success: **240/240, 214/240, 240/240, 231/240, 238/240** for seeds 11, 29, 47, 71, 101.
 
-## Paired RS-parity ablation
-| RS | Recovery | Exact 95% CI | Mean images/session | Gain/loss vs previous |
-|---:|---:|---:|---:|---:|
-| 0 | 829/1,200 (69.08%) | 66.38–71.69% | 970.0 | — |
-| 32 | 1,064/1,200 (88.67%) | 86.74–90.41% | 1,396.7 | 235/0 |
-| 64 | 1,115/1,200 (92.92%) | 91.32–94.30% | 1,825.0 | 51/0 |
-| 96 | 1,145/1,200 (95.42%) | 94.08–96.53% | 2,250.0 | 30/0 |
-| 128 | 1,163/1,200 (96.92%) | 95.77–97.82% | 2,676.7 | 18/0 |
+## RS-parity ablation
+The same 1,200 resampling--session--attack outcomes are reused at every parity level.
 
-All four adjacent exact McNemar contrasts remain significant after Holm adjustment. The RS0→RS128 endpoint has **334 gains / 0 losses**, exact (p=5.71\times10^{-101}).
+| RS parity bytes | Authenticated recovery | Mean images/session | Paired gain/loss vs previous |
+|---:|---:|---:|---:|
+| 0 | 829/1,200 (69.08%) | 970.0 | — |
+| 32 | 1,064/1,200 (88.67%) | 1,396.7 | 235/0 |
+| 64 | 1,115/1,200 (92.92%) | 1,825.0 | 51/0 |
+| 96 | 1,145/1,200 (95.42%) | 2,250.0 | 30/0 |
+| 128 | 1,163/1,200 (96.92%) | 2,676.7 | 18/0 |
+
+The RS0→RS128 endpoint contains **334 gains / 0 losses**. These counts are reported descriptively because attacks are repeated within sessions and the five Caltech runs overlap substantially; the current manuscript therefore does not treat the 1,200 outcomes or the five resamplings as independent inferential units.
 
 ## Communication and traffic observability
 At RS128:
@@ -30,20 +35,23 @@ The cover count therefore exposes payload-length-class information in an unshape
 
 ## Conditional finite-index planning
 Under the stated i.i.d.-uniform coded-symbol planning model:
-- 8 B: (5.04\times10^{-43})
-- 32 B: (1.64\times10^{-34})
-- 64 B: (1.14\times10^{-25})
+- 8 B: **5.04×10^-43**
+- 32 B: **1.64×10^-34**
+- 64 B: **1.14×10^-25**
 
-The realized-session feasibility criterion remains (d_k\le a_k) for every label, with necessity and sufficiency stated label by label.
+The realized-session feasibility criterion remains `d_k <= a_k` for every label, with necessity and sufficiency stated label by label.
 
-## Hierarchical detector audit
-Inference uses the **five external partition means**; the 20 image-disjoint repetitions within a partition characterize split stability.
+## Selection-detector audit
+Each Caltech resampling uses 20 image-disjoint train/test repetitions. These repetitions quantify within-resampling split stability. The five resampling means are reported descriptively because their underlying image pools overlap.
 
-| Detector | Mean AUC | Between-partition SD | Partition range | 95% CI (n=5) |
-|---|---:|---:|---:|---:|
-| SRM-lite + ExtraTrees | 0.5040 | 0.0015 | 0.5014–0.5052 | 0.5021–0.5060 |
-| GLCM + logistic | 0.5128 | 0.0007 | 0.5120–0.5138 | 0.5119–0.5138 |
-| 30-head CNN | 0.5266 | 0.0029 | 0.5232–0.5301 | 0.5230–0.5302 |
+| Detector | Mean AUC | Resampling range | Mean within-run SD |
+|---|---:|---:|---:|
+| SRM-lite + ExtraTrees | 0.5040 | 0.5014–0.5052 | 0.0018 |
+| GLCM + logistic | 0.5128 | 0.5120–0.5138 | 0.0016 |
+| 30-head CNN | 0.5266 | 0.5232–0.5301 | 0.0022 |
 
 ## SOTA positioning
 Guo--Ping and ARCIS are positioned through their native quantitative regimes and recovery-event definitions. ARCIS success is exact authenticated whole-plaintext recovery after majority decoding, RS correction, framing, and AES-GCM verification. Guo--Ping's published robustness percentages remain under the source paper's native robustness metric and are not placed on a common percentage scale with ARCIS.
+
+## Canonical-lineage closure
+The immutable release must be based only on the recorded fresh Caltech checkpoint lineage. The release-candidate A4 workflow regenerates all five seed checkpoints, compares their SHA-256 values to the recorded canonical hashes, reruns the authenticated channel and component ablations, and publishes per-seed manifests. This section is finalized only after all five SHA checks and manuscript-facing recovery totals agree with the canonical freeze.
