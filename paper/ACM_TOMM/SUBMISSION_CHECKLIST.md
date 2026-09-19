@@ -28,14 +28,18 @@
 - [x] A4: archived canonical checkpoint bundle verified byte-for-byte; all five checkpoint SHA-256 values match the recorded fresh campaign; canonical holdout aggregate is 1,163/1,200.
 - [x] A3: 150/150 metadata roundtrips; all tested tamper, replay, and wrong-receiver cases rejected; evidence integrated in manuscript.
 - [x] A5: canonical component ablation reproduced the A4 holdout result exactly and the Guo–Ping 2026 primary-source comparator audit is integrated.
-- [x] Final TOMM source validation succeeded on the validated scientific snapshot: run `35455852993` — SUCCESS.
+- [x] Final TOMM source validation succeeded on the validated scientific snapshot: run `35460375489` — SUCCESS.
 - [x] A8: repair branch merged to `main`.
-- [x] A8: submitted scientific state is uniquely identified by commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`.
+- [x] A8: submitted scientific state is uniquely identified by commit `254f31e7c44e43f104509c117b0efb4c414dcdcd`.
 - [x] A8: **CLOSED for TOMM submission**.
 
 ## Post-acceptance preservation — not a submission blocker
 - [ ] Create the immutable publication tag/release from the accepted-version lineage.
 - [ ] Optionally archive the accepted artifact in a long-term repository/DOI service if desired.
+
+## Gate 10 finalization
+- [ ] Automated claim/code/data verifier PASS on the synchronized snapshot.
+- [ ] Compiled PDF inspected for clipping, overflow, unreadable figures/tables, and unresolved references.
 
 ## Before portal upload
 Confirm author names, affiliations, e-mails, CRediT roles, funding, competing interests, AI-use wording if required, and final human reread.
