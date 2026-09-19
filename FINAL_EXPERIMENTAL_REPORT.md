@@ -12,6 +12,14 @@ For each Caltech seed in `{11, 29, 47, 71, 101}`, a deterministic permutation as
 - 12% crop: **113/150**; all 37 holdout failures occur there.
 - Per-resampling success: **240/240, 214/240, 240/240, 231/240, 238/240** for seeds 11, 29, 47, 71, 101.
 
+## Authenticated control plane
+The implemented metadata path was exercised over five seeds and 30 monotonically ordered sessions per seed:
+- **150/150** exact metadata roundtrips;
+- **5/5** tested ciphertext tamper cases rejected;
+- **5/5** immediate replay attempts rejected;
+- **5/5** wrong-receiver cases rejected through associated-data binding;
+- metadata envelope size: **110–111 bytes**.
+
 ## RS-parity ablation
 The same 1,200 resampling--session--attack outcomes are reused at every parity level.
 
@@ -54,4 +62,6 @@ Each Caltech resampling uses 20 image-disjoint train/test repetitions. These rep
 Guo--Ping and ARCIS are positioned through their native quantitative regimes and recovery-event definitions. ARCIS success is exact authenticated whole-plaintext recovery after majority decoding, RS correction, framing, and AES-GCM verification. Guo--Ping's published robustness percentages remain under the source paper's native robustness metric and are not placed on a common percentage scale with ARCIS.
 
 ## Canonical-lineage closure
-The immutable release must be based only on the recorded fresh Caltech checkpoint lineage. The release-candidate A4 workflow regenerates all five seed checkpoints, compares their SHA-256 values to the recorded canonical hashes, reruns the authenticated channel and component ablations, and publishes per-seed manifests. This section is finalized only after all five SHA checks and manuscript-facing recovery totals agree with the canonical freeze.
+**A4 PASS.** The archived `NARCIS_TOMM_FRESH_CHECKPOINTS.zip` has SHA-256 `8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1`. Its five Caltech checkpoints match the SHA-256 values recorded in the fresh campaign, and the archived runtime is Python 3.13.5 / PyTorch 2.10.0+cpu with the recorded scientific-package versions. The canonical holdout aggregate has SHA-256 `27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf` and yields exactly **1,163/1,200** with per-seed successes **240, 214, 240, 231, 238**.
+
+A later retraining under a different runtime produced non-identical checkpoint bytes and is therefore classified as a diagnostic rather than as a replacement lineage.
