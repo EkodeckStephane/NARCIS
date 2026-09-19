@@ -22,6 +22,6 @@
 - Cover Letter: **CLOSED / synchronized**.
 - **A8 CLOSED for TOMM submission:** repair branch merged to `main` at `254f31e7c44e43f104509c117b0efb4c414dcdcd`; TOMM revision validation run `35460375489` completed **SUCCESS**.
 - GitHub tag/release: **deferred to post-acceptance version freezing; not a submission blocker**.
-- Q1 Gate 10: **HOLD only for the final automated claim/code/data prescreen and compiled-PDF inspection on the synchronized snapshot**.
+- Q1 Gate 10: **PASS** — static claim/code/data verifier PASS and rendered-PDF inspection PASS; CI run `35465970002` completed SUCCESS.
 
 The validated scientific submission snapshot is the cited `main` commit. Later documentation-only commits do not replace that experimental lineage.
