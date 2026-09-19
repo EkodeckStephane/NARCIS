@@ -9,7 +9,7 @@ Current manuscript: **ARCIS: Authenticated Robust Cover-Selection Image Signalin
 - External calibration: **1,800/1,800** authenticated recoveries.
 - External holdout: **1,163/1,200 (96.92%)**; all 37 failures occur under the 12% central crop.
 - RS-parity sweep: **829 / 1,064 / 1,115 / 1,145 / 1,163** successes out of 1,200 at RS0/32/64/96/128.
-- Exact paired RS0→RS128 comparison: **334 gains / 0 losses**, exact McNemar (p=5.71\times10^{-101}).
+- Exact paired RS0→RS128 comparison: **334 gains / 0 losses**, reported descriptively because attacks repeat within sessions and the five Caltech resamplings overlap.
 - Mean transmitted images/session: **970 → 2,676.7** from RS0 to RS128.
 - RS128 8/32/64-byte sessions require **2,320 / 2,640 / 3,070** images.
 - Conditional finite-index blocking risk at RS128: approximately **5.04e-43 / 1.64e-34 / 1.14e-25** for 8 / 32 / 64 bytes under the stated i.i.d.-uniform planning model.
@@ -20,7 +20,9 @@ The communication-cost analysis identifies carrier volume and session-volume obs
 
 ## Canonical implementation
 
-The executable TOMM lineage originates at commit `b8ee42d547b580b9e1639de559b1dfa6ea88d4ef`. The current TOMM repair and release candidate is maintained on branch `arcis-a1-a10-repair`.
+The executable TOMM lineage originates at commit `b8ee42d547b580b9e1639de559b1dfa6ea88d4ef`. The validated TOMM submission snapshot is commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb` on `main`, validated by GitHub Actions run `35455852993` (**SUCCESS**). The former `arcis-a1-a10-repair` branch is retained only as repair provenance.
+
+A GitHub tag/release is **not a TOMM submission gate** for ARCIS. Version freezing by tag/release is deferred to the post-acceptance publication stage.
 
 Key paths:
 - `src/narcis/group_bank.py`

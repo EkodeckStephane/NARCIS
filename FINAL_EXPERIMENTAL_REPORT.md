@@ -1,4 +1,4 @@
-# ARCIS Final Experimental Report — ACM TOMM release candidate
+# ARCIS Final Experimental Report — ACM TOMM submission snapshot
 
 ## Frozen operating point
 ARCIS uses `K=8`, five covers per coded symbol, and RS128 at the final operating point. BOSSBase 1.01 is the development corpus. Caltech-101 is the external corpus.
@@ -65,3 +65,6 @@ Guo--Ping and ARCIS are positioned through their native quantitative regimes and
 **A4 PASS.** The archived `NARCIS_TOMM_FRESH_CHECKPOINTS.zip` has SHA-256 `8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1`. Its five Caltech checkpoints match the SHA-256 values recorded in the fresh campaign, and the archived runtime is Python 3.13.5 / PyTorch 2.10.0+cpu with the recorded scientific-package versions. The canonical holdout aggregate has SHA-256 `27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf` and yields exactly **1,163/1,200** with per-seed successes **240, 214, 240, 231, 238**.
 
 A later retraining under a different runtime produced non-identical checkpoint bytes and is therefore classified as a diagnostic rather than as a replacement lineage.
+
+## Submission-control status
+The scientific submission snapshot was merged to `main` at commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb` and passed TOMM revision validation run `35455852993`. **A8 is therefore closed for submission.** A tag/release is deferred until post-acceptance version freezing.

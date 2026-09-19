@@ -4,7 +4,9 @@ Historical executable TOMM base: `b8ee42d547b580b9e1639de559b1dfa6ea88d4ef`.
 
 Recorded fresh Caltech checkpoint campaign: `bdef888c90d191550a1e3ae29ec25b4a2d422e66`.
 
-Current repair/release branch: `arcis-a1-a10-repair`.
+Repair provenance branch: `arcis-a1-a10-repair`.
+
+Validated scientific submission snapshot: `main` commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`.
 
 ## Restored and synchronized
 - group-bank implementation and projection;
@@ -33,4 +35,5 @@ Current repair/release branch: `arcis-a1-a10-repair`.
 
 The attempted September 19 retraining used a different runtime from the archived campaign and is retained only as a diagnostic; it is not substituted for the byte-identical canonical checkpoints.
 
-A8 remains pending final CI, merge to `main`, and immutable release creation.
+## A8 submission closure
+**CLOSED.** The repaired scientific state was merged to `main` at `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`, and TOMM revision validation run `35455852993` completed **SUCCESS**. No GitHub release is required for the current TOMM submission. Tag/release creation is deferred until acceptance, when the publication version is frozen.

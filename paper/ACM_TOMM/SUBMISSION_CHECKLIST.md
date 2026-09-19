@@ -23,12 +23,17 @@
 - A3 control-plane evidence is synchronized across manuscript, ScholarOne and Cover Letter.
 - Independence-based five-run confidence intervals and McNemar significance claims are absent from the current TOMM narrative.
 
-## Release-control checks
+## Submission-control checks
 - [x] A4: archived canonical checkpoint bundle verified byte-for-byte; all five checkpoint SHA-256 values match the recorded fresh campaign; canonical holdout aggregate is 1,163/1,200.
 - [x] A3: 150/150 metadata roundtrips; all tested tamper, replay, and wrong-receiver cases rejected; evidence integrated in manuscript.
-- [ ] Final TOMM source validation succeeds at the final release-candidate head.
-- [ ] A8: release-candidate branch merged to `main`.
-- [ ] A8: immutable tag/release created and recorded in the revision manifest.
+- [x] Final TOMM source validation succeeded on the validated scientific snapshot: run `35455852993` — SUCCESS.
+- [x] A8: repair branch merged to `main`.
+- [x] A8: submitted scientific state is uniquely identified by commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`.
+- [x] A8: **CLOSED for TOMM submission**.
+
+## Post-acceptance preservation — not a submission blocker
+- [ ] Create the immutable publication tag/release from the accepted-version lineage.
+- [ ] Optionally archive the accepted artifact in a long-term repository/DOI service if desired.
 
 ## Before portal upload
 Confirm author names, affiliations, e-mails, CRediT roles, funding, competing interests, AI-use wording if required, and final human reread.

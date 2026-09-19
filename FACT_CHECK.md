@@ -1,4 +1,4 @@
-# ARCIS Fact Check — ACM TOMM release candidate
+# ARCIS Fact Check — ACM TOMM submission snapshot
 
 | Item | Current value |
 |---|---|
@@ -23,7 +23,9 @@
 | A4 status | PASS: all five canonical Caltech checkpoint SHA-256 values match the fresh-campaign record; holdout = 1,163/1,200 |
 | Cyclic mapping property | exact balancing follows from the session shift; Gray order fixes symbol ordering |
 | Repository | https://github.com/EkodeckStephane/NARCIS |
-| Current repair/release branch | arcis-a1-a10-repair |
-| A8 | pending final CI, main merge, immutable tag/release |
+| Validated submission snapshot | `main` commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb` |
+| Final TOMM validation | run `35455852993` — SUCCESS |
+| A8 | **CLOSED for TOMM submission** |
+| Post-acceptance freeze | tag/release deferred until acceptance; not a current submission requirement |
 
 Historical K=16 / 1,575/1,575 / 3–4 bits-per-cover values are superseded for the current TOMM submission.

@@ -18,7 +18,8 @@
 - Non-identical retraining under a different runtime is retained only as a diagnostic and is not substituted for the canonical checkpoint bytes.
 - ScholarOne metadata: **CLOSED / synchronized**.
 - Cover Letter: **CLOSED / synchronized**.
-- A8 immutable release: **pending final CI, merge to main, tag/release**.
+- **A8 CLOSED for TOMM submission:** repair branch merged to `main` at `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`; TOMM revision validation run `35455852993` completed **SUCCESS**.
+- GitHub tag/release: **deferred to post-acceptance version freezing; not a submission blocker**.
 - Q1 Gate 10: **not declared PASS in this status file while any other A1–A10 item outside A3/A4/A8 remains partial**.
 
-The branch is a release candidate until A8 is completed.
+The validated scientific submission snapshot is the cited `main` commit. Later documentation-only commits do not replace that experimental lineage.

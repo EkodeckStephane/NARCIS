@@ -5,7 +5,9 @@
 - Acronym: **ARCIS = Authenticated Robust Cover-Selection Image Signaling**
 - Target: **ACM TOMM**
 - Corresponding author: **Chantal Marguerite Mveh-Abia**
-- Current release-candidate branch: `arcis-a1-a10-repair`
+- Repair provenance branch: `arcis-a1-a10-repair`
+- Validated scientific submission snapshot: `main` commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`
+- Final TOMM validation: run `35455852993` — **SUCCESS**
 
 ## Frozen operating point
 - K = 8
@@ -25,7 +27,8 @@
 - **A3 CLOSED:** 150/150 control-plane metadata roundtrips; all 5 tested tamper, replay, and wrong-receiver cases rejected;
 - **A4 CLOSED:** byte-identical canonical checkpoint bundle verified, all five recorded checkpoint SHA-256 values matched, canonical holdout aggregate verified at 1,163/1,200;
 - canonical A3/A4 audit files stored in `tomm_results/`;
-- noncanonical retraining workflows removed from the release candidate.
+- noncanonical retraining workflows removed from the submission lineage;
+- **A8 CLOSED for TOMM submission:** final validation succeeded and the repair branch was merged to `main`.
 
 ## A4 provenance
 - recorded fresh campaign commit: `bdef888c90d191550a1e3ae29ec25b4a2d422e66`;
@@ -33,11 +36,12 @@
 - canonical holdout aggregate SHA-256: `27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf`;
 - archived runtime: Python 3.13.5, PyTorch 2.10.0+cpu, NumPy 2.3.5, pandas 2.2.3, scikit-learn 1.8.0, SciPy 1.17.0, Pillow 12.3.0, cryptography 46.0.4.
 
-## Final release gate
-Before A8:
-1. final TOMM source validation must succeed at the release-candidate head;
-2. the branch is merged to `main`;
-3. an immutable ARCIS/TOMM tag/release is created;
-4. the merge SHA, validation run, tag, and release URL are recorded here.
+## Submission-control closure
+A8 for the current TOMM submission requires:
+1. final TOMM source validation at the scientific submission snapshot — **DONE / SUCCESS**;
+2. merge of the repaired scientific state to `main` — **DONE**;
+3. stable identification of the submitted scientific snapshot by commit SHA — **DONE**.
 
-Global Gate 10 remains separate from A8 and must not be inferred from release creation if another A1–A10 item remains partial.
+A GitHub tag/release is **not required to close A8 for submission**. The publication lineage will be frozen by tag/release after acceptance, when the accepted-version source is known.
+
+Global Gate 10 remains separate from A8 and must not be inferred from A8 closure if another A1–A10 item remains partial.
