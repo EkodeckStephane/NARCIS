@@ -17,27 +17,27 @@
 - per seed = 1,500 descriptor-training images + 7,000 cover-index images, disjoint within run
 - cross-seed interpretation = overlapping train--index resamplings of the same 9,144-image corpus, not independent external replications
 
-## Scientific closure already integrated
-- session-volume side-channel analysis and traffic-shaping extensions;
-- detector reporting based on descriptive means/ranges across five seeded resamplings, with 20 image-disjoint repeated splits used as within-resampling stability diagnostics;
-- SOTA positioning with recovery-event semantics separated explicitly;
-- public repository traceability;
-- explicit necessity/sufficiency proof for finite-index feasibility;
-- RS-parity reporting based on recoveries, communication cost, and paired gain/loss counts without independence-based confidence intervals or McNemar significance claims;
-- verified Guo--Ping and Cao--Wang--Zhang bibliographic metadata;
-- exact symbol-wise balancing attributed to the cyclic authenticated-session shift; Gray indexing specifies implementation ordering;
-- ScholarOne metadata and Cover Letter synchronized to the seeded-resampling interpretation.
+## Scientific and editorial closure
+- dependence-aware detector and parity reporting integrated;
+- session-volume side-channel analysis integrated;
+- finite-index necessity/sufficiency proof integrated;
+- ScholarOne metadata and Cover Letter synchronized;
+- **A3 CLOSED:** 150/150 control-plane metadata roundtrips; all 5 tested tamper, replay, and wrong-receiver cases rejected;
+- **A4 CLOSED:** byte-identical canonical checkpoint bundle verified, all five recorded checkpoint SHA-256 values matched, canonical holdout aggregate verified at 1,163/1,200;
+- canonical A3/A4 audit files stored in `tomm_results/`;
+- noncanonical retraining workflows removed from the release candidate.
 
-## Canonical A4 lineage gate
-Canonical recheck workflow: **GitHub Actions run 35452993368**.
-
-The workflow regenerates all five Caltech checkpoints under the frozen scientific environment, compares each SHA-256 with the recorded fresh-campaign hash, reruns authenticated channel recovery and the component ablation, then publishes one manifest per seed. A4 is closed only if every SHA check passes and the canonical manuscript-facing recovery totals remain consistent.
+## A4 provenance
+- recorded fresh campaign commit: `bdef888c90d191550a1e3ae29ec25b4a2d422e66`;
+- checkpoint bundle SHA-256: `8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1`;
+- canonical holdout aggregate SHA-256: `27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf`;
+- archived runtime: Python 3.13.5, PyTorch 2.10.0+cpu, NumPy 2.3.5, pandas 2.2.3, scikit-learn 1.8.0, SciPy 1.17.0, Pillow 12.3.0, cryptography 46.0.4.
 
 ## Final release gate
 Before A8:
-1. A4 canonical checkpoint/result verification must pass.
-2. A3 authenticated-control evidence must be integrated in the manuscript.
-3. The final branch head must pass TOMM source validation after all editorial edits.
-4. Only then may the branch be merged to `main` and an immutable ARCIS/TOMM release be created.
+1. final TOMM source validation must succeed at the release-candidate head;
+2. the branch is merged to `main`;
+3. an immutable ARCIS/TOMM tag/release is created;
+4. the merge SHA, validation run, tag, and release URL are recorded here.
 
-The final release commit, validation run, tag, and release URL are recorded here only after those operations succeed.
+Global Gate 10 remains separate from A8 and must not be inferred from release creation if another A1–A10 item remains partial.
