@@ -1,0 +1,232 @@
+{
+  "status": "PASS",
+  "gate": "A5 canonical component ablation",
+  "scientific_base_commit": "6b32ac3ef196ca2a5169b4ca81c1c7bbd3c6a046",
+  "canonical_scientific_snapshot": "c3e58a157b0b3bfe58959436e2d02e46d09c40cb",
+  "canonical_checkpoint_bundle_sha256": "8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1",
+  "canonical_holdout_aggregate_sha256": "27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf",
+  "runtime": {
+    "python": "3.13.5",
+    "torch": "2.10.0+cpu",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scikit_learn": "1.8.0",
+    "scipy": "1.17.0",
+    "pillow": "12.3.0",
+    "cryptography": "46.0.4"
+  },
+  "design": {
+    "dataset": "Caltech-101",
+    "seeds": [
+      11,
+      29,
+      47,
+      71,
+      101
+    ],
+    "sessions_per_seed": 30,
+    "holdout_attacks": 8,
+    "trials_per_seed": 240,
+    "aggregate_trials": 1200,
+    "rs_parity_bytes": 128,
+    "group_size": 5,
+    "codebook_size": 8,
+    "dependence_note": "paired gain/loss counts are descriptive because attacks repeat within sessions and cross-seed index pools overlap"
+  },
+  "canonical_reproduction": {
+    "expected_successes": 1163,
+    "observed_successes": 1163,
+    "exact_match": true,
+    "per_seed_expected": [
+      240,
+      214,
+      240,
+      231,
+      238
+    ],
+    "per_seed_observed": [
+      240,
+      214,
+      240,
+      231,
+      238
+    ]
+  },
+  "variants": {
+    "arcis_full": {
+      "successes": 1163,
+      "trials": 1200,
+      "success_rate": 0.9691666666666666,
+      "per_seed": [
+        240,
+        214,
+        240,
+        231,
+        238
+      ],
+      "mean_cover_frequency_cv": 0.2296786375887451,
+      "mean_label_emission_cv": 0.022547538249345984,
+      "mean_unique_covers": 7000
+    },
+    "random_groups": {
+      "successes": 1042,
+      "trials": 1200,
+      "success_rate": 0.8683333333333333,
+      "per_seed": [
+        208,
+        195,
+        220,
+        209,
+        210
+      ],
+      "mean_cover_frequency_cv": 0.2339267714608311,
+      "mean_label_emission_cv": 0.022547538249345984,
+      "mean_unique_covers": 7000
+    },
+    "uniform_group_scheduler": {
+      "successes": 1160,
+      "trials": 1200,
+      "success_rate": 0.9666666666666667,
+      "per_seed": [
+        240,
+        215,
+        240,
+        229,
+        236
+      ],
+      "mean_cover_frequency_cv": 0.2338342319176377,
+      "mean_label_emission_cv": 0.022547538249345984,
+      "mean_unique_covers": 7000
+    },
+    "fixed_mapping": {
+      "successes": 1166,
+      "trials": 1200,
+      "success_rate": 0.9716666666666667,
+      "per_seed": [
+        240,
+        218,
+        240,
+        229,
+        239
+      ],
+      "mean_cover_frequency_cv": 0.26103698839162864,
+      "mean_label_emission_cv": 0.1314004457594063,
+      "mean_unique_covers": 7000
+    },
+    "matched_bucket_baseline": {
+      "successes": 1038,
+      "trials": 1200,
+      "success_rate": 0.865,
+      "per_seed": [
+        208,
+        192,
+        221,
+        206,
+        211
+      ],
+      "mean_cover_frequency_cv": 0.2293748327315901,
+      "mean_label_emission_cv": 0.022547538249345984,
+      "mean_unique_covers": 7000
+    }
+  },
+  "paired_descriptive_vs_arcis": {
+    "random_groups": {
+      "arcis_gain_other_fail": 121,
+      "arcis_fail_other_gain": 0,
+      "both_success": 1042,
+      "both_fail": 37
+    },
+    "uniform_group_scheduler": {
+      "arcis_gain_other_fail": 10,
+      "arcis_fail_other_gain": 7,
+      "both_success": 1153,
+      "both_fail": 30
+    },
+    "fixed_mapping": {
+      "arcis_gain_other_fail": 3,
+      "arcis_fail_other_gain": 6,
+      "both_success": 1160,
+      "both_fail": 31
+    },
+    "matched_bucket_baseline": {
+      "arcis_gain_other_fail": 125,
+      "arcis_fail_other_gain": 0,
+      "both_success": 1038,
+      "both_fail": 37
+    }
+  },
+  "by_attack_successes": {
+    "blur_1_2": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "blur_1_8": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "gaussian_9": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "gaussian_15": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "rotate_5": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "rotate_9": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "crop_08": {
+      "arcis_full": 150,
+      "random_groups": 132,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 126
+    },
+    "crop_12": {
+      "arcis_full": 113,
+      "random_groups": 10,
+      "uniform_group_scheduler": 110,
+      "fixed_mapping": 116,
+      "matched_bucket_baseline": 12
+    }
+  },
+  "cycle_coverage": {
+    "arcis_each_symbol_clusters": 8,
+    "fixed_mapping_each_symbol_clusters": 1
+  },
+  "mechanism_interpretation": {
+    "qualified_complementary_groups": "primary robustness contributor: ARCIS 1163/1200 versus random_groups 1042/1200; 121 ARCIS-only gains and zero reverse gains",
+    "matched_bucket_baseline": "group-bank construction matters: ARCIS 1163/1200 versus 1038/1200; 125 ARCIS-only gains and zero reverse gains",
+    "scheduler": "uniform scheduler is nearly recovery-equivalent (1160/1200); adaptive scheduling is not claimed as a major standalone recovery gain",
+    "cyclic_mapping": "fixed mapping is slightly higher in recovery (1166/1200) but mean label-emission CV increases from 0.0225 to 0.1314 and symbol-to-cluster cycle coverage falls from 8 to 1; cyclic mapping is justified by balance rather than recovery"
+  },
+  "external_comparator_scope": "Complete Guo-Ping 2026 primary source reviewed. Published parameters and native robustness/traffic semantics are used directly. The article still leaves several implementation choices unfrozen (complex-PZM scalarization before modulo quantization, common image resampling, K-means initialization/restarts/seed, exact attack-library interpolation/RNG choices, and the identities of the 50,000 ImageNet validation images), so an independent implementation must be labelled Guo-Ping-derived rather than the authors' exact executable system. DiffStega remains executable positioning evidence under secret-image reconstruction semantics.",
+  "raw_evidence": {
+    "rows": 6000,
+    "sha256": "5ffe8a76d43a54448a6c9d1260bc069f858d6c50b45e9cdb47c8ed5009eaa476",
+    "archived_library_path": "/NARCIS/TOMM/A5_CANONICAL_COMPONENT_ABLATION_RAW.csv"
+  }
+}

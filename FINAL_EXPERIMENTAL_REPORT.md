@@ -58,8 +58,28 @@ Each Caltech resampling uses 20 image-disjoint train/test repetitions. These rep
 | GLCM + logistic | 0.5128 | 0.5120–0.5138 | 0.0016 |
 | 30-head CNN | 0.5266 | 0.5232–0.5301 | 0.0022 |
 
+## Canonical A5 component ablation
+The A5 experiment was rerun on the byte-identified A4 lineage. The full ARCIS arm reproduces the canonical result exactly: **1,163/1,200**.
+
+| Variant | Authenticated recovery | ARCIS-only gains / reverse gains |
+|---|---:|---:|
+| ARCIS full | 1,163/1,200 (96.92%) | reference |
+| Random groups | 1,042/1,200 (86.83%) | 121 / 0 |
+| Uniform group scheduler | 1,160/1,200 (96.67%) | 10 / 7 |
+| Fixed mapping | 1,166/1,200 (97.17%) | 3 / 6 |
+| Matched bucket baseline | 1,038/1,200 (86.50%) | 125 / 0 |
+
+The recovery difference is concentrated in crop conditions. Complementary qualified grouping is therefore the principal recovery contributor among the tested mechanisms. The fixed-mapping result does not support a recovery-gain claim for cyclic mapping; instead, cyclic mapping reduces mean label-emission CV from **0.1314** to **0.0225** and makes every coded symbol visit all eight visual clusters over a complete cycle.
+
+## Guo–Ping 2026 primary-source comparator
+The complete Knowledge-Based Systems article is now audited. It specifies PZM features, SA-PQE, K-means CID construction, stability-regularized representative selection, and the main parameters **N=18, J=128, Δ=40, (w_center,w_stab)=(0.7,0.3)**. Its native robustness is per-representative message-segment recovery. Reported mean robustness at theoretical maximum capacity is **99.54% at 10 bits on Holidays, 98.64% at 14 bits on VOC 2012, and 97.19% at 15 bits on ImageNet**.
+
+Its source-native hiding rule requires `ceil(P/L)+1` images for a P-bit raw message, giving 8/27/53 images at L=10, 6/20/38 at L=14, and 6/19/36 at L=15 for 8/32/64-byte payloads. Those counts exclude ARCIS cryptographic framing, metadata, RS parity, and five-cover majority overhead and are not treated as a like-for-like throughput score.
+
+The paper does not freeze enough low-level details for a bit-identical independent executable reproduction; the repository records these limitations in `tomm_results/GUO_PING_2026_SOURCE_AUDIT.json`.
+
 ## SOTA positioning
-Guo--Ping and ARCIS are positioned through their native quantitative regimes and recovery-event definitions. ARCIS success is exact authenticated whole-plaintext recovery after majority decoding, RS correction, framing, and AES-GCM verification. Guo--Ping's published robustness percentages remain under the source paper's native robustness metric and are not placed on a common percentage scale with ARCIS.
+Guo--Ping and ARCIS are positioned through their native quantitative regimes and recovery-event definitions, now grounded in the complete 2026 primary source. ARCIS success is exact authenticated whole-plaintext recovery after majority decoding, RS correction, framing, and AES-GCM verification. Guo--Ping's published robustness percentages remain under the source paper's native robustness metric and are not placed on a common percentage scale with ARCIS.
 
 ## Canonical-lineage closure
 **A4 PASS.** The archived `NARCIS_TOMM_FRESH_CHECKPOINTS.zip` has SHA-256 `8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1`. Its five Caltech checkpoints match the SHA-256 values recorded in the fresh campaign, and the archived runtime is Python 3.13.5 / PyTorch 2.10.0+cpu with the recorded scientific-package versions. The canonical holdout aggregate has SHA-256 `27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf` and yields exactly **1,163/1,200** with per-seed successes **240, 214, 240, 231, 238**.

@@ -1,0 +1,88 @@
+{
+  "status": "PASS",
+  "interpretation": "Descriptive paired accounting only; attacks repeat within sessions and Caltech resamplings overlap.",
+  "paired_descriptive": {
+    "random_groups": {
+      "arcis_gain_other_fail": 121,
+      "arcis_fail_other_gain": 0,
+      "both_success": 1042,
+      "both_fail": 37
+    },
+    "uniform_group_scheduler": {
+      "arcis_gain_other_fail": 10,
+      "arcis_fail_other_gain": 7,
+      "both_success": 1153,
+      "both_fail": 30
+    },
+    "fixed_mapping": {
+      "arcis_gain_other_fail": 3,
+      "arcis_fail_other_gain": 6,
+      "both_success": 1160,
+      "both_fail": 31
+    },
+    "matched_bucket_baseline": {
+      "arcis_gain_other_fail": 125,
+      "arcis_fail_other_gain": 0,
+      "both_success": 1038,
+      "both_fail": 37
+    }
+  },
+  "by_attack_successes": {
+    "blur_1_2": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "blur_1_8": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "gaussian_9": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "gaussian_15": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "rotate_5": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "rotate_9": {
+      "arcis_full": 150,
+      "random_groups": 150,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 150
+    },
+    "crop_08": {
+      "arcis_full": 150,
+      "random_groups": 132,
+      "uniform_group_scheduler": 150,
+      "fixed_mapping": 150,
+      "matched_bucket_baseline": 126
+    },
+    "crop_12": {
+      "arcis_full": 113,
+      "random_groups": 10,
+      "uniform_group_scheduler": 110,
+      "fixed_mapping": 116,
+      "matched_bucket_baseline": 12
+    }
+  }
+}

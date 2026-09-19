@@ -21,6 +21,9 @@
 | A4 checkpoint bundle SHA-256 | 8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1 |
 | A4 canonical holdout SHA-256 | 27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf |
 | A4 status | PASS: all five canonical Caltech checkpoint SHA-256 values match the fresh-campaign record; holdout = 1,163/1,200 |
+| A5 canonical component ablation | full 1,163/1,200; random groups 1,042; uniform scheduler 1,160; fixed mapping 1,166; matched bucket 1,038 |
+| A5 mechanism interpretation | complementary qualified grouping carries the principal recovery effect; fixed mapping is recovery-similar but worsens label-emission CV from 0.0225 to 0.1314 |
+| Guo–Ping 2026 native comparator | 10/14/15 bits; 99.54/98.64/97.19% mean native robustness on Holidays/VOC/ImageNet; per-representative segment recovery, not authenticated whole-message recovery |
 | Cyclic mapping property | exact balancing follows from the session shift; Gray order fixes symbol ordering |
 | Repository | https://github.com/EkodeckStephane/NARCIS |
 | Validated submission snapshot | `main` commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb` |

@@ -14,7 +14,8 @@
 - Detector means across the five seeded Caltech resamplings: 0.5040 / 0.5128 / 0.5266; descriptive ranges 0.5014–0.5052 / 0.5120–0.5138 / 0.5232–0.5301.
 - Cross-seed Caltech runs are overlapping train--index resamplings, not independent external replications.
 - Direction E′ integrated.
-- Guo--Ping and ARCIS recovery percentages are kept in their native semantic domains.
+- Canonical A5 component ablation: ARCIS 1,163/1,200; random groups 1,042; uniform scheduler 1,160; fixed mapping 1,166; matched bucket 1,038.
+- Guo--Ping 2026 complete primary source audited; its 99.54/98.64/97.19% values are retained under per-representative native semantics and are not conflated with ARCIS authenticated whole-message recovery.
 
 ## Editorial checks
 - Abstract follows Context → Objective → Methods → Results → Conclusion.
@@ -26,6 +27,7 @@
 ## Submission-control checks
 - [x] A4: archived canonical checkpoint bundle verified byte-for-byte; all five checkpoint SHA-256 values match the recorded fresh campaign; canonical holdout aggregate is 1,163/1,200.
 - [x] A3: 150/150 metadata roundtrips; all tested tamper, replay, and wrong-receiver cases rejected; evidence integrated in manuscript.
+- [x] A5: canonical component ablation reproduced the A4 holdout result exactly and the Guo–Ping 2026 primary-source comparator audit is integrated.
 - [x] Final TOMM source validation succeeded on the validated scientific snapshot: run `35455852993` — SUCCESS.
 - [x] A8: repair branch merged to `main`.
 - [x] A8: submitted scientific state is uniquely identified by commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`.

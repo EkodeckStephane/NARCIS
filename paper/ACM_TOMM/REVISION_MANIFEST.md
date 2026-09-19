@@ -26,6 +26,7 @@
 - ScholarOne metadata and Cover Letter synchronized;
 - **A3 CLOSED:** 150/150 control-plane metadata roundtrips; all 5 tested tamper, replay, and wrong-receiver cases rejected;
 - **A4 CLOSED:** byte-identical canonical checkpoint bundle verified, all five recorded checkpoint SHA-256 values matched, canonical holdout aggregate verified at 1,163/1,200;
+- **A5 CLOSED:** canonical component ablation reproduces ARCIS 1,163/1,200 and records random-groups 1,042/1,200, uniform-scheduler 1,160/1,200, fixed-mapping 1,166/1,200, and matched-bucket 1,038/1,200; Guo–Ping 2026 comparator audited from the complete primary source;
 - canonical A3/A4 audit files stored in `tomm_results/`;
 - noncanonical retraining workflows removed from the submission lineage;
 - **A8 CLOSED for TOMM submission:** final validation succeeded and the repair branch was merged to `main`.
@@ -44,4 +45,4 @@ A8 for the current TOMM submission requires:
 
 A GitHub tag/release is **not required to close A8 for submission**. The publication lineage will be frozen by tag/release after acceptance, when the accepted-version source is known.
 
-Global Gate 10 remains separate from A8 and must not be inferred from A8 closure if another A1–A10 item remains partial.
+Global Gate 10 remains separate from A3/A4/A5/A8 and must not be inferred from these closures if another A1–A10 item remains partial.

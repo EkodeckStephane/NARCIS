@@ -1,0 +1,83 @@
+{
+  "source": {
+    "title": "Towards robust and high-capacity coverless image steganography",
+    "authors": [
+      "Bobiao Guo",
+      "Ping Ping"
+    ],
+    "journal": "Knowledge-Based Systems",
+    "volume": 338,
+    "year": 2026,
+    "article": "115472",
+    "doi": "10.1016/j.knosys.2026.115472",
+    "pdf_sha256": "7906c99bd2122ed7f25680cef6371b68685483eb0a3a4f765a49a895ff3d7c97",
+    "pdf_bytes": 2666409
+  },
+  "status": "PRIMARY_SOURCE_REVIEWED",
+  "method_specified": {
+    "feature_space": "Pseudo-Zernike moments on the Y channel after RGB-to-YUV conversion; low-order coefficients selected from Omega_N",
+    "sa_pqe": "Piecewise modulo-Delta quantization, one coefficient per bit, per-image stability score from minimum safe distance to a quantization decision boundary",
+    "cid": "K-means on binary vectors with K=2^L; one representative image per cluster",
+    "representative_score": "w_center*(1-normalized centroid distance)+w_stab*normalized stability",
+    "extraction": "PZM -> SA-PQE binary vector -> nearest CID centroid -> cluster index",
+    "native_robustness": "fraction of the 2^L CID representative images whose message segment is recovered correctly after an attack"
+  },
+  "published_parameters": {
+    "N": 18,
+    "J": 128,
+    "Delta": 40,
+    "w_center": 0.7,
+    "w_stab": 0.3,
+    "datasets": {
+      "Holidays": {
+        "images": 1491,
+        "Lmax_bits": 10,
+        "average_robustness_percent": 99.54
+      },
+      "VOC2012": {
+        "images": 17125,
+        "Lmax_bits": 14,
+        "average_robustness_percent": 98.64
+      },
+      "ImageNet2012_validation_subset": {
+        "images": 50000,
+        "Lmax_bits": 15,
+        "average_robustness_percent": 97.19
+      }
+    }
+  },
+  "native_message_carrier_count": {
+    "formula": "T+1 images where T=ceil(P/L) for a P-bit message; the final image conveys padding length",
+    "examples_raw_payload_only": {
+      "8_bytes": {
+        "L10": 8,
+        "L14": 6,
+        "L15": 6
+      },
+      "32_bytes": {
+        "L10": 27,
+        "L14": 20,
+        "L15": 19
+      },
+      "64_bytes": {
+        "L10": 53,
+        "L14": 38,
+        "L15": 36
+      }
+    },
+    "comparability_warning": "These are source-native counts for the raw message bitstream and exclude ARCIS authenticated-envelope, replay-control, Reed-Solomon, and five-cover majority overhead."
+  },
+  "reproducibility_limitations_for_exact_independent_reimplementation": [
+    "The article defines complex-valued PZM moments but does not explicitly state whether SA-PQE applies to magnitude, real part, or another scalar projection before modulo quantization.",
+    "The article gives W x W in the discrete PZM equation but does not state a common image resizing/resampling rule or fixed W for the heterogeneous datasets.",
+    "The K-means initialization, number of restarts, stopping tolerance, implementation/library, and random seeds are not reported.",
+    "Attack parameter labels are reported, but the exact image-processing implementation choices (interpolation, padding/fill, noise RNG, JPEG/JPEG2000 library settings) are not fully frozen.",
+    "The identities of the 50,000 selected ImageNet validation images are not frozen in the article.",
+    "The article states that data will be made available on request and does not provide a public code repository link."
+  ],
+  "decision": {
+    "native_published_comparison": "USE",
+    "claim_as_exact_reimplementation": "DO_NOT_USE",
+    "aligned_reimplementation": "Allowed only if explicitly labelled Guo-Ping-derived and all previously unspecified implementation choices are frozen and disclosed."
+  }
+}
