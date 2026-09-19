@@ -18,6 +18,8 @@ Current manuscript: **ARCIS: Authenticated Robust Cover-Selection Image Signalin
 - Guo–Ping 2026 primary-source audit: published native maximum-capacity robustness **99.54% / 98.64% / 97.19%** at **10 / 14 / 15 bits** on Holidays / VOC / ImageNet; retained under its own per-segment recovery semantics.
 - Descriptive resampling ranges: **0.5014–0.5052 / 0.5120–0.5138 / 0.5232–0.5301**. The five resamplings are not treated as independent external replications.
 
+Gate 10: **PASS**. The final claim/code/data verifier and the 20-page rendered-PDF inspection pass; CI run `35465970002` completed SUCCESS.
+
 The communication-cost analysis identifies carrier volume and session-volume observability as the principal deployment constraints of the current operating point. The manuscript discusses fixed-volume batching, padding, dummy covers, timing shaping, denser group signaling, and adaptive parity allocation as direct extension paths.
 
 ## Canonical implementation
