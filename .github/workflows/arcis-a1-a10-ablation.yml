@@ -32,6 +32,24 @@ jobs:
       - name: Unit tests
         env: {PYTHONPATH: src}
         run: python -m pytest -q
+      - name: Restore canonical frozen checkpoint and schedule
+        uses: actions/download-artifact@v4
+        with:
+          name: tomm-final-detectors-seed-${{ matrix.seed }}
+          path: prior_tomm
+          github-token: ${{ github.token }}
+          repository: EkodeckStephane/NARCIS
+          run-id: 33979603611
+      - name: Stage canonical checkpoint and schedule
+        run: |
+          mkdir -p "arcis_a1_a10/checkpoints_${{ matrix.seed }}" "arcis_a1_a10/seed_${{ matrix.seed }}"
+          CHECKPOINT="$(find prior_tomm -type f -name "encoder_seed_${{ matrix.seed }}.pt" | head -n 1)"
+          SCHEDULE="$(find prior_tomm -type f -name schedule.csv | head -n 1)"
+          test -n "$CHECKPOINT"
+          test -n "$SCHEDULE"
+          cp "$CHECKPOINT" "arcis_a1_a10/checkpoints_${{ matrix.seed }}/encoder_seed_${{ matrix.seed }}.pt"
+          cp "$SCHEDULE" "arcis_a1_a10/seed_${{ matrix.seed }}/schedule.csv"
+          sha256sum "arcis_a1_a10/checkpoints_${{ matrix.seed }}/encoder_seed_${{ matrix.seed }}.pt"
       - name: Download official Caltech-101
         run: |
           mkdir -p data
@@ -50,7 +68,7 @@ jobs:
             --checkpoint-root "arcis_a1_a10/checkpoints_${{ matrix.seed }}" \
             --output "arcis_a1_a10/seed_${{ matrix.seed }}" \
             --seed "${{ matrix.seed }}" \
-            --epochs 5 \
+            --epochs 0 \
             --component-ablation
           cp requirements-tomm-freeze.txt "arcis_a1_a10/seed_${{ matrix.seed }}/requirements-tomm-freeze.txt"
       - uses: actions/upload-artifact@v4
