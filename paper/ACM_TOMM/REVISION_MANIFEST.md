@@ -6,8 +6,8 @@
 - Target: **ACM TOMM**
 - Corresponding author: **Chantal Marguerite Mveh-Abia**
 - Repair provenance branch: `arcis-a1-a10-repair`
-- Validated scientific submission snapshot: `main` commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`
-- Final TOMM validation: run `35455852993` — **SUCCESS**
+- Validated scientific submission snapshot: `main` commit `254f31e7c44e43f104509c117b0efb4c414dcdcd`
+- Final TOMM validation: run `35460375489` — **SUCCESS**
 
 ## Frozen operating point
 - K = 8
@@ -45,4 +45,4 @@ A8 for the current TOMM submission requires:
 
 A GitHub tag/release is **not required to close A8 for submission**. The publication lineage will be frozen by tag/release after acceptance, when the accepted-version source is known.
 
-Global Gate 10 remains separate from A3/A4/A5/A8 and must not be inferred from these closures if another A1–A10 item remains partial.
+Global Gate 10: **PASS**. The final automated claim/code/data verifier and rendered-PDF inspection both pass; workflow run `35465970002` completed SUCCESS.

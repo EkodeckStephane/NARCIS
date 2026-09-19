@@ -87,4 +87,4 @@ Guo--Ping and ARCIS are positioned through their native quantitative regimes and
 A later retraining under a different runtime produced non-identical checkpoint bytes and is therefore classified as a diagnostic rather than as a replacement lineage.
 
 ## Submission-control status
-The scientific submission snapshot was merged to `main` at commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb` and passed TOMM revision validation run `35455852993`. **A8 is therefore closed for submission.** A tag/release is deferred until post-acceptance version freezing.
+The scientific submission snapshot was merged to `main` at commit `254f31e7c44e43f104509c117b0efb4c414dcdcd` and passed TOMM revision validation run `35460375489`. **A8 is therefore closed for submission.** A tag/release is deferred until post-acceptance version freezing.

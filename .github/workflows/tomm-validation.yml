@@ -2,7 +2,7 @@ name: TOMM revision validation
 
 on:
   push:
-    branches: [main, arcis-tomm-final-sync, arcis-tomm-d1-d7, arcis-a1-a10-repair, arcis-a5-canonical-benchmark]
+    branches: [main, arcis-tomm-final-sync, arcis-tomm-d1-d7, arcis-a1-a10-repair, arcis-a5-canonical-benchmark, arcis-gate10-final]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -35,7 +35,8 @@ jobs:
             tools/verify_a3_control_plane.py \
             tools/verify_a4_canonical_lineage.py \
             tools/a5_cached_component_ablation.py \
-            tools/verify_a5_component_ablation.py
+            tools/verify_a5_component_ablation.py \
+            tools/verify_gate10_submission.py
           python - <<'PY'
           import json
           from pathlib import Path
@@ -115,6 +116,11 @@ jobs:
           print({"Guo_Ping_2026_primary_source_audit": "PASS"})
           PY
 
+      - name: Gate 10 static claim/code/data verifier
+        env:
+          PYTHONPATH: src
+        run: python tools/verify_gate10_submission.py
+
       - name: TOMM preflight without datasets
         env:
           PYTHONPATH: src
@@ -134,7 +140,8 @@ jobs:
             texlive-fonts-recommended \
             texlive-fonts-extra \
             texlive-bibtex-extra \
-            texlive-publishers
+            texlive-publishers \
+            poppler-utils
           kpsewhich acmart.cls
           kpsewhich libertine.sty
           kpsewhich zi4.sty
@@ -147,3 +154,22 @@ jobs:
           bibtex ARCIS_TOMM
           pdflatex -interaction=nonstopmode -halt-on-error ARCIS_TOMM.tex
           pdflatex -interaction=nonstopmode -halt-on-error ARCIS_TOMM.tex
+          if grep -E 'Overfull \\hbox|Overfull \\vbox|Float too large|undefined references|Citation .* undefined|Reference .* undefined' ARCIS_TOMM.log; then
+            echo "Layout/reference warning detected"
+            exit 1
+          fi
+
+      - name: PDF metadata
+        working-directory: paper/ACM_TOMM
+        run: pdfinfo ARCIS_TOMM.pdf | tee ARCIS_TOMM_PDFINFO.txt
+
+      - name: Upload final PDF audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: arcis-tomm-gate10-pdf
+          path: |
+            paper/ACM_TOMM/ARCIS_TOMM.pdf
+            paper/ACM_TOMM/ARCIS_TOMM.log
+            paper/ACM_TOMM/ARCIS_TOMM_PDFINFO.txt
+          if-no-files-found: error
+          retention-days: 7
