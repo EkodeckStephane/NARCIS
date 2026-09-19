@@ -17,9 +17,13 @@
 | GLCM mean / resampling range | 0.5128 / 0.5120–0.5138 |
 | CNN mean / resampling range | 0.5266 / 0.5232–0.5301 |
 | Detector interpretation | 20 image-disjoint repeated splits quantify within-resampling stability; five resampling means are descriptive, not independent external replications |
+| A3 control plane | 150/150 roundtrips; 5/5 tamper, 5/5 replay, 5/5 wrong-receiver rejections |
+| A4 checkpoint bundle SHA-256 | 8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1 |
+| A4 canonical holdout SHA-256 | 27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf |
+| A4 status | PASS: all five canonical Caltech checkpoint SHA-256 values match the fresh-campaign record; holdout = 1,163/1,200 |
 | Cyclic mapping property | exact balancing follows from the session shift; Gray order fixes symbol ordering |
 | Repository | https://github.com/EkodeckStephane/NARCIS |
 | Current repair/release branch | arcis-a1-a10-repair |
-| A4 canonical-lineage run | GitHub Actions 35452993368; release remains gated on all five SHA checks and canonical result agreement |
+| A8 | pending final CI, main merge, immutable tag/release |
 
 Historical K=16 / 1,575/1,575 / 3–4 bits-per-cover values are superseded for the current TOMM submission.
