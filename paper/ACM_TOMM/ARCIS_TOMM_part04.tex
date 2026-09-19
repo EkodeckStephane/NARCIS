@@ -20,20 +20,20 @@
 \end{figure}
 
 \subsection{RS-parity ablation and communication cost}
-The controlled parity ablation shows a monotone reliability--traffic tradeoff. With no RS parity, group-majority decoding alone recovers 829/1,200 trials (69.08\%, exact 95\% CI 66.38--71.69\%). Recovery rises to 1,064/1,200 (88.67\%, 86.74--90.41\%) at RS32, 1,115/1,200 (92.92\%, 91.32--94.30\%) at RS64, 1,145/1,200 (95.42\%, 94.08--96.53\%) at RS96, and 1,163/1,200 (96.92\%, 95.77--97.82\%) at RS128. In the paired trial outcomes, the four adjacent transitions contain 235/0, 51/0, 30/0, and 18/0 gain/loss discordances, respectively; every adjacent exact McNemar contrast remains significant after Holm adjustment ($p_{\mathrm{Holm}}\le7.63\times10^{-6}$). The RS0--RS128 endpoint comparison contains 334 gains and zero losses ($p_{\mathrm{exact}}=5.71\times10^{-101}$). Mean transmitted images per session rise from 970 to 1,396.7, 1,825, 2,250, and 2,676.7. At RS128, 8-, 32-, and 64-byte plaintexts require 2,320, 2,640, and 3,070 transmitted images, corresponding to 0.0276, 0.0970, and 0.1668 useful bits per transmitted image. Table~\ref{tab:rsablation} reports the paired parity results, Table~\ref{tab:commcost} gives payload-specific communication cost, and Fig.~\ref{fig:rstradeoff} visualizes the resulting reliability--traffic tradeoff.
+The controlled parity ablation shows a monotone reliability--traffic tradeoff. With no RS parity, group-majority decoding alone recovers 829/1,200 outcomes (69.08\%). Recovery rises to 1,064/1,200 (88.67\%) at RS32, 1,115/1,200 (92.92\%) at RS64, 1,145/1,200 (95.42\%) at RS96, and 1,163/1,200 (96.92\%) at RS128. In paired outcome accounting, the four adjacent transitions contain 235/0, 51/0, 30/0, and 18/0 gain/loss counts, respectively, and the RS0--RS128 endpoint contains 334 gains and zero losses. These counts are descriptive because attacks are repeated within sessions and the five Caltech runs are overlapping resamplings of one corpus. Mean transmitted images per session rise from 970 to 1,396.7, 1,825, 2,250, and 2,676.7. At RS128, 8-, 32-, and 64-byte plaintexts require 2,320, 2,640, and 3,070 transmitted images, corresponding to 0.0276, 0.0970, and 0.1668 useful bits per transmitted image. Table~\ref{tab:rsablation} reports the paired parity results, Table~\ref{tab:commcost} gives payload-specific communication cost, and Fig.~\ref{fig:rstradeoff} visualizes the resulting reliability--traffic tradeoff.
 \begin{table}[!htbp]
-\caption{Controlled external RS-parity ablation. Confidence intervals are exact Clopper--Pearson intervals; gain/loss counts compare each row with the preceding parity level on the same 1,200 trials.}
+\caption{Controlled RS-parity ablation over the same 1,200 resampling--session--attack outcomes at each parity level. Gain/loss counts compare each row descriptively with the preceding level.}
 \label{tab:rsablation}
 \small
 \begin{tabular}{rrrrr}
 \toprule
-Parity bytes & Auth. recovery & Exact 95\% CI & Mean images/session & Paired gain/loss\\
+Parity bytes & Auth. recovery & Mean images/session & Paired gain/loss\\
 \midrule
-0&829/1,200 (69.08\%)&66.38--71.69\%&970.0&---\\
-32&1,064/1,200 (88.67\%)&86.74--90.41\%&1,396.7&235/0\\
-64&1,115/1,200 (92.92\%)&91.32--94.30\%&1,825.0&51/0\\
-96&1,145/1,200 (95.42\%)&94.08--96.53\%&2,250.0&30/0\\
-128&1,163/1,200 (96.92\%)&95.77--97.82\%&2,676.7&18/0\\
+0&829/1,200 (69.08\%)&970.0&---\\
+32&1,064/1,200 (88.67\%)&1,396.7&235/0\\
+64&1,115/1,200 (92.92\%)&1,825.0&51/0\\
+96&1,145/1,200 (95.42\%)&2,250.0&30/0\\
+128&1,163/1,200 (96.92\%)&2,676.7&18/0\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -64,19 +64,19 @@ Plaintext & Coded groups & Images sent & Net bits/image\\
 \end{figure}
 
 \subsection{Selection detectability}
-Table~\ref{tab:detectors} reports the detector audit at the external-partition level. Each of the five Caltech partitions contributes one mean obtained from its 20 image-disjoint repetitions; the repetitions quantify within-partition split stability, while statistical inference uses the five partition means. All three detector families remain close to the 0.5 chance reference in absolute effect size, with mean excess AUC of 0.0040 for SRM-lite, 0.0128 for GLCM, and 0.0266 for the CNN. The corresponding partition-mean ranges are 0.5014--0.5052, 0.5120--0.5138, and 0.5232--0.5301. Figure~\ref{fig:detectors} visualizes the three partition-level mean AUC values against the chance reference.
+Table~\ref{tab:detectors} reports the detector audit across the five seeded Caltech resamplings. Each run contributes one mean obtained from its 20 image-disjoint repetitions; the repetitions quantify within-resampling split stability, while the five run means are interpreted descriptively because the underlying image pools overlap across seeds. All three detector families remain close to the 0.5 chance reference in absolute effect size, with mean excess AUC of 0.0040 for SRM-lite, 0.0128 for GLCM, and 0.0266 for the CNN. The corresponding resampling-mean ranges are 0.5014--0.5052, 0.5120--0.5138, and 0.5232--0.5301. Figure~\ref{fig:detectors} visualizes the three partition-level mean AUC values against the chance reference.
 
 \begin{table}[!htbp]
-\caption{Hierarchical Caltech-101 selection-detector audit. Each row uses the five independent partition means as the external replication level; the 20 repeated splits within each partition quantify split stability. Confidence intervals are two-sided Student-$t$ intervals over $n=5$ partition means. Holm-adjusted $p$-values test the partition means against chance AUC 0.5 across the three detector families.}
+\caption{Caltech-101 selection-detector audit across five seeded train--index resamplings. The 20 image-disjoint repeated splits within each run quantify split stability; mean and range across resamplings are reported descriptively because cross-seed image overlap prevents an independence interpretation.}
 \label{tab:detectors}
 \scriptsize
-\begin{tabularx}{\textwidth}{p{2.05cm}C C C C C C}
+\begin{tabularx}{\textwidth}{p{2.35cm}C C C C}
 \toprule
-Detector & Mean AUC & $\Delta$ vs. 0.5 & Between-part. SD & Partition range & 95\% CI ($n=5$) & Holm $p$\\
+Detector & Mean AUC & $\Delta$ vs. 0.5 & Resampling range & Mean within-run SD\\
 \midrule
-SRM-lite + ExtraTrees & 0.5040 & +0.0040 & 0.0015 & 0.5014--0.5052 & 0.5021--0.5060 & 0.00423\\
-GLCM + logistic & 0.5128 & +0.0128 & 0.0007 & 0.5120--0.5138 & 0.5119--0.5138 & $7.98\times10^{-6}$\\
-30-head CNN & 0.5266 & +0.0266 & 0.0029 & 0.5232--0.5301 & 0.5230--0.5302 & $6.57\times10^{-5}$\\
+SRM-lite + ExtraTrees & 0.5040 & +0.0040 & 0.5014--0.5052 & 0.0018\\
+GLCM + logistic & 0.5128 & +0.0128 & 0.5120--0.5138 & 0.0016\\
+30-head CNN & 0.5266 & +0.0266 & 0.5232--0.5301 & 0.0022\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -84,14 +84,14 @@ GLCM + logistic & 0.5128 & +0.0128 & 0.0007 & 0.5120--0.5138 & 0.5119--0.5138 & 
 \begin{figure}[!htbp]
 \centering
 \begin{tikzpicture}
-\begin{axis}[width=.72\textwidth,height=5cm,ymin=.495,ymax=.535,xtick={1,2,3},xticklabels={SRM-lite,GLCM,CNN},ylabel={Mean partition AUC},ymajorgrids=true]
+\begin{axis}[width=.72\textwidth,height=5cm,ymin=.495,ymax=.535,xtick={1,2,3},xticklabels={SRM-lite,GLCM,CNN},ylabel={Mean resampling AUC},ymajorgrids=true]
 \addplot+[ybar,bar width=17pt] coordinates {(1,.5040)(2,.5128)(3,.5266)};
 \addplot[domain=.7:3.3,dashed] {.5};
 \end{axis}
 \end{tikzpicture}
-\caption{Mean of the five external partition-level macro-AUC values. The dashed reference is chance AUC 0.5.}
+\caption{Mean macro-AUC across the five Caltech train--index resamplings. The dashed reference is chance AUC 0.5.}
 \Description{Three-bar chart with mean partition AUC 0.504 for SRM-lite, 0.513 for GLCM, and 0.527 for CNN; a dashed line marks chance at 0.5.}
 \label{fig:detectors}
 \end{figure}
 
-The final CNN evidence contains 100 repetition-level rows and 3,000 session-head AUC rows. The D2 classical-detector rerun uses the same certified final schedule and produces 100 additional repetition-level rows for SRM-lite and GLCM. This common schedule removes the earlier lineage ambiguity between detector runs and supports partition-level comparison across all three warden families.
+The final CNN evidence contains 100 repetition-level rows and 3,000 session-head AUC rows. The classical-detector rerun uses the same certified schedule and produces 100 additional repetition-level rows for SRM-lite and GLCM. This common schedule removes the earlier lineage ambiguity between detector runs and supports matched descriptive comparison across all three warden families.

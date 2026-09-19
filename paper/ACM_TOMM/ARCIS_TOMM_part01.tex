@@ -9,9 +9,11 @@ Authentication also has several multimedia meanings. FaceSigns~\cite{neekhara202
 \toprule
 Approach & Carrier / information object & Native quantitative regime & Recovery event & Evaluation emphasis\\
 \midrule
+Guo--Ping--Xu~\cite{guo2025active} & Selected natural images / hash sequence & VOC and COCO native-regime capacity/robustness evaluation & Native hash/retrieval robustness under passive and active steganalysis & Diversity, inverse retrieval, active/passive robustness\\
 Guo--Ping~\cite{guo2026capacity} & Selected natural images / symbolic code & Reported 10-, 14-, and 15-bit nominal-capacity settings on Holidays, VOC, and ImageNet & Robustness evaluated with the source paper's native recovery metric & Stability-aware quantization, representative selection, robust nominal capacity\\
 Meng et al.~\cite{meng2025restoration} & Existing coverless schemes & Restoration-based evaluation over geometric perturbations & Recovery of the underlying coverless decoder after restoration & Geometric robustness\\
 DiffStega~\cite{yang2024diffstega} & Generated images / secret image & UniStega secret-image reconstruction regime & Secret-image reconstruction under the generative protocol & Perceptual recovery, password sensitivity, steganalysis\\
+Li et al.~\cite{li2026mllm} & Generated images / semantic feature mapping & Multi-generator MLLM-assisted regime & Native semantic-feature recovery under the source protocol & Universality, lightweight deployment, diversity and robustness\\
 \method & Unchanged indexed natural images / authenticated byte string & $K=8$; five covers/coded symbol; 8/32/64-byte plaintexts; 1,200 external holdout trials & Exact authenticated whole-plaintext recovery after majority decoding, RS correction, and AES-GCM verification & Finite-index feasibility, authenticated recovery, traffic cost, selection detectability\\
 \bottomrule
 \end{tabularx}
