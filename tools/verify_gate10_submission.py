@@ -32,8 +32,14 @@ def main() -> None:
     a5 = json.loads(read("tomm_results/A5_CANONICAL_COMPONENT_ABLATION.json"))
     gp = json.loads(read("tomm_results/GUO_PING_2026_SOURCE_AUDIT.json"))
     hold = json.loads(read("tomm_results/caltech_external_holdout_aggregate.json"))
+    pdf_audit = json.loads(read("tomm_results/GATE10_PDF_INSPECTION.json"))
 
     assert a3["status"] == "PASS"
+    assert pdf_audit["status"] == "PASS"
+    assert pdf_audit["decision"] == "PASS"
+    assert pdf_audit["pdf"]["pages"] == 20
+    assert pdf_audit["automated_checks"]["overfull_hbox"] == "NONE"
+    assert pdf_audit["automated_checks"]["undefined_references"] == "NONE"
     assert a4["status"] == "PASS"
     assert a5["status"] == "PASS" and a5["canonical_reproduction"]["exact_match"] is True
     assert hold["aggregate"]["successes"] == 1163 and hold["aggregate"]["trials"] == 1200
@@ -86,7 +92,8 @@ def main() -> None:
         "title_sync":"PASS",
         "A3":"PASS","A4":"PASS","A5":"PASS",
         "snapshot":SNAPSHOT,"validation_run":RUN,
-        "citations":len(cite_keys),"labels":len(labels),"refs":len(refs)
+        "citations":len(cite_keys),"labels":len(labels),"refs":len(refs),
+        "pdf_inspection":"PASS"
     }, indent=2))
 
 if __name__ == "__main__":
