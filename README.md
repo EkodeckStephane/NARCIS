@@ -13,14 +13,14 @@ Current manuscript: **ARCIS: Authenticated Robust Cover-Selection Image Signalin
 - Mean transmitted images/session: **970 → 2,676.7** from RS0 to RS128.
 - RS128 8/32/64-byte sessions require **2,320 / 2,640 / 3,070** images.
 - Conditional finite-index blocking risk at RS128: approximately **5.04e-43 / 1.64e-34 / 1.14e-25** for 8 / 32 / 64 bytes under the stated i.i.d.-uniform planning model.
-- Final partition-level detector means: **0.5040 / 0.5128 / 0.5266** for SRM-lite / GLCM / CNN.
-- Five-partition 95% intervals: **0.5021–0.5060 / 0.5119–0.5138 / 0.5230–0.5302**.
+- Detector means across five seeded Caltech train--index resamplings: **0.5040 / 0.5128 / 0.5266** for SRM-lite / GLCM / CNN.
+- Descriptive resampling ranges: **0.5014–0.5052 / 0.5120–0.5138 / 0.5232–0.5301**. The five resamplings are not treated as independent external replications.
 
 The communication-cost analysis identifies carrier volume and session-volume observability as the principal deployment constraints of the current operating point. The manuscript discusses fixed-volume batching, padding, dummy covers, timing shaping, denser group signaling, and adaptive parity allocation as direct extension paths.
 
 ## Canonical implementation
 
-The executable TOMM lineage originates at commit `b8ee42d547b580b9e1639de559b1dfa6ea88d4ef`. The D1--D7 scientific closure is frozen on branch `arcis-tomm-d1-d7`.
+The executable TOMM lineage originates at commit `b8ee42d547b580b9e1639de559b1dfa6ea88d4ef`. The current TOMM repair and release candidate is maintained on branch `arcis-a1-a10-repair`.
 
 Key paths:
 - `src/narcis/group_bank.py`
@@ -28,8 +28,11 @@ Key paths:
 - `src/narcis/group_bank_projection.py`
 - `src/narcis/protocol.py`
 - `run_tomm_groupbank_cached.py`
-- `tomm_results/rs_parity_ablation_inference.json`
-- `tomm_results/detector_hierarchical_inference.json`
+- `tomm_results/rs_parity_ablation_summary.json`
+- `tomm_results/detector_resampling_summary.json`
+- `tomm_results/caltech_resampling_overlap.json`
+- `tomm_results/communication_cost.json`
+- `tomm_results/finite_index_blocking_risk.json`
 - `paper/ACM_TOMM/`
 
 ## Evaluation scope

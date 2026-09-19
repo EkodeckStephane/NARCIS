@@ -1,20 +1,24 @@
-# ARCIS — Final Q1 / Senior Reviewer Audit after D1--D7
+# ARCIS — Q1 / Senior Reviewer release-candidate audit
 
 Target: **ACM Transactions on Multimedia Computing, Communications, and Applications (TOMM)**  
 Manuscript: **ARCIS: Authenticated Robust Cover-Selection Image Signaling under Finite-Index Constraints**
 
 ## Gate result
-**Gate 10: PASS for the current evidence-bounded manuscript.**  
-**Senior Reviewer prescreen: PASS.**
+**A3: CLOSED.**  
+**A4: CLOSED on the archived canonical lineage.**  
+**A8: pending final CI, main merge, and immutable release.**
 
-The central claims are supported by released code/results and by the final D1--D7 closure. The manuscript now separates whole-message authenticated recovery from heterogeneous SOTA robustness metrics, uses paired inference for the RS study, uses five external partitions rather than overlapping splits as the detector inference unit, quantifies the communication/traffic side channel, makes finite-index sufficiency explicit, and attributes the cyclic balancing invariant to the session shift rather than to Gray ordering.
+**Gate 10 is not declared PASS here solely from A3/A4 closure.** Any other A1–A10 item that remains partial must be resolved or explicitly accepted before the global gate is changed.
 
-## Remaining reviewer-sensitive points
-The current RS128 operating point is traffic-intensive, and this is now a quantified deployment result rather than an implicit cost. External image-domain evidence consists of BOSSBase development plus Caltech-101 validation. Guo--Ping remains the closest natural-image-selection comparator, but the published robustness percentage is kept under its native recovery semantics rather than treated as equivalent to ARCIS exact authenticated whole-message success.
+The manuscript-facing recovery, communication-cost, finite-index, and detector claims respect the actual dependence structure. The five Caltech runs are seeded train--index resamplings of one corpus and are not treated as independent external replications. RS gain/loss counts are descriptive because attacks repeat within sessions. Detector means and resampling ranges are likewise descriptive.
 
-These points define future generalization and deployment work; they no longer create unsupported central claims in the manuscript.
+## Closed items in this repair
+- **A4 canonical lineage:** the archived `NARCIS_TOMM_FRESH_CHECKPOINTS.zip` has SHA-256 `8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1`. Its five Caltech checkpoints match the SHA-256 values recorded by campaign commit `bdef888c90d191550a1e3ae29ec25b4a2d422e66`. The canonical holdout aggregate has SHA-256 `27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf` and yields 1,163/1,200 overall with per-seed successes 240, 214, 240, 231, and 238.
+- **A3 authenticated control plane:** the implementation completes 150/150 metadata roundtrips across five seeds and rejects 5/5 tested tamper cases, 5/5 immediate replays, and 5/5 wrong-receiver cases. The evidence is frozen in `tomm_results/A3_AUTHENTICATED_CONTROL_PLANE_AUDIT.json` and integrated in the manuscript.
+- **Editorial synchronization:** ScholarOne metadata and the Cover Letter use the seeded-resampling interpretation, contain the A3 evidence, and do not report independence-based five-run confidence intervals.
+- **Canonical provenance:** `tomm_results/A4_CANONICAL_LINEAGE_AUDIT.json` records the checkpoint bundle hash, per-seed checkpoint hashes, archived runtime, calibration-validation hashes, and holdout result hash.
 
-## Validation
-- D2 final-schedule classical detector workflow: **PASS**, all five partition jobs.
-- TOMM source validation: **PASS**, unit tests, preflight and ACM LaTeX compilation.
-- Defensive-phrase scan on manuscript/cover/metadata: **PASS**.
+## Reviewer-sensitive scope
+The RS128 operating point remains traffic-intensive and is reported as a measured deployment constraint. External image-domain evidence consists of BOSSBase development plus Caltech-101 validation through overlapping seeded resamplings. Guo--Ping remains the closest natural-image-selection comparator; its published robustness is kept under its native recovery semantics rather than treated as equivalent to ARCIS exact authenticated whole-message success.
+
+A8 is the remaining release-control action addressed after the final validation run.

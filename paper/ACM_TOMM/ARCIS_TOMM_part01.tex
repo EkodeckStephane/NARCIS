@@ -9,9 +9,11 @@ Authentication also has several multimedia meanings. FaceSigns~\cite{neekhara202
 \toprule
 Approach & Carrier / information object & Native quantitative regime & Recovery event & Evaluation emphasis\\
 \midrule
+Guo--Ping--Xu~\cite{guo2025active} & Selected natural images / hash sequence & VOC and COCO native-regime capacity/robustness evaluation & Native hash/retrieval robustness under passive and active steganalysis & Diversity, inverse retrieval, active/passive robustness\\
 Guo--Ping~\cite{guo2026capacity} & Selected natural images / symbolic code & Reported 10-, 14-, and 15-bit nominal-capacity settings on Holidays, VOC, and ImageNet & Robustness evaluated with the source paper's native recovery metric & Stability-aware quantization, representative selection, robust nominal capacity\\
 Meng et al.~\cite{meng2025restoration} & Existing coverless schemes & Restoration-based evaluation over geometric perturbations & Recovery of the underlying coverless decoder after restoration & Geometric robustness\\
 DiffStega~\cite{yang2024diffstega} & Generated images / secret image & UniStega secret-image reconstruction regime & Secret-image reconstruction under the generative protocol & Perceptual recovery, password sensitivity, steganalysis\\
+Li et al.~\cite{li2026mllm} & Generated images / semantic feature mapping & Multi-generator MLLM-assisted regime & Native semantic-feature recovery under the source protocol & Universality, lightweight deployment, diversity and robustness\\
 \method & Unchanged indexed natural images / authenticated byte string & $K=8$; five covers/coded symbol; 8/32/64-byte plaintexts; 1,200 external holdout trials & Exact authenticated whole-plaintext recovery after majority decoding, RS correction, and AES-GCM verification & Finite-index feasibility, authenticated recovery, traffic cost, selection detectability\\
 \bottomrule
 \end{tabularx}
@@ -24,7 +26,7 @@ Selection steganalysis tests whether the emitted subset differs statistically fr
 \subsection{Parties and shared state}
 Sender and receiver share an indexed image corpus $\mathcal{I}=\{x_i\}_{i=1}^{N}$, the trained descriptor and frozen codebook, and independent cryptographic subkeys for payload encryption, cluster mapping, and cover selection. The sender transmits existing indexed images unchanged. Session metadata records the authenticated sequence number, codebook size, padding information, and cover count. The implementation seals metadata with AES-GCM and binds it to sender/receiver identities.
 
-The benchmark uses deterministic public key/nonce derivation to make every run reproducible. A production deployment can replace this benchmark root with an operational key-management service while preserving protocol interfaces. For a partition key $K_{\mathrm{master}}$, HMAC-SHA256 derives subkeys for encryption, mapping, and selection. The benchmark nonce combines a four-byte HMAC-derived prefix with the unique 64-bit session sequence, giving explicit nonce uniqueness for sequences $0,\ldots,29$ under a fixed benchmark key.
+The benchmark uses deterministic public key/nonce derivation to make every run reproducible. A production deployment can replace this benchmark root with an operational key-management service while preserving protocol interfaces. For a run-specific master key $K_{\mathrm{master}}$, HMAC-SHA256 derives subkeys for encryption, mapping, and selection. The benchmark nonce combines a four-byte HMAC-derived prefix with the unique 64-bit session sequence, giving explicit nonce uniqueness for sequences $0,\ldots,29$ under a fixed benchmark key.
 
 \subsection{Channel and warden}
 The image channel applies lossy compression, additive Gaussian noise, blur, resizing, central cropping, and small rotations. Calibration and holdout transformation values are disjoint. The receiver decodes directly from the received image stream under the declared channel family.

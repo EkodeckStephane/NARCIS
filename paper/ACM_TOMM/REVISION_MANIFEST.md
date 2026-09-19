@@ -5,31 +5,39 @@
 - Acronym: **ARCIS = Authenticated Robust Cover-Selection Image Signaling**
 - Target: **ACM TOMM**
 - Corresponding author: **Chantal Marguerite Mveh-Abia**
+- Current release-candidate branch: `arcis-a1-a10-repair`
 
 ## Frozen operating point
 - K = 8
 - group size = 5
 - RS parity = 128 bytes
-- development = BOSSBase 1.01
-- external evaluation = Caltech-101
-- seeds = 11, 29, 47, 71, 101
+- development corpus = BOSSBase 1.01
+- external corpus = Caltech-101
+- external seeds = 11, 29, 47, 71, 101
+- per seed = 1,500 descriptor-training images + 7,000 cover-index images, disjoint within run
+- cross-seed interpretation = overlapping train--index resamplings of the same 9,144-image corpus, not independent external replications
 
-## D1--D7 additions
-- session-volume side-channel analysis and traffic-shaping extensions;
-- hierarchical detector inference using five external partition means;
-- SOTA positioning with recovery-event semantics separated explicitly;
-- public repository traceability;
-- explicit necessity/sufficiency proof for finite-index feasibility;
-- paired exact McNemar inference and exact binomial confidence intervals for RS parity;
-- verified Guo--Ping and Cao--Wang--Zhang bibliographic metadata.
+## Scientific and editorial closure
+- dependence-aware detector and parity reporting integrated;
+- session-volume side-channel analysis integrated;
+- finite-index necessity/sufficiency proof integrated;
+- ScholarOne metadata and Cover Letter synchronized;
+- **A3 CLOSED:** 150/150 control-plane metadata roundtrips; all 5 tested tamper, replay, and wrong-receiver cases rejected;
+- **A4 CLOSED:** byte-identical canonical checkpoint bundle verified, all five recorded checkpoint SHA-256 values matched, canonical holdout aggregate verified at 1,163/1,200;
+- canonical A3/A4 audit files stored in `tomm_results/`;
+- noncanonical retraining workflows removed from the release candidate.
 
-## Direction E′
-Exact symbol-wise balancing is attributed to the cyclic authenticated-session shift for any fixed symbol-order bijection. Gray indexing specifies the implementation ordering.
+## A4 provenance
+- recorded fresh campaign commit: `bdef888c90d191550a1e3ae29ec25b4a2d422e66`;
+- checkpoint bundle SHA-256: `8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1`;
+- canonical holdout aggregate SHA-256: `27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf`;
+- archived runtime: Python 3.13.5, PyTorch 2.10.0+cpu, NumPy 2.3.5, pandas 2.2.3, scikit-learn 1.8.0, SciPy 1.17.0, Pillow 12.3.0, cryptography 46.0.4.
 
-## Validation
-GitHub Actions run **35350028122**: all five classical D2 reruns succeeded.
-GitHub Actions run **35350028122** artifacts provide the final-schedule SRM-lite/GLCM evidence.
-GitHub Actions run **35350028122** is distinct from the manuscript CI.
-GitHub Actions manuscript validation run **35350028122** should not be confused with final CI; the final D1--D7 TOMM validation run is **35350028122** only if displayed by the workflow. The canonical source of truth is the branch commit and successful status checks.
+## Final release gate
+Before A8:
+1. final TOMM source validation must succeed at the release-candidate head;
+2. the branch is merged to `main`;
+3. an immutable ARCIS/TOMM tag/release is created;
+4. the merge SHA, validation run, tag, and release URL are recorded here.
 
-The final delivery ZIP records its own hashes after packaging.
+Global Gate 10 remains separate from A8 and must not be inferred from release creation if another A1–A10 item remains partial.

@@ -1,0 +1,60 @@
+{
+  "status": "canonical_descriptive_summary",
+  "supersedes_for_inference": "detector_hierarchical_inference.json",
+  "dataset": "Caltech-101",
+  "resampling_seeds": [
+    11,
+    29,
+    47,
+    71,
+    101
+  ],
+  "inference_note": "Because the five runs reuse the same source corpus with substantial cross-seed image overlap, partition means are reported descriptively as sensitivity to seeded train-index assignment. No between-run independence assumption, Student-t confidence interval, or p-value is used.",
+  "detectors": {
+    "SRM-lite": {
+      "means_by_seed": {
+        "11": 0.5048847623245207,
+        "29": 0.5013847917439221,
+        "47": 0.505192237650636,
+        "71": 0.504706899171961,
+        "101": 0.5040730259959221
+      },
+      "mean": 0.5040483433773923,
+      "range": [
+        0.5013847917439221,
+        0.505192237650636
+      ],
+      "mean_within_resampling_sd": 0.0018230922083826442
+    },
+    "GLCM": {
+      "means_by_seed": {
+        "11": 0.5126708827752432,
+        "29": 0.5123309629459671,
+        "47": 0.5119993402486465,
+        "71": 0.5138055974252518,
+        "101": 0.5133606365558687
+      },
+      "mean": 0.5128334839901955,
+      "range": [
+        0.5119993402486465,
+        0.5138055974252518
+      ],
+      "mean_within_resampling_sd": 0.001612743944858059
+    },
+    "CNN": {
+      "means_by_seed": {
+        "11": 0.5231504607384523,
+        "29": 0.5270229506056732,
+        "47": 0.530053606023985,
+        "71": 0.5242388266321195,
+        "101": 0.5285482800919894
+      },
+      "mean": 0.5266028248184439,
+      "range": [
+        0.5231504607384523,
+        0.530053606023985
+      ],
+      "mean_within_resampling_sd": 0.0021870542845904718
+    }
+  }
+}

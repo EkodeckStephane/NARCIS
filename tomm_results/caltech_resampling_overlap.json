@@ -1,0 +1,99 @@
+{
+  "status": "descriptive_resampling_overlap",
+  "dataset": "Caltech-101",
+  "source_images": 9144,
+  "seeds": [
+    11,
+    29,
+    47,
+    71,
+    101
+  ],
+  "split_rule": "For each seed, NumPy default_rng(seed).permutation(9144); first 1500 images train the descriptor and positions 1500:8500 form the 7000-image index.",
+  "within_run_train_index_disjoint": true,
+  "cross_seed_independence": false,
+  "pairwise_index_overlap": [
+    {
+      "seed_a": 11,
+      "seed_b": 29,
+      "images": 5352,
+      "fraction_of_index": 0.7645714285714286,
+      "train_a_in_index_b": 1166,
+      "train_b_in_index_a": 1161
+    },
+    {
+      "seed_a": 11,
+      "seed_b": 47,
+      "images": 5320,
+      "fraction_of_index": 0.76,
+      "train_a_in_index_b": 1179,
+      "train_b_in_index_a": 1180
+    },
+    {
+      "seed_a": 11,
+      "seed_b": 71,
+      "images": 5351,
+      "fraction_of_index": 0.7644285714285715,
+      "train_a_in_index_b": 1172,
+      "train_b_in_index_a": 1160
+    },
+    {
+      "seed_a": 11,
+      "seed_b": 101,
+      "images": 5365,
+      "fraction_of_index": 0.7664285714285715,
+      "train_a_in_index_b": 1173,
+      "train_b_in_index_a": 1146
+    },
+    {
+      "seed_a": 29,
+      "seed_b": 47,
+      "images": 5353,
+      "fraction_of_index": 0.7647142857142857,
+      "train_a_in_index_b": 1138,
+      "train_b_in_index_a": 1143
+    },
+    {
+      "seed_a": 29,
+      "seed_b": 71,
+      "images": 5331,
+      "fraction_of_index": 0.7615714285714286,
+      "train_a_in_index_b": 1181,
+      "train_b_in_index_a": 1165
+    },
+    {
+      "seed_a": 29,
+      "seed_b": 101,
+      "images": 5361,
+      "fraction_of_index": 0.7658571428571429,
+      "train_a_in_index_b": 1138,
+      "train_b_in_index_a": 1141
+    },
+    {
+      "seed_a": 47,
+      "seed_b": 71,
+      "images": 5352,
+      "fraction_of_index": 0.7645714285714286,
+      "train_a_in_index_b": 1151,
+      "train_b_in_index_a": 1143
+    },
+    {
+      "seed_a": 47,
+      "seed_b": 101,
+      "images": 5371,
+      "fraction_of_index": 0.7672857142857142,
+      "train_a_in_index_b": 1132,
+      "train_b_in_index_a": 1127
+    },
+    {
+      "seed_a": 71,
+      "seed_b": 101,
+      "images": 5370,
+      "fraction_of_index": 0.7671428571428571,
+      "train_a_in_index_b": 1147,
+      "train_b_in_index_a": 1146
+    }
+  ],
+  "all_five_index_intersection_images": 2374,
+  "reporting_rule": "The five runs are seeded train-index resamplings of one external corpus. They quantify sensitivity to data assignment; they are not treated as independent external replications."
+}

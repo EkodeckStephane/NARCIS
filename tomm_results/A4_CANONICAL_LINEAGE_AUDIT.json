@@ -1,0 +1,60 @@
+{
+  "status": "PASS",
+  "canonical_checkpoint_bundle": {
+    "name": "NARCIS_TOMM_FRESH_CHECKPOINTS.zip",
+    "sha256": "8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1",
+    "recorded_campaign_commit": "bdef888c90d191550a1e3ae29ec25b4a2d422e66",
+    "checkpoint_sha256": {
+      "11": "0adac1e014b799ada4a46698bcad922ce4ce116697186c1d45964e405a81e28c",
+      "29": "658e97d5fe4ad8da03ebad42461bce458d967beaf5753ac5d22a3c62eb480f2e",
+      "47": "426d058567fbb08eca9a34668c1a20caeb29ba8d5c7b6ba0d2e8c44c449c6a2a",
+      "71": "e0e958faf040a4d080d377a7694ea86cd602eab7c5350d4f04e619ca37fcade4",
+      "101": "810f843f82cd6726b16ae632d38ec6bb0f1dbfaaf0345ffd92a6a0a883cb722e"
+    },
+    "runtime": {
+      "python": "3.13.5",
+      "torch": "2.10.0+cpu",
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "scikit_learn": "1.8.0",
+      "scipy": "1.17.0",
+      "pillow": "12.3.0",
+      "cryptography": "46.0.4"
+    }
+  },
+  "canonical_calibration_validation_json_sha256": {
+    "11": "82fbad8cb764fd9d64ce0db89dcae6aa34e89cacb2e0f9500cf89ea77bb62327",
+    "29": "89e614ff0500985baf3dcf88403b244f9321e501f1e99e011b43306b9b0029ef",
+    "47": "e5655f0aa0eb649c02a91a8ef3d12b6af1f6bdfc3db28660aaad7be65b04035d",
+    "71": "8a8fa6fb9319750463166d65b2b9ca435926c24211c7a90f891bb9c8f398fec1",
+    "101": "68b11a39ece22449e53ef99ad02e84bd9b963ff1933d3e1b3d71837543aa29bf"
+  },
+  "canonical_holdout": {
+    "file": "tomm_results/caltech_external_holdout_aggregate.json",
+    "sha256": "27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf",
+    "aggregate": {"trials": 1200, "successes": 1163, "success_rate": 0.9691666666666666, "maximum_rs_corrections": 64},
+    "per_seed": {
+      "11": {"trials": 240, "successes": 240, "maximum_rs_corrections": 55},
+      "29": {"trials": 240, "successes": 214, "maximum_rs_corrections": 64},
+      "47": {"trials": 240, "successes": 240, "maximum_rs_corrections": 37},
+      "71": {"trials": 240, "successes": 231, "maximum_rs_corrections": 64},
+      "101": {"trials": 240, "successes": 238, "maximum_rs_corrections": 63}
+    },
+    "by_attack_successes": {
+      "gaussian_9_holdout": "150/150",
+      "gaussian_15_holdout": "150/150",
+      "blur_1.2_holdout": "150/150",
+      "blur_1.8_holdout": "150/150",
+      "crop_08_holdout": "150/150",
+      "crop_12_holdout": "113/150",
+      "rotate_5_holdout": "150/150",
+      "rotate_9_holdout": "150/150"
+    }
+  },
+  "diagnostic_retraining": {
+    "run": 35453987385,
+    "status": "NON_CANONICAL_DIAGNOSTIC",
+    "reason": "The diagnostic retraining used a different runtime (notably Python 3.11 rather than the archived Python 3.13.5 environment) and produced at least one different checkpoint byte hash. It is not substituted for the archived canonical checkpoint bytes."
+  },
+  "verifier": "tools/verify_a4_canonical_lineage.py"
+}
