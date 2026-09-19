@@ -14,7 +14,7 @@ on:
 
 concurrency:
   group: perm-rrns-fresh-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   dataset:
@@ -31,9 +31,9 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-          from src.narcis.data import discover_images
           root=Path('dataset_external/caltech101/images')
-          images=discover_images(root)
+          suffixes={'.png','.jpg','.jpeg','.bmp','.pgm','.tif','.tiff'}
+          images=[p for p in root.rglob('*') if p.is_file() and p.suffix.lower() in suffixes]
           assert len(images) >= 8500, len(images)
           print({'images':len(images),'required':8500})
           PY
