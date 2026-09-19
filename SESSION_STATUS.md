@@ -13,11 +13,12 @@
 - RS128 8/32/64-byte image counts: **2,320 / 2,640 / 3,070**.
 - Detector means across the five resamplings: **0.5040 / 0.5128 / 0.5266**, with descriptive ranges **0.5014–0.5052 / 0.5120–0.5138 / 0.5232–0.5301**.
 - Direction E′ cyclic-mapping clarification: **integrated**.
-- ScholarOne metadata: **synchronized to seeded-resampling language**.
-- Cover Letter: **synchronized to seeded-resampling language**.
-- A4 canonical-lineage workflow: **run 35452993368 in progress**; release remains gated on all five checkpoint SHA checks and canonical result agreement.
-- A3 authenticated control-plane manuscript closure: **pending A4 success**.
-- Q1 Gate 10: **HOLD until A4 + A3 + final CI + A8 immutable release**.
-- Senior Reviewer prescreen: **HOLD on the same release-control items**.
+- **A3 CLOSED:** 150/150 authenticated metadata roundtrips; 5/5 tamper, replay, and wrong-receiver rejections; manuscript, ScholarOne, and Cover Letter synchronized.
+- **A4 CLOSED:** canonical archive `NARCIS_TOMM_FRESH_CHECKPOINTS.zip` SHA-256 `8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1`; all five Caltech checkpoint SHA-256 values match the recorded fresh campaign; canonical holdout aggregate SHA-256 `27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf` and reproduces 1,163/1,200 with the frozen per-seed results.
+- Non-identical retraining under a different runtime is retained only as a diagnostic and is not substituted for the canonical checkpoint bytes.
+- ScholarOne metadata: **CLOSED / synchronized**.
+- Cover Letter: **CLOSED / synchronized**.
+- A8 immutable release: **pending final CI, merge to main, tag/release**.
+- Q1 Gate 10: **not declared PASS in this status file while any other A1–A10 item outside A3/A4/A8 remains partial**.
 
-The branch remains a release candidate until these checks are completed.
+The branch is a release candidate until A8 is completed.
