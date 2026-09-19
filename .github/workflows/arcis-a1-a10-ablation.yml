@@ -57,7 +57,6 @@ jobs:
             --component-ablation
           cp requirements-tomm-freeze.txt "arcis_a1_a10/seed_${{ matrix.seed }}/requirements-tomm-freeze.txt"
       - name: Verify canonical fresh-checkpoint lineage
-        env: {PYTHONPATH: src}
         run: |
           python - <<'PY'
           import json, os
