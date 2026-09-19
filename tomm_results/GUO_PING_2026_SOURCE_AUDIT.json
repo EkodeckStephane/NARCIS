@@ -9,7 +9,9 @@
     "volume": 338,
     "year": 2026,
     "article": "115472",
-    "doi": "10.1016/j.knosys.2026.115472"
+    "doi": "10.1016/j.knosys.2026.115472",
+    "pdf_sha256": "7906c99bd2122ed7f25680cef6371b68685483eb0a3a4f765a49a895ff3d7c97",
+    "pdf_bytes": 2666409
   },
   "status": "PRIMARY_SOURCE_REVIEWED",
   "method_specified": {
