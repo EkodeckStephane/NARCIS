@@ -11,7 +11,7 @@ Manuscript: **ARCIS: Authenticated Robust Cover-Selection Image Signaling under 
 
 A GitHub tag/release is not treated as a current submission gate. Immutable version freezing is deferred to the post-acceptance publication stage.
 
-**Gate 10 remains HOLD until the final claim/code/data verifier and compiled-PDF inspection pass on the synchronized submission snapshot.**
+**Gate 10: PASS.** The final claim/code/data verifier passes, the strict ACM LaTeX build passes, and the 20-page PDF rendered at 200 dpi has been inspected without clipping, overlap, broken glyphs, out-of-margin tables, or unresolved references.
 
 The manuscript-facing recovery, communication-cost, finite-index, and detector claims respect the actual dependence structure. The five Caltech runs are seeded train--index resamplings of one corpus and are not treated as independent external replications. RS gain/loss counts are descriptive because attacks repeat within sessions. Detector means and resampling ranges are likewise descriptive.
 
@@ -28,3 +28,10 @@ The manuscript-facing recovery, communication-cost, finite-index, and detector c
 The RS128 operating point remains traffic-intensive and is reported as a measured deployment constraint. External image-domain evidence consists of BOSSBase development plus Caltech-101 validation through overlapping seeded resamplings. Guo--Ping remains the closest natural-image-selection comparator. The full primary source is now available and its published robustness, capacity, and source-native carrier-count semantics are grounded directly from that article. Several low-level implementation choices remain unfrozen by the paper, so no independently completed implementation is labelled as the authors' exact executable system.
 
 Post-acceptance preservation will create the immutable publication tag/release from the accepted-version lineage; this action does not block the current TOMM submission.
+
+## Gate 10 evidence
+- workflow run `35465970002`: **SUCCESS**;
+- static claim/code/data verifier: **PASS**;
+- rendered-PDF inspection: **PASS**;
+- PDF audit artifact: `arcis-tomm-gate10-pdf`, archive SHA-256 `490ccf1f4fe7857a8efea856840b9cfaa35a307b254c60132fbc9b9be0704e96`;
+- machine-readable inspection record: `tomm_results/GATE10_PDF_INSPECTION.json`.
