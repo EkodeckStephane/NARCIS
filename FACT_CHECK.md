@@ -29,6 +29,7 @@
 | Validated submission snapshot | `main` commit `254f31e7c44e43f104509c117b0efb4c414dcdcd` |
 | Final TOMM validation | run `35460375489` — SUCCESS |
 | A8 | **CLOSED for TOMM submission** |
+| Gate 10 | **PASS** — claim/code/data verifier PASS; 20-page PDF inspection PASS; run `35465970002` SUCCESS |
 | Post-acceptance freeze | tag/release deferred until acceptance; not a current submission requirement |
 
 Historical K=16 / 1,575/1,575 / 3–4 bits-per-cover values are superseded for the current TOMM submission.
