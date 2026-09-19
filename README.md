@@ -22,7 +22,7 @@ The communication-cost analysis identifies carrier volume and session-volume obs
 
 ## Canonical implementation
 
-The executable TOMM lineage originates at commit `b8ee42d547b580b9e1639de559b1dfa6ea88d4ef`. The validated TOMM submission snapshot is commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb` on `main`, validated by GitHub Actions run `35455852993` (**SUCCESS**). The former `arcis-a1-a10-repair` branch is retained only as repair provenance.
+The executable TOMM lineage originates at commit `b8ee42d547b580b9e1639de559b1dfa6ea88d4ef`. The validated TOMM submission snapshot is commit `254f31e7c44e43f104509c117b0efb4c414dcdcd` on `main`, validated by GitHub Actions run `35460375489` (**SUCCESS**). The former `arcis-a1-a10-repair` branch is retained only as repair provenance.
 
 A GitHub tag/release is **not a TOMM submission gate** for ARCIS. Version freezing by tag/release is deferred to the post-acceptance publication stage.
 
