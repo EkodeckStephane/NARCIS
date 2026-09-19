@@ -61,6 +61,9 @@ Seed & Unique covers & Min freq. & Mean freq. & Max freq. & Frequency CV\\
 \label{fig:caldiag}
 \end{figure}
 
+\subsection{Authenticated control-plane verification}
+The protocol implementation was also exercised independently of image-channel errors to verify the authenticated session-control path. Across the same five external seeds, 30 monotonically ordered session metadata envelopes per seed were sealed and reopened with the implemented AES-GCM control plane, yielding 150/150 exact metadata roundtrips. One negative-control case per seed was then exercised for ciphertext tampering, immediate replay, and receiver-identity mismatch. All five tampered envelopes were rejected by authentication, all five immediate replays were rejected by the per-sender sequence guard, and all five wrong-receiver cases were rejected because sender--receiver identities are bound as associated data. The authenticated metadata envelope occupied 110--111 bytes in this audit. These tests validate the implemented control-plane mechanisms; channel robustness remains evaluated separately through authenticated plaintext recovery in the calibration and holdout experiments.
+
 \subsection{Unseen holdout robustness}
 Table~\ref{tab:holdout} details the external holdout campaign, which recovers 1,163 of 1,200 authenticated messages (96.92\%). The 37 unsuccessful trials are concentrated in the unseen 12\% central crop, which reaches the Reed--Solomon correction radius of 64 bytes. Each of the other seven transformations recovers 150/150 messages. Crop 8\% lowers mean cover-label accuracy to 0.707, yet group majority and RS128 preserve all 150 authenticated messages; rotate 9 degrees similarly reaches mean label accuracy 0.860 while retaining full message recovery.
 
