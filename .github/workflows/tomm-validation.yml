@@ -28,7 +28,9 @@ jobs:
           python -m py_compile \
             tools/diffstega_gpu_preflight.py \
             tools/evaluate_diffstega_outputs.py \
-            tools/tomm_final_cnn_from_frozen_payload.py
+            tools/tomm_final_cnn_from_frozen_payload.py \
+            tools/verify_a3_control_plane.py \
+            tools/verify_a4_canonical_lineage.py
           python - <<'PY'
           import json
           from pathlib import Path
@@ -45,6 +47,47 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m pytest -q
+
+      - name: Verify A3 authenticated control-plane audit
+        env:
+          PYTHONPATH: src
+        run: |
+          python tools/verify_a3_control_plane.py
+          git diff --exit-code -- tomm_results/A3_AUTHENTICATED_CONTROL_PLANE_AUDIT.json
+
+      - name: Verify A4 release-manifest consistency
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          audit = json.loads(Path("tomm_results/A4_CANONICAL_LINEAGE_AUDIT.json").read_text(encoding="utf-8"))
+          holdout_path = Path("tomm_results/caltech_external_holdout_aggregate.json")
+          holdout = json.loads(holdout_path.read_text(encoding="utf-8"))
+          campaign = Path("TOMM_FRESH_CAMPAIGN.md").read_text(encoding="utf-8")
+
+          assert audit["status"] == "PASS"
+          assert holdout["aggregate"]["trials"] == 1200
+          assert holdout["aggregate"]["successes"] == 1163
+          assert holdout["aggregate"]["maximum_rs_corrections"] == 64
+
+          digest = hashlib.sha256(holdout_path.read_bytes()).hexdigest()
+          assert digest == audit["canonical_holdout"]["sha256"]
+
+          expected = audit["canonical_checkpoint_bundle"]["checkpoint_sha256"]
+          for seed, sha in expected.items():
+              assert sha in campaign, f"checkpoint SHA for seed {seed} missing from TOMM_FRESH_CAMPAIGN.md"
+
+          per_seed = {str(row["seed"]): row for row in holdout["per_seed"]}
+          for seed, expected_row in audit["canonical_holdout"]["per_seed"].items():
+              row = per_seed[seed]
+              assert row["trials"] == expected_row["trials"]
+              assert row["successes"] == expected_row["successes"]
+              assert row["maximum_rs_corrections"] == expected_row["maximum_rs_corrections"]
+
+          print({"A4_static_consistency": "PASS", "holdout_sha256": digest})
+          PY
 
       - name: TOMM preflight without datasets
         env:
