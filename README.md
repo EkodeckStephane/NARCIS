@@ -28,8 +28,11 @@ Key paths:
 - `src/narcis/group_bank_projection.py`
 - `src/narcis/protocol.py`
 - `run_tomm_groupbank_cached.py`
-- `tomm_results/rs_parity_ablation_inference.json`
-- `tomm_results/detector_hierarchical_inference.json`
+- `tomm_results/rs_parity_ablation_summary.json`
+- `tomm_results/detector_resampling_summary.json`
+- `tomm_results/caltech_resampling_overlap.json`
+- `tomm_results/communication_cost.json`
+- `tomm_results/finite_index_blocking_risk.json`
 - `paper/ACM_TOMM/`
 
 ## Evaluation scope
