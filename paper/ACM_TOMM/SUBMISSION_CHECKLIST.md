@@ -38,8 +38,8 @@
 - [ ] Optionally archive the accepted artifact in a long-term repository/DOI service if desired.
 
 ## Gate 10 finalization
-- [ ] Automated claim/code/data verifier PASS on the synchronized snapshot.
-- [ ] Compiled PDF inspected for clipping, overflow, unreadable figures/tables, and unresolved references.
+- [x] Automated claim/code/data verifier PASS on the synchronized snapshot (run `35465970002`).
+- [x] Compiled 20-page PDF inspected at 200 dpi: no clipping, overflow, broken glyphs, unreadable figures/tables, or unresolved references.
 
 ## Before portal upload
 Confirm author names, affiliations, e-mails, CRediT roles, funding, competing interests, AI-use wording if required, and final human reread.
