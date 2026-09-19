@@ -13,13 +13,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: Stage exact A5 source
         run: |
-          mkdir -p a5_source
+          mkdir -p a5_source/vendor
           cp -R src a5_source/src
           cp -R tools a5_source/tools
           cp run_bossbase_campaign.py a5_source/
           cp requirements.txt a5_source/
           cp pytest.ini a5_source/
           git rev-parse HEAD > a5_source/SOURCE_COMMIT.txt
+          python -m pip install --no-deps reedsolo==1.7.0 --target a5_source/vendor
       - uses: actions/upload-artifact@v4
         with:
           name: arcis-a5-source
