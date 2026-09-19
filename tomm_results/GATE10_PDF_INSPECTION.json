@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "gate": "Gate 6 rendered-PDF inspection / Gate 10 visual closure",
+  "manuscript_source_head": "ddde3dec30c06e149317741f9d551a3b136818b9",
+  "workflow_run_id": 35465970002,
+  "workflow_conclusion": "success",
+  "workflow_artifact": {
+    "id": 10590649193,
+    "name": "arcis-tomm-gate10-pdf",
+    "archive_sha256": "490ccf1f4fe7857a8efea856840b9cfaa35a307b254c60132fbc9b9be0704e96"
+  },
+  "pdf": {
+    "pages": 20,
+    "page_size_points": "486 x 720",
+    "file_size_bytes": 563205,
+    "encrypted": false,
+    "renderer": "pdfs/render_pdf.py",
+    "inspection_dpi": 200
+  },
+  "automated_checks": {
+    "latex_compile": "PASS",
+    "overfull_hbox": "NONE",
+    "overfull_vbox": "NONE",
+    "undefined_references": "NONE",
+    "undefined_citations": "NONE",
+    "gate10_static_claim_code_data_verifier": "PASS"
+  },
+  "visual_checks": {
+    "all_pages_contact_reviewed": true,
+    "detailed_pages_reviewed": [
+      1,
+      3,
+      4,
+      15,
+      17,
+      18,
+      19,
+      20
+    ],
+    "clipped_text": "NONE",
+    "overlapping_text_or_figures": "NONE",
+    "tables_outside_margins": "NONE",
+    "unreadable_figures": "NONE",
+    "broken_glyphs": "NONE",
+    "final_page_whitespace": "acceptable natural bibliography ending"
+  },
+  "decision": "PASS"
+}
