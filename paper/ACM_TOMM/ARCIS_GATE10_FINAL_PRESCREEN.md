@@ -13,11 +13,11 @@ Main validation: `35460375489` — **SUCCESS**
 | 3 | Final article contains no debugging narrative | PASS | manuscript-facing provenance is limited to canonical evidence; noncanonical diagnostics remain outside the article |
 | 4 | Novelty is positioned against direct SOTA | PASS | Guo--Ping 2026 primary-source audit, positioning table, finite-index/authenticated-whole-message distinction |
 | 5 | Baselines, units, uncertainty and confounds are handled | PASS | canonical matched A5 ablation; native comparator semantics; dependence-aware descriptive reporting |
-| 6 | Structure and figures are submission-quality | PENDING PDF INSPECTION | LaTeX compilation is green; final rendered-PDF inspection still required |
+| 6 | Structure and figures are submission-quality | PASS | 20-page CI PDF compiled without overfull boxes or unresolved references; 200-dpi rendered inspection found no clipping, overlap, broken glyphs, or out-of-margin tables |
 | 7 | Guarantees are bounded to the evaluated snapshot | PASS | limitations/threats section, held-out parameterization wording, detector and comparator scope |
 | 8 | Reproducibility package separates manuscript from evidence | PASS | hashes, manifests, machine-readable results, verifier scripts, stable scientific commit |
-| 9 | References, numbers, title, abstract, tables and conclusion are coherent | PASS subject to final verifier | synchronized title/metadata; BibTeX build; Guo--Ping source audit; canonical numeric checks |
-| 10 | Zero claim/evidence/code/data/review mismatch | HOLD | becomes PASS only after final verifier + compiled-PDF inspection |
+| 9 | References, numbers, title, abstract, tables and conclusion are coherent | PASS | synchronized title/metadata; BibTeX build; Guo--Ping source audit; canonical numeric checks; final static verifier PASS |
+| 10 | Zero claim/evidence/code/data/review mismatch | PASS | Gate 10 static verifier PASS and rendered-PDF inspection PASS on workflow run `35465970002` |
 
 ## Current reviewer-sensitive findings
 
@@ -27,4 +27,4 @@ Main validation: `35460375489` — **SUCCESS**
 4. Caltech seeds are overlapping resamplings of one corpus; no independence-based five-run inference is permitted.
 5. The post-acceptance GitHub tag/release is preservation, not a submission gate.
 
-**Current prescreen verdict: HOLD only for Gate 6 rendered-PDF inspection and Gate 10 automated final verifier.**
+**Final prescreen verdict: PASS.** The automated claim/code/data verifier and the rendered-PDF inspection both pass. The article is submission-ready subject only to the normal human portal-entry check.
