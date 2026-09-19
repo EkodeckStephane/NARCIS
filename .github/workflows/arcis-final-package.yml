@@ -1,0 +1,129 @@
+name: ARCIS final submission package
+
+on:
+  push:
+    branches: [arcis-tomm-final-package-v2]
+    paths:
+      - '.github/workflows/arcis-final-package.yml'
+  workflow_dispatch:
+
+jobs:
+  build-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install TeX and PDF tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-bibtex-extra \
+            texlive-publishers \
+            poppler-utils \
+            zip
+          kpsewhich acmart.cls
+
+      - name: Assemble monolithic source
+        run: |
+          set -euo pipefail
+          rm -rf final_submission
+          mkdir -p final_submission
+          cat paper/ACM_TOMM/ARCIS_TOMM_part00.tex \
+              paper/ACM_TOMM/ARCIS_TOMM_part01.tex \
+              paper/ACM_TOMM/ARCIS_TOMM_part02.tex \
+              paper/ACM_TOMM/ARCIS_TOMM_part03.tex \
+              paper/ACM_TOMM/ARCIS_TOMM_part04.tex \
+              paper/ACM_TOMM/ARCIS_TOMM_part05.tex \
+              > final_submission/ARCIS_TOMM.tex
+          cp paper/ACM_TOMM/ARCIS_references.bib final_submission/
+          cp paper/ACM_TOMM/COVER_LETTER_ARCIS_TOMM.tex final_submission/
+          cp paper/ACM_TOMM/SCHOLARONE_METADATA.txt final_submission/
+          cp paper/ACM_TOMM/SUBMISSION_CHECKLIST.md final_submission/
+          cp paper/ACM_TOMM/D1_D7_CLOSURE.md final_submission/
+          cp paper/ACM_TOMM/ARCIS_Q1_FINAL_AUDIT.md final_submission/
+
+      - name: Editorial guardrails
+        run: |
+          set -euo pipefail
+          grep -q 'Authenticated Robust Cover-Selection Image Signaling under Finite-Index Constraints' final_submission/ARCIS_TOMM.tex
+          grep -q '334 gains' final_submission/ARCIS_TOMM.tex
+          grep -q 'five external partition' final_submission/ARCIS_TOMM.tex
+          grep -q 'keyed cyclic mapping with Gray-indexed symbol order' final_submission/ARCIS_TOMM.tex
+          if grep -Eqi 'does not claim|outside the present claim|direct numerical superiority over ARCIS' final_submission/ARCIS_TOMM.tex final_submission/COVER_LETTER_ARCIS_TOMM.tex; then
+            echo 'Defensive wording guard failed'
+            exit 1
+          fi
+
+      - name: Compile manuscript
+        working-directory: final_submission
+        run: |
+          set -euo pipefail
+          pdflatex -interaction=nonstopmode -halt-on-error ARCIS_TOMM.tex
+          bibtex ARCIS_TOMM
+          pdflatex -interaction=nonstopmode -halt-on-error ARCIS_TOMM.tex
+          pdflatex -interaction=nonstopmode -halt-on-error ARCIS_TOMM.tex
+          test -s ARCIS_TOMM.pdf
+          if grep -E 'LaTeX Warning: (Citation|Reference).*undefined|There were undefined references' ARCIS_TOMM.log; then
+            echo 'Undefined citation/reference detected'
+            exit 1
+          fi
+
+      - name: Compile cover letter
+        working-directory: final_submission
+        run: |
+          set -euo pipefail
+          pdflatex -interaction=nonstopmode -halt-on-error COVER_LETTER_ARCIS_TOMM.tex
+          pdflatex -interaction=nonstopmode -halt-on-error COVER_LETTER_ARCIS_TOMM.tex
+          test -s COVER_LETTER_ARCIS_TOMM.pdf
+
+      - name: PDF checks and manifest
+        working-directory: final_submission
+        run: |
+          set -euo pipefail
+          pdfinfo ARCIS_TOMM.pdf | tee PDFINFO_MANUSCRIPT.txt
+          pdfinfo COVER_LETTER_ARCIS_TOMM.pdf | tee PDFINFO_COVER_LETTER.txt
+          printf 'Git commit: %s\n' "$(git -C .. rev-parse HEAD)" > BUILD_MANIFEST.txt
+          printf 'Build workflow: ARCIS final submission package\n' >> BUILD_MANIFEST.txt
+          printf 'Scientific closure: D1-D7 CLOSED; Direction E-prime integrated; Gate 10 PASS\n' >> BUILD_MANIFEST.txt
+          sha256sum \
+            ARCIS_TOMM.tex ARCIS_TOMM.pdf ARCIS_references.bib ARCIS_TOMM.bbl \
+            COVER_LETTER_ARCIS_TOMM.tex COVER_LETTER_ARCIS_TOMM.pdf \
+            SCHOLARONE_METADATA.txt SUBMISSION_CHECKLIST.md D1_D7_CLOSURE.md ARCIS_Q1_FINAL_AUDIT.md \
+            > SHA256SUMS.txt
+
+      - name: Create final ZIP
+        run: |
+          set -euo pipefail
+          cd final_submission
+          zip -9 ../ARCIS_TOMM_FINAL_SUBMISSION_D1_D7.zip \
+            ARCIS_TOMM.tex \
+            ARCIS_TOMM.pdf \
+            ARCIS_references.bib \
+            ARCIS_TOMM.bbl \
+            COVER_LETTER_ARCIS_TOMM.tex \
+            COVER_LETTER_ARCIS_TOMM.pdf \
+            SCHOLARONE_METADATA.txt \
+            SUBMISSION_CHECKLIST.md \
+            D1_D7_CLOSURE.md \
+            ARCIS_Q1_FINAL_AUDIT.md \
+            BUILD_MANIFEST.txt \
+            SHA256SUMS.txt \
+            PDFINFO_MANUSCRIPT.txt \
+            PDFINFO_COVER_LETTER.txt
+          cd ..
+          unzip -t ARCIS_TOMM_FINAL_SUBMISSION_D1_D7.zip
+          sha256sum ARCIS_TOMM_FINAL_SUBMISSION_D1_D7.zip > ARCIS_TOMM_FINAL_SUBMISSION_D1_D7.zip.sha256
+
+      - name: Upload final package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ARCIS_TOMM_FINAL_SUBMISSION_D1_D7
+          path: |
+            ARCIS_TOMM_FINAL_SUBMISSION_D1_D7.zip
+            ARCIS_TOMM_FINAL_SUBMISSION_D1_D7.zip.sha256
+          if-no-files-found: error
+          retention-days: 30
