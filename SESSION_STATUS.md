@@ -20,8 +20,8 @@
 - Guo–Ping 2026: complete primary source audited; native maximum-capacity robustness = 99.54% / 98.64% / 97.19% at 10 / 14 / 15 bits on Holidays / VOC / ImageNet, under per-representative segment semantics.
 - ScholarOne metadata: **CLOSED / synchronized**.
 - Cover Letter: **CLOSED / synchronized**.
-- **A8 CLOSED for TOMM submission:** repair branch merged to `main` at `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`; TOMM revision validation run `35455852993` completed **SUCCESS**.
+- **A8 CLOSED for TOMM submission:** repair branch merged to `main` at `254f31e7c44e43f104509c117b0efb4c414dcdcd`; TOMM revision validation run `35460375489` completed **SUCCESS**.
 - GitHub tag/release: **deferred to post-acceptance version freezing; not a submission blocker**.
-- Q1 Gate 10: **not declared PASS in this status file while any other A1–A10 item outside A3/A4/A5/A8 remains partial**.
+- Q1 Gate 10: **HOLD only for the final automated claim/code/data prescreen and compiled-PDF inspection on the synchronized snapshot**.
 
 The validated scientific submission snapshot is the cited `main` commit. Later documentation-only commits do not replace that experimental lineage.
