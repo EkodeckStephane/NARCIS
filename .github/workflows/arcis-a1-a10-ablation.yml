@@ -72,7 +72,7 @@ jobs:
             --component-ablation
           cp requirements-tomm-freeze.txt "arcis_a1_a10/seed_${{ matrix.seed }}/requirements-tomm-freeze.txt"
       - uses: actions/upload-artifact@v4
-        if: always()
+        if: success()
         with:
           name: arcis-a1-a10-seed-${{ matrix.seed }}
           path: |
