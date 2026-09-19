@@ -7,11 +7,11 @@ Manuscript: **ARCIS: Authenticated Robust Cover-Selection Image Signaling under 
 **A3: CLOSED.**  
 **A4: CLOSED on the archived canonical lineage.**  
 **A5: CLOSED on the canonical A4 lineage.**  
-**A8: CLOSED for TOMM submission.** The repair branch was merged to `main` at `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`, and TOMM revision validation run `35455852993` completed **SUCCESS**.
+**A8: CLOSED for TOMM submission.** The A5 scientific closure is merged to `main` at `254f31e7c44e43f104509c117b0efb4c414dcdcd`, and TOMM revision validation run `35460375489` completed **SUCCESS**.
 
 A GitHub tag/release is not treated as a current submission gate. Immutable version freezing is deferred to the post-acceptance publication stage.
 
-**Gate 10 is not declared PASS here solely from A3/A4/A5/A8 closure.** Any other A1–A10 item that remains partial must be resolved or explicitly accepted before the global gate is changed.
+**Gate 10 remains HOLD until the final claim/code/data verifier and compiled-PDF inspection pass on the synchronized submission snapshot.**
 
 The manuscript-facing recovery, communication-cost, finite-index, and detector claims respect the actual dependence structure. The five Caltech runs are seeded train--index resamplings of one corpus and are not treated as independent external replications. RS gain/loss counts are descriptive because attacks repeat within sessions. Detector means and resampling ranges are likewise descriptive.
 
@@ -22,7 +22,7 @@ The manuscript-facing recovery, communication-cost, finite-index, and detector c
 - **A3 authenticated control plane:** the implementation completes 150/150 metadata roundtrips across five seeds and rejects 5/5 tested tamper cases, 5/5 immediate replays, and 5/5 wrong-receiver cases. The evidence is frozen in `tomm_results/A3_AUTHENTICATED_CONTROL_PLANE_AUDIT.json` and integrated in the manuscript.
 - **Editorial synchronization:** ScholarOne metadata and the Cover Letter use the seeded-resampling interpretation, contain the A3 evidence, and do not report independence-based five-run confidence intervals.
 - **Canonical provenance:** `tomm_results/A4_CANONICAL_LINEAGE_AUDIT.json` records the checkpoint bundle hash, per-seed checkpoint hashes, archived runtime, calibration-validation hashes, and holdout result hash.
-- **A8 submission control:** validated scientific snapshot on `main` at `c3e58a157b0b3bfe58959436e2d02e46d09c40cb`; final TOMM validation run `35455852993` SUCCESS.
+- **A8 submission control:** validated scientific snapshot on `main` at `254f31e7c44e43f104509c117b0efb4c414dcdcd`; final TOMM validation run `35460375489` SUCCESS.
 
 ## Reviewer-sensitive scope
 The RS128 operating point remains traffic-intensive and is reported as a measured deployment constraint. External image-domain evidence consists of BOSSBase development plus Caltech-101 validation through overlapping seeded resamplings. Guo--Ping remains the closest natural-image-selection comparator. The full primary source is now available and its published robustness, capacity, and source-native carrier-count semantics are grounded directly from that article. Several low-level implementation choices remain unfrozen by the paper, so no independently completed implementation is labelled as the authors' exact executable system.
