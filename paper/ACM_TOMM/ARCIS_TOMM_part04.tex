@@ -14,7 +14,7 @@
 \addplot+[ybar,bar width=13pt] coordinates {(1,1)(2,.8917)(3,1)(4,.9625)(5,.9917)};
 \end{axis}
 \end{tikzpicture}
-\caption{External holdout authenticated-message success by partition. The aggregate across all five partitions is 96.92\%.}
+\caption{External holdout authenticated-message success by resampling. The aggregate across all five resamplings is 96.92\%.}
 \Description{Bar chart showing holdout authenticated-message success by seed: 1.0, approximately 0.892, 1.0, 0.963, and 0.992.}
 \label{fig:holdoutseed}
 \end{figure}
@@ -64,7 +64,7 @@ Plaintext & Coded groups & Images sent & Net bits/image\\
 \end{figure}
 
 \subsection{Selection detectability}
-Table~\ref{tab:detectors} reports the detector audit across the five seeded Caltech resamplings. Each run contributes one mean obtained from its 20 image-disjoint repetitions; the repetitions quantify within-resampling split stability, while the five run means are interpreted descriptively because the underlying image pools overlap across seeds. All three detector families remain close to the 0.5 chance reference in absolute effect size, with mean excess AUC of 0.0040 for SRM-lite, 0.0128 for GLCM, and 0.0266 for the CNN. The corresponding resampling-mean ranges are 0.5014--0.5052, 0.5120--0.5138, and 0.5232--0.5301. Figure~\ref{fig:detectors} visualizes the three partition-level mean AUC values against the chance reference.
+Table~\ref{tab:detectors} reports the detector audit across the five seeded Caltech resamplings. Each run contributes one mean obtained from its 20 image-disjoint repetitions; the repetitions quantify within-resampling split stability, while the five run means are interpreted descriptively because the underlying image pools overlap across seeds. All three detector families remain close to the 0.5 chance reference in absolute effect size, with mean excess AUC of 0.0040 for SRM-lite, 0.0128 for GLCM, and 0.0266 for the CNN. The corresponding resampling-mean ranges are 0.5014--0.5052, 0.5120--0.5138, and 0.5232--0.5301. Figure~\ref{fig:detectors} visualizes the three detector-family mean AUC values against the chance reference.
 
 \begin{table}[!htbp]
 \caption{Caltech-101 selection-detector audit across five seeded train--index resamplings. The 20 image-disjoint repeated splits within each run quantify split stability; mean and range across resamplings are reported descriptively because cross-seed image overlap prevents an independence interpretation.}
