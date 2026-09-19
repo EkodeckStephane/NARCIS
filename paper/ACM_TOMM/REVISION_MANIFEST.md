@@ -5,31 +5,39 @@
 - Acronym: **ARCIS = Authenticated Robust Cover-Selection Image Signaling**
 - Target: **ACM TOMM**
 - Corresponding author: **Chantal Marguerite Mveh-Abia**
+- Current release-candidate branch: `arcis-a1-a10-repair`
 
 ## Frozen operating point
 - K = 8
 - group size = 5
 - RS parity = 128 bytes
-- development = BOSSBase 1.01
-- external evaluation = Caltech-101
-- seeds = 11, 29, 47, 71, 101
+- development corpus = BOSSBase 1.01
+- external corpus = Caltech-101
+- external seeds = 11, 29, 47, 71, 101
+- per seed = 1,500 descriptor-training images + 7,000 cover-index images, disjoint within run
+- cross-seed interpretation = overlapping train--index resamplings of the same 9,144-image corpus, not independent external replications
 
-## D1--D7 additions
+## Scientific closure already integrated
 - session-volume side-channel analysis and traffic-shaping extensions;
-- hierarchical detector inference using five external partition means;
+- detector reporting based on descriptive means/ranges across five seeded resamplings, with 20 image-disjoint repeated splits used as within-resampling stability diagnostics;
 - SOTA positioning with recovery-event semantics separated explicitly;
 - public repository traceability;
 - explicit necessity/sufficiency proof for finite-index feasibility;
-- paired exact McNemar inference and exact binomial confidence intervals for RS parity;
-- verified Guo--Ping and Cao--Wang--Zhang bibliographic metadata.
+- RS-parity reporting based on recoveries, communication cost, and paired gain/loss counts without independence-based confidence intervals or McNemar significance claims;
+- verified Guo--Ping and Cao--Wang--Zhang bibliographic metadata;
+- exact symbol-wise balancing attributed to the cyclic authenticated-session shift; Gray indexing specifies implementation ordering;
+- ScholarOne metadata and Cover Letter synchronized to the seeded-resampling interpretation.
 
-## Direction E′
-Exact symbol-wise balancing is attributed to the cyclic authenticated-session shift for any fixed symbol-order bijection. Gray indexing specifies the implementation ordering.
+## Canonical A4 lineage gate
+Canonical recheck workflow: **GitHub Actions run 35452993368**.
 
-## Validation
-GitHub Actions run **35350028122**: all five classical D2 reruns succeeded.
-GitHub Actions run **35350028122** artifacts provide the final-schedule SRM-lite/GLCM evidence.
-GitHub Actions run **35350028122** is distinct from the manuscript CI.
-GitHub Actions manuscript validation run **35350028122** should not be confused with final CI; the final D1--D7 TOMM validation run is **35350028122** only if displayed by the workflow. The canonical source of truth is the branch commit and successful status checks.
+The workflow regenerates all five Caltech checkpoints under the frozen scientific environment, compares each SHA-256 with the recorded fresh-campaign hash, reruns authenticated channel recovery and the component ablation, then publishes one manifest per seed. A4 is closed only if every SHA check passes and the canonical manuscript-facing recovery totals remain consistent.
 
-The final delivery ZIP records its own hashes after packaging.
+## Final release gate
+Before A8:
+1. A4 canonical checkpoint/result verification must pass.
+2. A3 authenticated-control evidence must be integrated in the manuscript.
+3. The final branch head must pass TOMM source validation after all editorial edits.
+4. Only then may the branch be merged to `main` and an immutable ARCIS/TOMM release be created.
+
+The final release commit, validation run, tag, and release URL are recorded here only after those operations succeed.
