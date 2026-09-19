@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "protocol": {
+    "metadata_fields": ["sequence", "padding_bits", "codebook_size", "cover_count"],
+    "authenticated_encryption": "AES-GCM",
+    "associated_data_binds": ["sender", "receiver"],
+    "freshness": "strictly increasing per-sender sequence number"
+  },
+  "aggregate": {
+    "seeds": 5,
+    "roundtrips": 150,
+    "tamper_rejections": 5,
+    "replay_rejections": 5,
+    "wrong_receiver_rejections": 5
+  },
+  "per_seed": [
+    {"seed": 11, "roundtrips": 30, "tamper_rejected": true, "replay_rejected": true, "wrong_receiver_rejected": true, "metadata_envelope_bytes_min": 110, "metadata_envelope_bytes_max": 111, "metadata_envelope_bytes_mean": 110.66666666666667},
+    {"seed": 29, "roundtrips": 30, "tamper_rejected": true, "replay_rejected": true, "wrong_receiver_rejected": true, "metadata_envelope_bytes_min": 110, "metadata_envelope_bytes_max": 111, "metadata_envelope_bytes_mean": 110.66666666666667},
+    {"seed": 47, "roundtrips": 30, "tamper_rejected": true, "replay_rejected": true, "wrong_receiver_rejected": true, "metadata_envelope_bytes_min": 110, "metadata_envelope_bytes_max": 111, "metadata_envelope_bytes_mean": 110.66666666666667},
+    {"seed": 71, "roundtrips": 30, "tamper_rejected": true, "replay_rejected": true, "wrong_receiver_rejected": true, "metadata_envelope_bytes_min": 110, "metadata_envelope_bytes_max": 111, "metadata_envelope_bytes_mean": 110.66666666666667},
+    {"seed": 101, "roundtrips": 30, "tamper_rejected": true, "replay_rejected": true, "wrong_receiver_rejected": true, "metadata_envelope_bytes_min": 110, "metadata_envelope_bytes_max": 111, "metadata_envelope_bytes_mean": 110.66666666666667}
+  ]
+}
