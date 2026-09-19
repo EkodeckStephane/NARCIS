@@ -25,9 +25,12 @@ Current repair/release branch: `arcis-a1-a10-repair`.
 - paired endpoint: **334 gains / 0 losses**, descriptive;
 - mean images/session **970 → 2,676.7**;
 - RS128 8/32/64 B: **2,320 / 2,640 / 3,070 images**;
-- detector mean AUC **0.5040 / 0.5128 / 0.5266** with descriptive resampling ranges.
+- detector mean AUC **0.5040 / 0.5128 / 0.5266** with descriptive resampling ranges;
+- authenticated control plane **150/150** metadata roundtrips with **5/5** tamper, replay and wrong-receiver rejections.
 
-## Release-control gate
-A4 workflow **35452993368** must regenerate all five fresh checkpoints, match the recorded SHA-256 values, and reproduce the canonical manuscript-facing channel results before A3 manuscript closure and A8 release.
+## Canonical A4 closure
+**PASS.** The archived checkpoint bundle `NARCIS_TOMM_FRESH_CHECKPOINTS.zip` has SHA-256 `8193bb8462d5b79fb18462e8e55091b8982752161ed388e95b7b7785483ed1f1`. All five Caltech checkpoint members exactly match the SHA-256 values recorded in `TOMM_FRESH_CAMPAIGN.md`. The canonical holdout aggregate has SHA-256 `27f99fa00e9e8a7f1792195799615e8c8235718fa613fc20476a9f6014c70fcf` and reproduces the frozen 1,163/1,200 result.
 
-No final PDF/package hash or immutable release identifier is recorded here until the release-candidate head has passed all final checks.
+The attempted September 19 retraining used a different runtime from the archived campaign and is retained only as a diagnostic; it is not substituted for the byte-identical canonical checkpoints.
+
+A8 remains pending final CI, merge to `main`, and immutable release creation.
