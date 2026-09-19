@@ -32,24 +32,9 @@ jobs:
       - name: Unit tests
         env: {PYTHONPATH: src}
         run: python -m pytest -q
-      - name: Restore canonical frozen checkpoint and schedule
-        uses: actions/download-artifact@v4
-        with:
-          name: tomm-final-detectors-seed-${{ matrix.seed }}
-          path: prior_tomm
-          github-token: ${{ github.token }}
-          repository: EkodeckStephane/NARCIS
-          run-id: 33979603611
-      - name: Stage canonical checkpoint and schedule
+      - name: Prepare canonical fresh-lineage directories
         run: |
           mkdir -p "arcis_a1_a10/checkpoints_${{ matrix.seed }}" "arcis_a1_a10/seed_${{ matrix.seed }}"
-          CHECKPOINT="$(find prior_tomm -type f -name "encoder_seed_${{ matrix.seed }}.pt" | head -n 1)"
-          SCHEDULE="$(find prior_tomm -type f -name schedule.csv | head -n 1)"
-          test -n "$CHECKPOINT"
-          test -n "$SCHEDULE"
-          cp "$CHECKPOINT" "arcis_a1_a10/checkpoints_${{ matrix.seed }}/encoder_seed_${{ matrix.seed }}.pt"
-          cp "$SCHEDULE" "arcis_a1_a10/seed_${{ matrix.seed }}/schedule.csv"
-          sha256sum "arcis_a1_a10/checkpoints_${{ matrix.seed }}/encoder_seed_${{ matrix.seed }}.pt"
       - name: Download official Caltech-101
         run: |
           mkdir -p data
@@ -68,14 +53,31 @@ jobs:
             --checkpoint-root "arcis_a1_a10/checkpoints_${{ matrix.seed }}" \
             --output "arcis_a1_a10/seed_${{ matrix.seed }}" \
             --seed "${{ matrix.seed }}" \
-            --epochs 0 \
+            --epochs 5 \
             --component-ablation
           cp requirements-tomm-freeze.txt "arcis_a1_a10/seed_${{ matrix.seed }}/requirements-tomm-freeze.txt"
+      - name: Verify canonical fresh-checkpoint lineage
+        env: {PYTHONPATH: src}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          seed = os.environ["SEED"]
+          p = Path(f"arcis_a1_a10/seed_{seed}/channel_recheck_manifest.json")
+          m = json.loads(p.read_text(encoding="utf-8"))
+          print("expected:", m["checkpoint_expected_sha256"])
+          print("actual:  ", m["checkpoint_actual_sha256"])
+          if not m["checkpoint_matches_recorded_fresh_campaign"]:
+              raise SystemExit("Fresh checkpoint SHA does not match the recorded canonical campaign")
+          PY
+        env:
+          PYTHONPATH: src
+          SEED: ${{ matrix.seed }}
       - uses: actions/upload-artifact@v4
-        if: success()
+        if: always()
         with:
           name: arcis-a1-a10-seed-${{ matrix.seed }}
           path: |
             arcis_a1_a10/seed_${{ matrix.seed }}
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
