@@ -22,10 +22,16 @@ The cyclic session mapping is justified by **balance rather than a recovery adva
 
 ## Comparator scope
 
-Guo–Ping remains the closest recent natural-image selection comparator, but its published recovery semantics differ from ARCIS and no official executable implementation sufficiently specified for a fidelity-preserving common-protocol reproduction was identified. The manuscript therefore keeps Guo–Ping under its native published semantics rather than presenting an approximate reimplementation as if it were exact. DiffStega remains executable positioning evidence in its distinct secret-image generative regime.
+The complete Guo–Ping 2026 primary source has now been audited. It fixes the PZM/SA-PQE/clustering/representative-selection chain and the published parameters (N=18), (J=128), (Delta=40), and ((w_{center},w_{stab})=(0.7,0.3)). It also defines robustness as per-representative message-segment recovery and reports 99.54%, 98.64%, and 97.19% at 10, 14, and 15 bits on Holidays, VOC, and ImageNet, respectively.
+
+The paper still does not freeze several choices required for a bit-identical independent implementation: scalar treatment of complex PZM coefficients before modulo quantization, a common image-resampling rule, K-means initialization/restarts/random seed, exact attack-library interpolation/RNG choices, and the identities of the selected 50,000 ImageNet images. The manuscript therefore uses Guo–Ping's published numbers directly under their native semantics and records these limits in `GUO_PING_2026_REPRODUCIBILITY_AUDIT.md`, rather than presenting a completed implementation as if it were the authors' exact executable system. DiffStega remains executable positioning evidence in its distinct secret-image generative regime.
 
 Machine-readable evidence:
 - `tomm_results/A5_CANONICAL_COMPONENT_ABLATION.json`
 - `tomm_results/A5_CANONICAL_PAIRED_DESCRIPTIVE.json`
 - `tools/a5_cached_component_ablation.py`
 - `tools/verify_a5_component_ablation.py`
+
+Primary-source audit:
+- `tomm_results/GUO_PING_2026_SOURCE_AUDIT.json`
+- `paper/ACM_TOMM/GUO_PING_2026_REPRODUCIBILITY_AUDIT.md`
