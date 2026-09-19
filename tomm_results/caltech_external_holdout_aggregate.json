@@ -1,0 +1,555 @@
+{
+  "dataset": "Caltech-101",
+  "status": "external_holdout_complete",
+  "seeds": [
+    11,
+    29,
+    47,
+    71,
+    101
+  ],
+  "aggregate": {
+    "trials": 1200,
+    "successes": 1163,
+    "success_rate": 0.9691666666666666,
+    "maximum_rs_corrections": 64
+  },
+  "per_seed": [
+    {
+      "dataset": "Caltech-101",
+      "seed": 11,
+      "trials": 240,
+      "successes": 240,
+      "success_rate": 1.0,
+      "maximum_rs_corrections": 55,
+      "by_attack": {
+        "gaussian_9_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9527926561470031,
+          "minimum_cover_label_accuracy": 0.940948275862069,
+          "maximum_rs_corrections": 0
+        },
+        "gaussian_15_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9280522483058145,
+          "minimum_cover_label_accuracy": 0.9112068965517242,
+          "maximum_rs_corrections": 2
+        },
+        "blur_1.2_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9786909672939662,
+          "minimum_cover_label_accuracy": 0.9745928338762215,
+          "maximum_rs_corrections": 0
+        },
+        "blur_1.8_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9605516455694766,
+          "minimum_cover_label_accuracy": 0.9504310344827587,
+          "maximum_rs_corrections": 0
+        },
+        "crop_08_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.6964515323401373,
+          "minimum_cover_label_accuracy": 0.6844827586206896,
+          "maximum_rs_corrections": 8
+        },
+        "crop_12_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.5977104329830939,
+          "minimum_cover_label_accuracy": 0.5870689655172414,
+          "maximum_rs_corrections": 55
+        },
+        "rotate_5_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9135539433422171,
+          "minimum_cover_label_accuracy": 0.9051724137931034,
+          "maximum_rs_corrections": 0
+        },
+        "rotate_9_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.8624556031504531,
+          "minimum_cover_label_accuracy": 0.8550488599348535,
+          "maximum_rs_corrections": 4
+        }
+      },
+      "by_payload": {
+        "8": {
+          "trials": 80,
+          "successes": 80,
+          "success_rate": 1.0,
+          "maximum_rs_corrections": 45
+        },
+        "32": {
+          "trials": 80,
+          "successes": 80,
+          "success_rate": 1.0,
+          "maximum_rs_corrections": 48
+        },
+        "64": {
+          "trials": 80,
+          "successes": 80,
+          "success_rate": 1.0,
+          "maximum_rs_corrections": 55
+        }
+      }
+    },
+    {
+      "dataset": "Caltech-101",
+      "seed": 29,
+      "trials": 240,
+      "successes": 214,
+      "success_rate": 0.8916666666666667,
+      "maximum_rs_corrections": 64,
+      "by_attack": {
+        "gaussian_9_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9642210164659059,
+          "minimum_cover_label_accuracy": 0.9602605863192183,
+          "maximum_rs_corrections": 0
+        },
+        "gaussian_15_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.957016666439754,
+          "minimum_cover_label_accuracy": 0.9501628664495114,
+          "maximum_rs_corrections": 0
+        },
+        "blur_1.2_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9811876898264914,
+          "minimum_cover_label_accuracy": 0.9745689655172414,
+          "maximum_rs_corrections": 0
+        },
+        "blur_1.8_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9665391489306182,
+          "minimum_cover_label_accuracy": 0.9599137931034483,
+          "maximum_rs_corrections": 0
+        },
+        "crop_08_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.6562816514578561,
+          "minimum_cover_label_accuracy": 0.6413793103448275,
+          "maximum_rs_corrections": 34
+        },
+        "crop_12_holdout": {
+          "trials": 30,
+          "successes": 4,
+          "success_rate": 0.13333333333333333,
+          "mean_cover_label_accuracy": 0.5379077447506628,
+          "minimum_cover_label_accuracy": 0.5254310344827586,
+          "maximum_rs_corrections": 64
+        },
+        "rotate_5_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9015655303455762,
+          "minimum_cover_label_accuracy": 0.8958333333333334,
+          "maximum_rs_corrections": 0
+        },
+        "rotate_9_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.8140169809972125,
+          "minimum_cover_label_accuracy": 0.8060344827586207,
+          "maximum_rs_corrections": 15
+        }
+      },
+      "by_payload": {
+        "8": {
+          "trials": 80,
+          "successes": 73,
+          "success_rate": 0.9125,
+          "maximum_rs_corrections": 64
+        },
+        "32": {
+          "trials": 80,
+          "successes": 71,
+          "success_rate": 0.8875,
+          "maximum_rs_corrections": 64
+        },
+        "64": {
+          "trials": 80,
+          "successes": 70,
+          "success_rate": 0.875,
+          "maximum_rs_corrections": 34
+        }
+      }
+    },
+    {
+      "dataset": "Caltech-101",
+      "seed": 47,
+      "trials": 240,
+      "successes": 240,
+      "success_rate": 1.0,
+      "maximum_rs_corrections": 37,
+      "by_attack": {
+        "gaussian_9_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9795041692336143,
+          "minimum_cover_label_accuracy": 0.9761363636363637,
+          "maximum_rs_corrections": 0
+        },
+        "gaussian_15_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9728894740395077,
+          "minimum_cover_label_accuracy": 0.968560606060606,
+          "maximum_rs_corrections": 0
+        },
+        "blur_1.2_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.972866788461953,
+          "minimum_cover_label_accuracy": 0.9642241379310345,
+          "maximum_rs_corrections": 0
+        },
+        "blur_1.8_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9526009547910873,
+          "minimum_cover_label_accuracy": 0.946590909090909,
+          "maximum_rs_corrections": 0
+        },
+        "crop_08_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.7604868223399899,
+          "minimum_cover_label_accuracy": 0.7545454545454545,
+          "maximum_rs_corrections": 1
+        },
+        "crop_12_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.6680446807738168,
+          "minimum_cover_label_accuracy": 0.655603448275862,
+          "maximum_rs_corrections": 37
+        },
+        "rotate_5_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9417538152501087,
+          "minimum_cover_label_accuracy": 0.9344827586206896,
+          "maximum_rs_corrections": 0
+        },
+        "rotate_9_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.8983173232379958,
+          "minimum_cover_label_accuracy": 0.8848484848484849,
+          "maximum_rs_corrections": 4
+        }
+      },
+      "by_payload": {
+        "8": {
+          "trials": 80,
+          "successes": 80,
+          "success_rate": 1.0,
+          "maximum_rs_corrections": 34
+        },
+        "32": {
+          "trials": 80,
+          "successes": 80,
+          "success_rate": 1.0,
+          "maximum_rs_corrections": 36
+        },
+        "64": {
+          "trials": 80,
+          "successes": 80,
+          "success_rate": 1.0,
+          "maximum_rs_corrections": 37
+        }
+      }
+    },
+    {
+      "dataset": "Caltech-101",
+      "seed": 71,
+      "trials": 240,
+      "successes": 231,
+      "success_rate": 0.9625,
+      "maximum_rs_corrections": 64,
+      "by_attack": {
+        "gaussian_9_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9478991348393517,
+          "minimum_cover_label_accuracy": 0.9420454545454545,
+          "maximum_rs_corrections": 0
+        },
+        "gaussian_15_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9196077420277129,
+          "minimum_cover_label_accuracy": 0.9117424242424242,
+          "maximum_rs_corrections": 0
+        },
+        "blur_1.2_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9102486379576966,
+          "minimum_cover_label_accuracy": 0.9018939393939394,
+          "maximum_rs_corrections": 0
+        },
+        "blur_1.8_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.8589207530772174,
+          "minimum_cover_label_accuracy": 0.843560606060606,
+          "maximum_rs_corrections": 5
+        },
+        "crop_08_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.6951190964457561,
+          "minimum_cover_label_accuracy": 0.6867424242424243,
+          "maximum_rs_corrections": 10
+        },
+        "crop_12_holdout": {
+          "trials": 30,
+          "successes": 21,
+          "success_rate": 0.7,
+          "mean_cover_label_accuracy": 0.592082726342386,
+          "minimum_cover_label_accuracy": 0.5797413793103449,
+          "maximum_rs_corrections": 64
+        },
+        "rotate_5_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.928993723883789,
+          "minimum_cover_label_accuracy": 0.9211206896551725,
+          "maximum_rs_corrections": 0
+        },
+        "rotate_9_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.8955452381276541,
+          "minimum_cover_label_accuracy": 0.884051724137931,
+          "maximum_rs_corrections": 2
+        }
+      },
+      "by_payload": {
+        "8": {
+          "trials": 80,
+          "successes": 80,
+          "success_rate": 1.0,
+          "maximum_rs_corrections": 63
+        },
+        "32": {
+          "trials": 80,
+          "successes": 79,
+          "success_rate": 0.9875,
+          "maximum_rs_corrections": 63
+        },
+        "64": {
+          "trials": 80,
+          "successes": 72,
+          "success_rate": 0.9,
+          "maximum_rs_corrections": 64
+        }
+      }
+    },
+    {
+      "dataset": "Caltech-101",
+      "seed": 101,
+      "trials": 240,
+      "successes": 238,
+      "success_rate": 0.9916666666666667,
+      "maximum_rs_corrections": 63,
+      "by_attack": {
+        "gaussian_9_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9766506849353924,
+          "minimum_cover_label_accuracy": 0.9726384364820847,
+          "maximum_rs_corrections": 0
+        },
+        "gaussian_15_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9703794927257526,
+          "minimum_cover_label_accuracy": 0.9664495114006515,
+          "maximum_rs_corrections": 0
+        },
+        "blur_1.2_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9493287034673364,
+          "minimum_cover_label_accuracy": 0.9442996742671009,
+          "maximum_rs_corrections": 0
+        },
+        "blur_1.8_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9006437053904198,
+          "minimum_cover_label_accuracy": 0.8849137931034483,
+          "maximum_rs_corrections": 3
+        },
+        "crop_08_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.7248597978549961,
+          "minimum_cover_label_accuracy": 0.715948275862069,
+          "maximum_rs_corrections": 2
+        },
+        "crop_12_holdout": {
+          "trials": 30,
+          "successes": 28,
+          "success_rate": 0.9333333333333333,
+          "mean_cover_label_accuracy": 0.6196557326040366,
+          "minimum_cover_label_accuracy": 0.603448275862069,
+          "maximum_rs_corrections": 63
+        },
+        "rotate_5_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.9282541295239262,
+          "minimum_cover_label_accuracy": 0.9227272727272727,
+          "maximum_rs_corrections": 0
+        },
+        "rotate_9_holdout": {
+          "trials": 30,
+          "successes": 30,
+          "success_rate": 1.0,
+          "mean_cover_label_accuracy": 0.8306741513756003,
+          "minimum_cover_label_accuracy": 0.818939393939394,
+          "maximum_rs_corrections": 26
+        }
+      },
+      "by_payload": {
+        "8": {
+          "trials": 80,
+          "successes": 80,
+          "success_rate": 1.0,
+          "maximum_rs_corrections": 54
+        },
+        "32": {
+          "trials": 80,
+          "successes": 80,
+          "success_rate": 1.0,
+          "maximum_rs_corrections": 61
+        },
+        "64": {
+          "trials": 80,
+          "successes": 78,
+          "success_rate": 0.975,
+          "maximum_rs_corrections": 63
+        }
+      }
+    }
+  ],
+  "by_attack": {
+    "gaussian_9_holdout": {
+      "trials": 150,
+      "successes": 150,
+      "success_rate": 1.0,
+      "mean_cover_label_accuracy": 0.9642135323242534,
+      "minimum_cover_label_accuracy": 0.940948275862069,
+      "maximum_rs_corrections": 0
+    },
+    "gaussian_15_holdout": {
+      "trials": 150,
+      "successes": 150,
+      "success_rate": 1.0,
+      "mean_cover_label_accuracy": 0.9495891247077083,
+      "minimum_cover_label_accuracy": 0.9112068965517242,
+      "maximum_rs_corrections": 2
+    },
+    "blur_1.2_holdout": {
+      "trials": 150,
+      "successes": 150,
+      "success_rate": 1.0,
+      "mean_cover_label_accuracy": 0.9584645574014886,
+      "minimum_cover_label_accuracy": 0.9018939393939394,
+      "maximum_rs_corrections": 0
+    },
+    "blur_1.8_holdout": {
+      "trials": 150,
+      "successes": 150,
+      "success_rate": 1.0,
+      "mean_cover_label_accuracy": 0.9278512415517639,
+      "minimum_cover_label_accuracy": 0.843560606060606,
+      "maximum_rs_corrections": 5
+    },
+    "crop_08_holdout": {
+      "trials": 150,
+      "successes": 150,
+      "success_rate": 1.0,
+      "mean_cover_label_accuracy": 0.706639780087747,
+      "minimum_cover_label_accuracy": 0.6413793103448275,
+      "maximum_rs_corrections": 34
+    },
+    "crop_12_holdout": {
+      "trials": 150,
+      "successes": 113,
+      "success_rate": 0.7533333333333333,
+      "mean_cover_label_accuracy": 0.6030802634907992,
+      "minimum_cover_label_accuracy": 0.5254310344827586,
+      "maximum_rs_corrections": 64
+    },
+    "rotate_5_holdout": {
+      "trials": 150,
+      "successes": 150,
+      "success_rate": 1.0,
+      "mean_cover_label_accuracy": 0.9228242284691233,
+      "minimum_cover_label_accuracy": 0.8958333333333334,
+      "maximum_rs_corrections": 0
+    },
+    "rotate_9_holdout": {
+      "trials": 150,
+      "successes": 150,
+      "success_rate": 1.0,
+      "mean_cover_label_accuracy": 0.8602018593777833,
+      "minimum_cover_label_accuracy": 0.8060344827586207,
+      "maximum_rs_corrections": 26
+    }
+  }
+}
