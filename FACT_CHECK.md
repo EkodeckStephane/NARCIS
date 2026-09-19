@@ -26,8 +26,8 @@
 | Guo–Ping 2026 native comparator | 10/14/15 bits; 99.54/98.64/97.19% mean native robustness on Holidays/VOC/ImageNet; per-representative segment recovery, not authenticated whole-message recovery |
 | Cyclic mapping property | exact balancing follows from the session shift; Gray order fixes symbol ordering |
 | Repository | https://github.com/EkodeckStephane/NARCIS |
-| Validated submission snapshot | `main` commit `c3e58a157b0b3bfe58959436e2d02e46d09c40cb` |
-| Final TOMM validation | run `35455852993` — SUCCESS |
+| Validated submission snapshot | `main` commit `254f31e7c44e43f104509c117b0efb4c414dcdcd` |
+| Final TOMM validation | run `35460375489` — SUCCESS |
 | A8 | **CLOSED for TOMM submission** |
 | Post-acceptance freeze | tag/release deferred until acceptance; not a current submission requirement |
 
