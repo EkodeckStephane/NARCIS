@@ -45,4 +45,4 @@ A8 for the current TOMM submission requires:
 
 A GitHub tag/release is **not required to close A8 for submission**. The publication lineage will be frozen by tag/release after acceptance, when the accepted-version source is known.
 
-Global Gate 10 remains on HOLD until the final automated claim/code/data verifier and compiled-PDF inspection pass on the synchronized snapshot.
+Global Gate 10: **PASS**. The final automated claim/code/data verifier and rendered-PDF inspection both pass; workflow run `35465970002` completed SUCCESS.
