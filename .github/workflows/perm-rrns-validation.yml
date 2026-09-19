@@ -1,0 +1,33 @@
+name: ARCIS permutation-RRNS validation
+
+on:
+  push:
+    branches: [arcis-perm-rrns-v1]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  perm-rrns-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0 torchvision==0.25.0
+          python -m pip install -r requirements.txt
+      - name: Compile new protocol
+        run: python -m py_compile src/narcis/perm_rrns_core.py tools/verify_perm_rrns_v1.py
+      - name: Run new unit tests
+        env:
+          PYTHONPATH: src
+        run: python -m pytest -q tests/test_perm_rrns_core.py
+      - name: Verify frozen traffic invariants
+        env:
+          PYTHONPATH: src
+        run: python tools/verify_perm_rrns_v1.py
