@@ -1,8 +1,8 @@
 
 \subsection{External calibration feasibility, index use, and recovery}
-Every external partition recovers all 360 calibration messages. Stable-cover fraction varies by partition, while all 7,000 covers are exercised in the complete 30-session schedule for every seed. Tables~\ref{tab:calibration} and~\ref{tab:indexuse} report the frozen external results.
+Every external partition recovers all 360 calibration messages. Stable-cover fraction varies by partition, while all 7,000 covers are exercised in the complete 30-session schedule for every seed. Tables~\ref{tab:calibration} and~\ref{tab:indexuse} report the frozen external results; Fig.~\ref{fig:caldiag} visualizes the stable-cover fractions and cover-frequency dispersion across partitions.
 
-\begin{table}[t]
+\begin{table}[!htbp]
 \caption{External Caltech-101 calibration results under the frozen protocol.}
 \label{tab:calibration}
 \small
@@ -21,7 +21,7 @@ All & -- & -- & 0.595 mean & 1,800/1,800 & 37\\
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\begin{table}[!htbp]
 \caption{External index-use diagnostics over the complete 30-session schedule. Every partition exercises all 7,000 available covers.}
 \label{tab:indexuse}
 \small
@@ -38,7 +38,7 @@ Seed & Unique covers & Min freq. & Mean freq. & Max freq. & Frequency CV\\
 \end{tabular}
 \end{table}
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \begin{minipage}[t]{.46\textwidth}
 \centering
@@ -62,9 +62,9 @@ Seed & Unique covers & Min freq. & Mean freq. & Max freq. & Frequency CV\\
 \end{figure}
 
 \subsection{Unseen holdout robustness}
-The external holdout campaign recovers 1,163 of 1,200 authenticated messages (96.92\%). The 37 unsuccessful trials are concentrated in the unseen 12\% central crop, which reaches the Reed--Solomon correction radius of 64 bytes. Each of the other seven transformations recovers 150/150 messages. Crop 8\% lowers mean cover-label accuracy to 0.707, yet group majority and RS128 preserve all 150 authenticated messages; rotate 9 degrees similarly reaches mean label accuracy 0.860 while retaining full message recovery.
+Table~\ref{tab:holdout} details the external holdout campaign, which recovers 1,163 of 1,200 authenticated messages (96.92\%). The 37 unsuccessful trials are concentrated in the unseen 12\% central crop, which reaches the Reed--Solomon correction radius of 64 bytes. Each of the other seven transformations recovers 150/150 messages. Crop 8\% lowers mean cover-label accuracy to 0.707, yet group majority and RS128 preserve all 150 authenticated messages; rotate 9 degrees similarly reaches mean label accuracy 0.860 while retaining full message recovery.
 
-\begin{table}[t]
+\begin{table}[!htbp]
 \caption{External holdout results. Cover-label accuracy is measured before group majority and FEC; message success requires final authenticated plaintext recovery.}
 \label{tab:holdout}
 \small
@@ -86,9 +86,9 @@ All holdouts&1,163/1,200&--&--&64\\
 \end{tabular}
 \end{table}
 
-Per-partition authenticated success is 240/240, 214/240, 240/240, 231/240, and 238/240 for seeds 11, 29, 47, 71, and 101. Maximum RS corrections are 55, 64, 37, 64, and 63 respectively.
+Per-partition authenticated success is 240/240, 214/240, 240/240, 231/240, and 238/240 for seeds 11, 29, 47, 71, and 101. Maximum RS corrections are 55, 64, 37, 64, and 63 respectively. Figures~\ref{fig:holdout} and~\ref{fig:holdoutseed} show the transformation-level and partition-level views of these holdout results.
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \begin{tikzpicture}
 \begin{axis}[width=.9\textwidth,height=5.6cm,ymin=.5,ymax=1.03,xtick=data,xticklabels={G9,G15,B1.2,B1.8,C8,C12,R5,R9},xlabel={Holdout transformation},ylabel={Rate / accuracy},legend style={at={(0.5,1.03)},anchor=south,legend columns=2},ymajorgrids=true]

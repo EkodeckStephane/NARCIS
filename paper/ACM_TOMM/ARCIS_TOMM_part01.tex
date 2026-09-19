@@ -1,11 +1,11 @@
 
-Authentication also has several multimedia meanings. FaceSigns~\cite{neekhara2024facesigns} embeds semi-fragile authentication information into media. \method keeps indexed covers unchanged and authenticates the protected payload and session state, providing a complementary carrier-preserving authentication model.
+Authentication also has several multimedia meanings. FaceSigns~\cite{neekhara2024facesigns} embeds semi-fragile authentication information into media. \method keeps indexed covers unchanged and authenticates the protected payload and session state, providing a complementary carrier-preserving authentication model. Table~\ref{tab:positioning} summarizes the resulting methodological positioning while keeping each approach in its native recovery semantics.
 
-\begin{table*}[t]
+\begin{table}[!htbp]
 \caption{Positioning of representative recent approaches. Quantitative regime entries retain their native units, while the recovery-event column makes the success semantics explicit before numerical interpretation.}
 \label{tab:positioning}
 \footnotesize
-\begin{tabularx}{\textwidth}{p{2.0cm}p{3.0cm}p{3.0cm}p{3.5cm}Y}
+\begin{tabularx}{\textwidth}{p{1.7cm}p{2.6cm}Y Y Y}
 \toprule
 Approach & Carrier / information object & Native quantitative regime & Recovery event & Evaluation emphasis\\
 \midrule
@@ -15,7 +15,7 @@ DiffStega~\cite{yang2024diffstega} & Generated images / secret image & UniStega 
 \method & Unchanged indexed natural images / authenticated byte string & $K=8$; five covers/coded symbol; 8/32/64-byte plaintexts; 1,200 external holdout trials & Exact authenticated whole-plaintext recovery after majority decoding, RS correction, and AES-GCM verification & Finite-index feasibility, authenticated recovery, traffic cost, selection detectability\\
 \bottomrule
 \end{tabularx}
-\end{table*}
+\end{table}
 
 \subsection{Steganalysis of selection policies}
 Selection steganalysis tests whether the emitted subset differs statistically from the available carrier population. CNN-based image steganalysis can exploit subtle distributional differences~\cite{li2023siamese}; adversarial embedding work likewise shows that the evaluated steganalyst materially shapes the security conclusion~\cite{wang2024adversarial}. Cao, Wang, and Zhang analyze cover-selection steganography directly and show that texture statistics can expose selection bias~\cite{cao2025selection}. \method therefore evaluates the selected-vs.-remainder distinction with residual, texture, and learned detectors under image-disjoint train/test splits.
@@ -35,7 +35,8 @@ The evaluation distinguishes image-content observability from session-level traf
 \method separates cryptographic protection, empirical carrier-selection security, and observable session traffic. AES-GCM provides payload confidentiality/integrity and metadata authentication under its standard AEAD assumptions and nonce discipline~\cite{dworkin2007gcm}; the replay guard rejects sequence numbers at or below the highest accepted value for a sender. Reed--Solomon coding~\cite{reed1960codes} corrects residual byte errors within its decoding budget. The detector battery quantifies image-content selection discrimination, while the measured image counts quantify the session-volume side channel. Fixed-volume batching, cover-count padding, dummy-cover insertion, and timing shaping provide deployment mechanisms for reducing length-class exposure.
 
 \section{ARCIS Protocol}
-\begin{figure}[t]
+Figure~\ref{fig:pipeline} summarizes the offline index-construction path and the online authenticated signaling path.
+\begin{figure}[!htbp]
 \centering
 \begin{tikzpicture}[node distance=6mm and 7mm, every node/.style={font=\scriptsize,align=center}, box/.style={draw,rounded corners,minimum width=2.55cm,minimum height=8mm,fill=gray!5}, arr/.style={-Latex,thick}]
 \node[box] (enc) {Learn normalized\\image descriptor};
@@ -88,7 +89,7 @@ Let $\sigma$ be a fixed keyed bijection of the $K$ coded symbols onto positions 
 \begin{equation}
 \pi_q(i)=\bigl(b_0+q+r\,\sigma(i)\bigr)\bmod K.
 \end{equation}
-For any fixed symbol $i$ and any starting sequence $q_0$, the $K$ values $\pi_{q_0+t}(i)$, $0\le t<K$, are all distinct modulo $K$ and therefore cover every visual cluster exactly once. The exact balancing invariant follows from the cyclic shift in $q$; the Gray-indexed bijection specifies the implementation-level symbol ordering. For each required mapped label, the sender chooses one five-cover group using the signature-balanced keyed scheduler and transmits the five unchanged images. Each cover appears at most once inside one transmission. The receiver re-embeds each image, recovers five labels, takes their strict majority, inverts $\pi_q$, reconstructs the coded bitstream, applies Reed--Solomon decoding, and accepts plaintext only after framing and AES-GCM verification.
+For any fixed symbol $i$ and any starting sequence $q_0$, the $K$ values $\pi_{q_0+t}(i)$, $0\le t<K$, are all distinct modulo $K$ and therefore cover every visual cluster exactly once. The exact balancing invariant follows from the cyclic shift in $q$; the Gray-indexed bijection specifies the implementation-level symbol ordering. Figure~\ref{fig:cycle} illustrates one normalized $K=8$ cycle. For each required mapped label, the sender chooses one five-cover group using the signature-balanced keyed scheduler and transmits the five unchanged images. Each cover appears at most once inside one transmission. The receiver re-embeds each image, recovers five labels, takes their strict majority, inverts $\pi_q$, reconstructs the coded bitstream, applies Reed--Solomon decoding, and accepts plaintext only after framing and AES-GCM verification.
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering

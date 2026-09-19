@@ -37,8 +37,8 @@ For arbitrary label capacities,
 \begin{equation}
 P_{\mathrm{ok}}=\frac{m!}{K^m}[z^m]\prod_{k=0}^{K-1}\left(\sum_{j=0}^{a_k}\frac{z^j}{j!}\right),\qquad P_{\mathrm{block}}=1-P_{\mathrm{ok}}.
 \end{equation}
-The multinomial formulation serves as an engineering planning model for pre-session blocking risk under the stated uniform-symbol assumption. For the balanced 7,000-image external index, each label has $a_k=175$ disjoint five-cover groups.
-\begin{table}[t]
+The multinomial formulation serves as an engineering planning model for pre-session blocking risk under the stated uniform-symbol assumption. For the balanced 7,000-image external index, each label has $a_k=175$ disjoint five-cover groups. Table~\ref{tab:blockrisk} reports the resulting blocking-risk values for the evaluated payload sizes.
+\begin{table}[!htbp]
 \caption{Conditional finite-index blocking risk under the i.i.d.-uniform coded-symbol planning model.}
 \label{tab:blockrisk}
 \small
@@ -53,7 +53,8 @@ Payload & Groups $m$ & $\mathbb{E}[D_k]$ & Capacity $a_k$ & $P_{\mathrm{block}}$
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+Table~\ref{tab:roles} summarizes the role of each principal protocol component and the evidence attached to that role.
+\begin{table}[!htbp]
 \caption{Role of principal components and evidence supporting each role.}
 \label{tab:roles}
 \small
@@ -88,9 +89,9 @@ The detector audit reconstructs the complete 30-session selected-cover schedule 
 
 \section{Results}
 \subsection{Development evidence on BOSSBase}
-The frozen $K=8$ development lineage reaches 1,800/1,800 calibration recoveries across five seeds. Cover participation is near-complete, with 7,995--8,000 unique covers exercised per seed. Table~\ref{tab:boss} reports the development diagnostics retained before external evaluation.
+The frozen $K=8$ development lineage reaches 1,800/1,800 calibration recoveries across five seeds. Cover participation is near-complete, with 7,995--8,000 unique covers exercised per seed. Table~\ref{tab:boss} reports the development diagnostics retained before external evaluation, while Fig.~\ref{fig:bossauc} visualizes the corresponding development-stage AUC diagnostics.
 
-\begin{table}[t]
+\begin{table}[!htbp]
 \caption{BOSSBase development evidence for the frozen $K=8$ lineage.}
 \label{tab:boss}
 \small
@@ -109,7 +110,7 @@ Mean & 5,292 & 7,999 & 0.256 & 0.5139 & 0.5184\\
 \end{tabular}
 \end{table}
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \begin{tikzpicture}
 \begin{axis}[width=.86\textwidth,height=5.2cm,ymin=.5,ymax=.53,xtick={1,2,3,4,5},xticklabels={11,29,47,71,101},xlabel={Development seed},ylabel={Mean session AUC},legend style={at={(0.5,1.03)},anchor=south,legend columns=2},ymajorgrids=true]
