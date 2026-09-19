@@ -14,6 +14,8 @@ Current manuscript: **ARCIS: Authenticated Robust Cover-Selection Image Signalin
 - RS128 8/32/64-byte sessions require **2,320 / 2,640 / 3,070** images.
 - Conditional finite-index blocking risk at RS128: approximately **5.04e-43 / 1.64e-34 / 1.14e-25** for 8 / 32 / 64 bytes under the stated i.i.d.-uniform planning model.
 - Detector means across five seeded Caltech train--index resamplings: **0.5040 / 0.5128 / 0.5266** for SRM-lite / GLCM / CNN.
+- Canonical A5 ablation: **1,163 / 1,042 / 1,160 / 1,166 / 1,038** successes for full ARCIS / random groups / uniform scheduler / fixed mapping / matched bucket baseline.
+- Guo–Ping 2026 primary-source audit: published native maximum-capacity robustness **99.54% / 98.64% / 97.19%** at **10 / 14 / 15 bits** on Holidays / VOC / ImageNet; retained under its own per-segment recovery semantics.
 - Descriptive resampling ranges: **0.5014–0.5052 / 0.5120–0.5138 / 0.5232–0.5301**. The five resamplings are not treated as independent external replications.
 
 The communication-cost analysis identifies carrier volume and session-volume observability as the principal deployment constraints of the current operating point. The manuscript discusses fixed-volume batching, padding, dummy covers, timing shaping, denser group signaling, and adaptive parity allocation as direct extension paths.
@@ -35,6 +37,8 @@ Key paths:
 - `tomm_results/caltech_resampling_overlap.json`
 - `tomm_results/communication_cost.json`
 - `tomm_results/finite_index_blocking_risk.json`
+- `tomm_results/A5_CANONICAL_COMPONENT_ABLATION.json`
+- `tomm_results/GUO_PING_2026_SOURCE_AUDIT.json`
 - `paper/ACM_TOMM/`
 
 ## Evaluation scope
