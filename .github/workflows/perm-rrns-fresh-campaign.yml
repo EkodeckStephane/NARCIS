@@ -1,0 +1,143 @@
+name: ARCIS PERM-RRNS fresh campaign
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [arcis-perm-rrns-v1]
+    paths:
+      - 'src/narcis/perm_rrns_core.py'
+      - 'tools/run_perm_rrns_fresh_seed.py'
+      - 'tools/aggregate_perm_rrns_fresh.py'
+      - 'PERM_RRNS_V1_SPEC.md'
+      - 'FRESH_HOLDOUT_PROTOCOL.md'
+      - '.github/workflows/perm-rrns-fresh-campaign.yml'
+
+concurrency:
+  group: perm-rrns-fresh-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  dataset:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download frozen Caltech-101 source mirror
+        run: python download_caltech101.py --output dataset_external/caltech101 --workers 12
+      - name: Verify image count
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from src.narcis.data import discover_images
+          root=Path('dataset_external/caltech101/images')
+          images=discover_images(root)
+          assert len(images) >= 8500, len(images)
+          print({'images':len(images),'required':8500})
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: caltech101-fresh-source
+          path: dataset_external/caltech101
+          retention-days: 3
+          compression-level: 6
+
+  seed-campaign:
+    needs: dataset
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [131, 157, 181, 211, 241]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install CPU scientific environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0 torchvision==0.25.0
+          python -m pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: caltech101-fresh-source
+          path: dataset_external/caltech101
+      - name: Compile frozen fresh runner
+        run: |
+          python -m py_compile src/narcis/perm_rrns_core.py tools/run_perm_rrns_fresh_seed.py
+      - name: Run seed campaign
+        env:
+          PYTHONPATH: src
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python tools/run_perm_rrns_fresh_seed.py \
+            --seed ${{ matrix.seed }} \
+            --dataset-root dataset_external/caltech101/images \
+            --output fresh_results/seed_${{ matrix.seed }} \
+            --epochs 5
+      - name: Verify per-seed result cardinality
+        run: |
+          python - <<'PY'
+          import pandas as pd
+          from pathlib import Path
+          seed=${{ matrix.seed }}
+          p=Path(f'fresh_results/seed_{seed}/fresh_payload_results.csv')
+          df=pd.read_csv(p)
+          assert len(df)==390, len(df)
+          assert set(df['payload_bytes'])=={8,32,64}
+          assert len(set(df['attack']))==13
+          print({'seed':seed,'trials':len(df),'successes':int(df.perm_rrns_success.sum())})
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: perm-rrns-seed-${{ matrix.seed }}
+          path: fresh_results/seed_${{ matrix.seed }}
+          retention-days: 30
+          compression-level: 6
+
+  aggregate-audit:
+    needs: seed-campaign
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install aggregation dependencies
+        run: python -m pip install numpy pandas scipy
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: perm-rrns-seed-*
+          path: downloaded_seed_artifacts
+          merge-multiple: false
+      - name: Aggregate fresh evidence and Q1 gates
+        run: |
+          python tools/aggregate_perm_rrns_fresh.py \
+            --input downloaded_seed_artifacts \
+            --output fresh_results/aggregate
+      - name: Verify aggregate evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('fresh_results/aggregate/fresh_aggregate.json').read_text())
+          assert d['observed_trials']==1950
+          assert d['evidence_status']=='COMPLETE'
+          q=json.loads(Path('fresh_results/aggregate/Q1_GATE_AUDIT.json').read_text())
+          assert q['Gate10']['status']=='BLOCKED'
+          print(d)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: perm-rrns-fresh-aggregate
+          path: fresh_results/aggregate
+          retention-days: 30
+          compression-level: 6
