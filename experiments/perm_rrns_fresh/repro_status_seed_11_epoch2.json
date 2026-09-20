@@ -1,0 +1,27 @@
+{
+  "seed": 11,
+  "completed_epoch": 2,
+  "epoch_finished": true,
+  "batch_pos": 0,
+  "plan_len": null,
+  "history": [
+    {
+      "seed": 11,
+      "epoch": 1,
+      "loss": 0.3456258428513363,
+      "invariance": 0.0008674310804288384,
+      "variance": 0.012947243658365101,
+      "covariance": 0.00025897370482374344
+    },
+    {
+      "seed": 11,
+      "epoch": 2,
+      "loss": 0.19530243642868533,
+      "invariance": 0.0005227039307873803,
+      "variance": 0.0072763715695429556,
+      "covariance": 0.00032554928138877156
+    }
+  ],
+  "state_sha256": "8cfebf6d8c19fb5e7fd5443f20da0a80d6715b60a24c94129713a03d6e4e5f97",
+  "exact_historical_match": true
+}
