@@ -10,7 +10,7 @@
   "fresh_holdout_inspected": false,
   "fresh_trials_completed": 0,
   "fresh_training": {
-    "131": 1,
+    "131": 2,
     "157": 0,
     "181": 0,
     "211": 0,
@@ -22,7 +22,7 @@
   },
   "last_checkpoint": {
     "seed": 131,
-    "epoch": 1,
-    "state_sha256": "de283fd1b553450a859e2445a279ca4ee0fb4e17cfb2a7a214d1d14a01fb3a52"
+    "epoch": 2,
+    "state_sha256": "d540f47e12776448e4d7f4c84c9fe6aa3a8d883b380e5969561fba3276b989e4"
   }
 }
