@@ -66,7 +66,7 @@ def state_save(path,payload):
 def main():
  ap=argparse.ArgumentParser(); ap.add_argument('--seed',type=int,required=True); ap.add_argument('--root',type=Path,required=True); ap.add_argument('--out',type=Path,required=True); ap.add_argument('--max-batches',type=int,default=25); args=ap.parse_args()
  torch.set_num_threads(1); torch.set_num_interop_threads(1); seed=args.seed; out=args.out; out.mkdir(parents=True,exist_ok=True)
- paths=discover_images(args.root); order=np.random.default_rng(seed).permutation(len(paths)); train=[paths[i] for i in order[:1500]]; cache=out/f'train_cache_seed_{seed}.npy'; build_cache(train,cache); validate_cache(train,cache); (out/f'train_files_seed_{seed}.txt').write_text('\n'.join(str(p) for p in train)+'\n')
+ paths=discover_images(args.root);\n if len(paths) != 9144: raise RuntimeError(f'expected 9144 Caltech-101 images under {args.root}, found {len(paths)}')\n order=np.random.default_rng(seed).permutation(len(paths)); train=[paths[i] for i in order[:1500]]; cache=out/f'train_cache_seed_{seed}.npy'; build_cache(train,cache); validate_cache(train,cache); (out/f'train_files_seed_{seed}.txt').write_text('\n'.join(str(p) for p in train)+'\n')
  random.seed(seed); np.random.seed(seed); torch.manual_seed(seed); model=RobustImageEncoder(); ds=CacheDS(cache); loader=DataLoader(ds,batch_size=16,shuffle=True,drop_last=True); aug=ChannelAugment(128,seed); opt=torch.optim.AdamW(model.parameters(),lr=1e-3,weight_decay=1e-5); cfg=Cfg()
  statep=out/f'training_state_seed_{seed}.pt'; history=[]; completed=0; plan=None; pos=0; totals=Counter(); batches_done=0
  if statep.exists():
