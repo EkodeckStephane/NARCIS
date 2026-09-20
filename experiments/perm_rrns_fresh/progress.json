@@ -13,8 +13,8 @@
     "131": 5,
     "157": 5,
     "181": 5,
-    "211": 2,
-    "241": 3
+    "211": 3,
+    "241": 4
   },
   "persistence": {
     "github": "epoch-level text snapshots",
@@ -22,8 +22,8 @@
   },
   "last_checkpoint": {
     "seed": 241,
-    "epoch": 3,
-    "state_sha256": "dcbecf6f9db9cebb3fffa9e5505b44debfeb14c9eab57b1d68659c5c012f8db9"
+    "epoch": 4,
+    "state_sha256": "560433b071ec97b27e39030abf383941bf86cb73a7733518e08fa649e7eb5ed0"
   },
   "completed_checkpoints": {
     "131": "92ba26ed661126ef15f0a66abc79ebdd27f300005b17fd58599c1f9e5300b096",
