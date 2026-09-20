@@ -1,0 +1,17 @@
+{
+  "seed": 131,
+  "completed_epoch": 1,
+  "epoch_finished": true,
+  "history": [
+    {
+      "seed": 131,
+      "epoch": 1,
+      "loss": 0.3561432281489013,
+      "invariance": 0.0003218260635646881,
+      "variance": 0.013914880192568225,
+      "covariance": 0.00022556954587265844
+    }
+  ],
+  "state_sha256": "de283fd1b553450a859e2445a279ca4ee0fb4e17cfb2a7a214d1d14a01fb3a52",
+  "fresh_holdout_inspected": false
+}
