@@ -1,0 +1,25 @@
+{
+  "seed": 131,
+  "completed_epoch": 2,
+  "epoch_finished": true,
+  "history": [
+    {
+      "seed": 131,
+      "epoch": 1,
+      "loss": 0.3561432281489013,
+      "invariance": 0.0003218260635646881,
+      "variance": 0.013914880192568225,
+      "covariance": 0.00022556954587265844
+    },
+    {
+      "seed": 131,
+      "epoch": 2,
+      "loss": 0.1994117054968111,
+      "invariance": 0.0004605655767688883,
+      "variance": 0.007504596899423789,
+      "covariance": 0.0002826425290393633
+    }
+  ],
+  "state_sha256": "d540f47e12776448e4d7f4c84c9fe6aa3a8d883b380e5969561fba3276b989e4",
+  "fresh_holdout_inspected": false
+}
