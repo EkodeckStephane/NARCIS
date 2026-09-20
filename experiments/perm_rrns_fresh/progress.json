@@ -13,7 +13,7 @@
     "131": 5,
     "157": 5,
     "181": 4,
-    "211": 0,
+    "211": 1,
     "241": 1
   },
   "persistence": {
@@ -21,9 +21,9 @@
     "library": "chunk-level binary training states"
   },
   "last_checkpoint": {
-    "seed": 241,
+    "seed": 211,
     "epoch": 1,
-    "state_sha256": "db1105a9d0991078d6da992f5d91d2b65e48465c2ec7f5e67c92017dcf0bb9d2"
+    "state_sha256": "7508e7884567110e38c446900551d698e0f3cc498eaa5d9491101390e1f4e163"
   },
   "completed_checkpoints": {
     "131": "92ba26ed661126ef15f0a66abc79ebdd27f300005b17fd58599c1f9e5300b096",
