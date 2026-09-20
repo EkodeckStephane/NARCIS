@@ -1,0 +1,14 @@
+{
+  "status": "REPRODUCIBILITY_LOCK_RESOLVED",
+  "dataset_files_verified": 9144,
+  "dataset_byte_identical": true,
+  "seed": 11,
+  "threads": 1,
+  "epochs": 5,
+  "metrics_exact_match": true,
+  "reference_sha256": "0adac1e014b799ada4a46698bcad922ce4ce116697186c1d45964e405a81e28c",
+  "reproduced_sha256": "0adac1e014b799ada4a46698bcad922ce4ce116697186c1d45964e405a81e28c",
+  "checkpoint_byte_identical": true,
+  "fresh_holdout_inspected": false,
+  "canonical_rule": "torch.set_num_threads(1); preserve exact DataLoader RNG consumption and augmentation RNG state"
+}
