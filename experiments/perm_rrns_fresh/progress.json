@@ -12,7 +12,7 @@
   "fresh_training": {
     "131": 5,
     "157": 5,
-    "181": 4,
+    "181": 5,
     "211": 1,
     "241": 1
   },
@@ -21,12 +21,13 @@
     "library": "chunk-level binary training states"
   },
   "last_checkpoint": {
-    "seed": 211,
-    "epoch": 1,
-    "state_sha256": "7508e7884567110e38c446900551d698e0f3cc498eaa5d9491101390e1f4e163"
+    "seed": 181,
+    "epoch": 5,
+    "state_sha256": "0e3046debc2cf9409c902091b34a37cef65a9e38db4cb0e8c73a0649cf7a89f8"
   },
   "completed_checkpoints": {
     "131": "92ba26ed661126ef15f0a66abc79ebdd27f300005b17fd58599c1f9e5300b096",
-    "157": "32202e45e79c146ad90695276849a3cdb0351ba6ccfd94ccf3c376eba52aa0d8"
+    "157": "32202e45e79c146ad90695276849a3cdb0351ba6ccfd94ccf3c376eba52aa0d8",
+    "181": "c9e8a82e606f2839bc3515549b7803ae15ead9c2324769409c35db02b419b4f5"
   }
 }
