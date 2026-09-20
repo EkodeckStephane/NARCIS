@@ -1,0 +1,13 @@
+{
+  "seed":241,
+  "completed_epoch":4,
+  "epoch_finished":true,
+  "history":[
+    {"seed":241,"epoch":1,"loss":0.31635028876925025,"invariance":0.0003173028120805631,"variance":0.01232751710490594,"covariance":0.00022978755274497445},
+    {"seed":241,"epoch":2,"loss":0.19978052850372047,"invariance":0.0005368441369418795,"variance":0.007442633481195537,"covariance":0.00029358934527838864},
+    {"seed":241,"epoch":3,"loss":0.1799429977532997,"invariance":0.0007717334401164525,"variance":0.006411485000944106,"covariance":0.00036253739866272855},
+    {"seed":241,"epoch":4,"loss":0.09119462745479479,"invariance":0.0009737464316734771,"variance":0.002654920791536169,"covariance":0.00047794773220835677}
+  ],
+  "state_sha256":"560433b071ec97b27e39030abf383941bf86cb73a7733518e08fa649e7eb5ed0",
+  "fresh_holdout_inspected":false
+}
