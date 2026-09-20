@@ -1,0 +1,30 @@
+name: ARCIS vendor reedsolo
+on:
+  push:
+    branches:
+      - arcis-perm-rrns-fresh-progress
+    paths:
+      - '.github/workflows/vendor-reedsolo.yml'
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact dependency
+        run: |
+          python -m pip install --no-deps reedsolo==1.7.0 --target vendor
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, 'vendor')
+          from reedsolo import RSCodec
+          assert RSCodec(10).encode(b'hello world') == b'hello world\xed%T\xc4\xfd\xfd\x89\xf3\xa8\xaa'
+          print('reedsolo vector PASS')
+          PY
+      - name: Upload dependency
+        uses: actions/upload-artifact@v4
+        with:
+          name: reedsolo-1.7.0
+          path: vendor/
+          retention-days: 1
