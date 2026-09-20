@@ -1,0 +1,18 @@
+{
+  "seed": 11,
+  "completed_epoch": 1,
+  "epoch_finished": true,
+  "batch_pos": 0,
+  "plan_len": null,
+  "history": [
+    {
+      "seed": 11,
+      "epoch": 1,
+      "loss": 0.3456258428513363,
+      "invariance": 0.0008674310804288384,
+      "variance": 0.012947243658365101,
+      "covariance": 0.00025897370482374344
+    }
+  ],
+  "state_sha256": "6955f7e487645badde20a65cd913b070edf2f92b8996c23b6bda6eba3f1bddd0"
+}
