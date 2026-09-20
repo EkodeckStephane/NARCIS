@@ -11,7 +11,7 @@
   "fresh_trials_completed": 0,
   "fresh_training": {
     "131": 5,
-    "157": 2,
+    "157": 3,
     "181": 0,
     "211": 0,
     "241": 0
@@ -22,8 +22,8 @@
   },
   "last_checkpoint": {
     "seed": 157,
-    "epoch": 2,
-    "state_sha256": "d55d3c4493c74929dc8425c0bbe052e3eaca89333c416f26747b27b7b6420f7b"
+    "epoch": 3,
+    "state_sha256": "90d9a34965bc200159e08be9fc887b6dbbebca023807643ba4bb8de534032ccd"
   },
   "completed_checkpoints": {
     "131": "92ba26ed661126ef15f0a66abc79ebdd27f300005b17fd58599c1f9e5300b096"
