@@ -12,7 +12,7 @@
   "fresh_training": {
     "131": 5,
     "157": 5,
-    "181": 2,
+    "181": 3,
     "211": 0,
     "241": 0
   },
@@ -22,8 +22,8 @@
   },
   "last_checkpoint": {
     "seed": 181,
-    "epoch": 2,
-    "state_sha256": "fc8ba1557b1403d141412377bebfd15cb70248a8ecb4870082d081205637d2e5"
+    "epoch": 3,
+    "state_sha256": "72f448798167b42e56e1f3600d53b86107acd02881bef0b3b87f663ca92b1543"
   },
   "completed_checkpoints": {
     "131": "92ba26ed661126ef15f0a66abc79ebdd27f300005b17fd58599c1f9e5300b096",
