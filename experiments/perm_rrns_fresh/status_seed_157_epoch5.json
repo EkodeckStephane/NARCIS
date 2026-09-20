@@ -1,0 +1,15 @@
+{
+  "seed": 157,
+  "completed_epoch": 5,
+  "epoch_finished": true,
+  "history": [
+    {"seed":157,"epoch":1,"loss":0.3402361097915839,"invariance":0.0003703583793873305,"variance":0.013228365904851866,"covariance":0.00026800730227732466},
+    {"seed":157,"epoch":2,"loss":0.17062579750293685,"invariance":0.0004303018583306512,"variance":0.006381426582373278,"covariance":0.0003325858865977235},
+    {"seed":157,"epoch":3,"loss":0.14875810282925764,"invariance":0.0006940113313170494,"variance":0.005240547280478221,"covariance":0.00039413783314978324},
+    {"seed":157,"epoch":4,"loss":0.1188970940207602,"invariance":0.0006975252085073397,"variance":0.004040901338861835,"covariance":0.0004364315089293986},
+    {"seed":157,"epoch":5,"loss":0.08003619304540197,"invariance":0.0007561012285424784,"variance":0.002425599054643704,"covariance":0.0004936857850000423}
+  ],
+  "state_sha256": "9c8ce0d1a3e2dbffd92bcfb10797e2e13e28fc1d7774e3be573e974225a43a54",
+  "checkpoint_sha256": "32202e45e79c146ad90695276849a3cdb0351ba6ccfd94ccf3c376eba52aa0d8",
+  "fresh_holdout_inspected": false
+}
