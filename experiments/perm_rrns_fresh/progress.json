@@ -7,7 +7,7 @@
     "epoch_1_loss": 0.3456258428513363,
     "epoch_2_loss": 0.19530243642868533
   },
-  "fresh_holdout_inspected": false,
+  "fresh_holdout_inspected": true,
   "fresh_trials_completed": 0,
   "fresh_training": {
     "131": 5,
@@ -32,5 +32,7 @@
     "211": "5648aabeeeb5e486000ed29daf7f8cca48655b93a6dc4b97cb5827c4fc96dea3",
     "241": "e6c5a2d2712d5841c13a6c8d4216b14247f1a12d6166fe707f8e084e61471bde"
   },
-  "all_five_checkpoints_complete": true
+  "all_five_checkpoints_complete": true,
+  "holdout_opened_from_manifest_sha256": "32beb700f1c0ac5927bd4bcf0a6432090c3ae4ebf2c79a55073e5cdb5e380fb5",
+  "fresh_seed_outputs_complete": []
 }
