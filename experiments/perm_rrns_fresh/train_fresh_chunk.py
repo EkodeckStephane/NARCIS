@@ -64,15 +64,17 @@ def validate_cache(paths,path):
 def state_save(path,payload):
  tmp=path.with_suffix('.tmp'); torch.save(payload,tmp); tmp.replace(path)
 def main():
- ap=argparse.ArgumentParser(); ap.add_argument('--seed',type=int,required=True); ap.add_argument('--root',type=Path,required=True); ap.add_argument('--out',type=Path,required=True); ap.add_argument('--max-batches',type=int,default=25); args=ap.parse_args()
+ ap=argparse.ArgumentParser(); ap.add_argument('--seed',type=int,required=True); ap.add_argument('--root',type=Path,required=True); ap.add_argument('--out',type=Path,required=True); ap.add_argument('--max-batches',type=int,default=25); ap.add_argument('--save-every',type=int,default=10); args=ap.parse_args()
  torch.set_num_threads(1); torch.set_num_interop_threads(1); seed=args.seed; out=args.out; out.mkdir(parents=True,exist_ok=True)
- paths=discover_images(args.root);\n if len(paths) != 9144: raise RuntimeError(f'expected 9144 Caltech-101 images under {args.root}, found {len(paths)}')\n order=np.random.default_rng(seed).permutation(len(paths)); train=[paths[i] for i in order[:1500]]; cache=out/f'train_cache_seed_{seed}.npy'; build_cache(train,cache); validate_cache(train,cache); (out/f'train_files_seed_{seed}.txt').write_text('\n'.join(str(p) for p in train)+'\n')
+ paths=discover_images(args.root)
+ if len(paths) != 9144: raise RuntimeError(f'expected 9144 Caltech-101 images under {args.root}, found {len(paths)}')
+ order=np.random.default_rng(seed).permutation(len(paths)); train=[paths[i] for i in order[:1500]]; cache=out/f'train_cache_seed_{seed}.npy'; build_cache(train,cache); validate_cache(train,cache); (out/f'train_files_seed_{seed}.txt').write_text('\n'.join(str(p) for p in train)+'\n')
  random.seed(seed); np.random.seed(seed); torch.manual_seed(seed); model=RobustImageEncoder(); ds=CacheDS(cache); loader=DataLoader(ds,batch_size=16,shuffle=True,drop_last=True); aug=ChannelAugment(128,seed); opt=torch.optim.AdamW(model.parameters(),lr=1e-3,weight_decay=1e-5); cfg=Cfg()
  statep=out/f'training_state_seed_{seed}.pt'; history=[]; completed=0; plan=None; pos=0; totals=Counter(); batches_done=0
  if statep.exists():
   st=torch.load(statep,map_location='cpu',weights_only=False); completed=st['completed_epoch']; history=st['history']; model.load_state_dict(st['model_state']); opt.load_state_dict(st['optimizer_state']); torch.set_rng_state(st['torch_rng_state']); np.random.set_state(st['numpy_rng_state']); random.setstate(st['python_rng_state']); aug.random.setstate(st['augment_rng_state']); plan=st.get('batch_plan'); pos=st.get('batch_pos',0); totals=Counter(st.get('totals',{})); batches_done=st.get('batches_done',0)
  if completed>=5:
-  final=out/f'encoder_seed_{seed}.pt';
+  final=out/f'encoder_seed_{seed}.pt'
   if not final.exists(): torch.save(model.state_dict(),final)
   print(json.dumps({'seed':seed,'completed_epoch':completed,'final_sha256':sha256_file(final),'status':'complete'})); return
  if plan is None:
@@ -80,6 +82,12 @@ def main():
  model.train(); end=min(len(plan),pos+args.max_batches); arr=np.load(cache,mmap_mode='r')
  for j in range(pos,end):
   idx=plan[j]; native=torch.from_numpy(arr[idx].astype(np.float32)/np.float32(255.0)); resized=model_view(native); first=torch.stack([aug(x) for x in resized]); second=torch.stack([aug(x) for x in resized]); opt.zero_grad(set_to_none=True); loss,m=lossfn(model(first),model(second),cfg); loss.backward(); opt.step(); totals.update(m); batches_done+=1
+  current_pos=j+1
+  if args.save_every>0 and current_pos < len(plan) and current_pos % args.save_every == 0:
+   partial={'seed':seed,'completed_epoch':completed,'model_state':model.state_dict(),'optimizer_state':opt.state_dict(),'torch_rng_state':torch.get_rng_state(),'numpy_rng_state':np.random.get_state(),'python_rng_state':random.getstate(),'augment_rng_state':aug.random.getstate(),'history':history,'batch_plan':plan,'batch_pos':current_pos,'totals':dict(totals),'batches_done':batches_done,'threads':torch.get_num_threads()}
+   state_save(statep,partial)
+   partial_result={'seed':seed,'completed_epoch':completed,'epoch_finished':False,'batch_pos':current_pos,'plan_len':len(plan),'history':history,'state_sha256':sha256_file(statep),'autosave':True}
+   (out/f'status_seed_{seed}.json').write_text(json.dumps(partial_result,indent=2))
  pos=end; epoch_finished=pos>=len(plan)
  if epoch_finished:
   row={'seed':seed,'epoch':completed+1,**{k:v/batches_done for k,v in totals.items()}}; history.append(row); completed+=1; plan=None; pos=0; totals=Counter(); batches_done=0
