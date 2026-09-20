@@ -14,16 +14,16 @@
     "157": 5,
     "181": 5,
     "211": 1,
-    "241": 1
+    "241": 2
   },
   "persistence": {
     "github": "epoch-level text snapshots",
     "library": "chunk-level binary training states"
   },
   "last_checkpoint": {
-    "seed": 181,
-    "epoch": 5,
-    "state_sha256": "0e3046debc2cf9409c902091b34a37cef65a9e38db4cb0e8c73a0649cf7a89f8"
+    "seed": 241,
+    "epoch": 2,
+    "state_sha256": "0eb26975497b268453599c15ee659ae985fcc7282025e861e6112bca76c510e7"
   },
   "completed_checkpoints": {
     "131": "92ba26ed661126ef15f0a66abc79ebdd27f300005b17fd58599c1f9e5300b096",
