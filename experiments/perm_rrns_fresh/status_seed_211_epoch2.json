@@ -1,0 +1,11 @@
+{
+  "seed":211,
+  "completed_epoch":2,
+  "epoch_finished":true,
+  "history":[
+    {"seed":211,"epoch":1,"loss":0.34214559878392886,"invariance":0.0006085452953039328,"variance":0.013067311296860376,"covariance":0.00024918280371733295},
+    {"seed":211,"epoch":2,"loss":0.17712286967904337,"invariance":0.00041358850735035644,"variance":0.006657234405577984,"covariance":0.0003522973803688161}
+  ],
+  "state_sha256":"ab2d047014e60e72e857463d32466f7566f78e31fbf3b40255d592ee783cdee4",
+  "fresh_holdout_inspected":false
+}
