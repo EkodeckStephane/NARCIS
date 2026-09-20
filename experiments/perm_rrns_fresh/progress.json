@@ -12,18 +12,18 @@
   "fresh_training": {
     "131": 5,
     "157": 5,
-    "181": 3,
+    "181": 4,
     "211": 0,
-    "241": 0
+    "241": 1
   },
   "persistence": {
     "github": "epoch-level text snapshots",
     "library": "chunk-level binary training states"
   },
   "last_checkpoint": {
-    "seed": 181,
-    "epoch": 3,
-    "state_sha256": "72f448798167b42e56e1f3600d53b86107acd02881bef0b3b87f663ca92b1543"
+    "seed": 241,
+    "epoch": 1,
+    "state_sha256": "db1105a9d0991078d6da992f5d91d2b65e48465c2ec7f5e67c92017dcf0bb9d2"
   },
   "completed_checkpoints": {
     "131": "92ba26ed661126ef15f0a66abc79ebdd27f300005b17fd58599c1f9e5300b096",
