@@ -1,0 +1,27 @@
+name: ARCIS local source bundle
+on:
+  push:
+    branches:
+      - arcis-perm-rrns-fresh-progress
+    paths:
+      - '.github/workflows/local-source-bundle.yml'
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout frozen scientific source
+        uses: actions/checkout@v4
+        with:
+          ref: e1706a8e59aa078b188a4a621590d9c90491de99
+      - name: Build source bundle
+        run: |
+          zip -qr arcis_frozen_source.zip . -x '.git/*'
+          sha256sum arcis_frozen_source.zip > arcis_frozen_source.sha256
+      - name: Upload source bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: arcis-frozen-source
+          path: |
+            arcis_frozen_source.zip
+            arcis_frozen_source.sha256
+          retention-days: 1
