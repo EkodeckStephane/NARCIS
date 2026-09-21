@@ -1,0 +1,10 @@
+{
+  "seed": 131,
+  "stage": "calibration",
+  "clean_embeddings": {"completed":7000,"total":7000},
+  "current_asset": "jpeg_80",
+  "current_asset_rows": 320,
+  "current_asset_total": 7000,
+  "scientific_results_inspected": false,
+  "resume_runner_sha256": "10b17f42d881341bff1b8a4cec86898dd65545673738913ce9d20b399227ab4d"
+}
