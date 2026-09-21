@@ -1,10 +1,10 @@
 {
-  "seed": 131,
   "stage": "calibration",
-  "clean_embeddings": {"completed":7000,"total":7000},
-  "current_asset": "jpeg_80",
-  "current_asset_rows": 320,
-  "current_asset_total": 7000,
+  "seed": 131,
+  "clean": 7000,
+  "jpeg_80": 7000,
+  "jpeg_50": 7000,
+  "gaussian_5": 640,
   "scientific_results_inspected": false,
-  "resume_runner_sha256": "10b17f42d881341bff1b8a4cec86898dd65545673738913ce9d20b399227ab4d"
+  "checkpoint_sha256": "92ba26ed661126ef15f0a66abc79ebdd27f300005b17fd58599c1f9e5300b096"
 }
