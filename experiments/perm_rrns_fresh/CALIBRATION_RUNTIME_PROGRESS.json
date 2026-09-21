@@ -1,0 +1,10 @@
+{
+  "stage": "calibration",
+  "seed_131": {"clean":7000,"jpeg_80":7000,"jpeg_50":640},
+  "seed_157": {"clean":7000,"jpeg_80":640},
+  "seed_181": {"clean":7000,"jpeg_80":640},
+  "seed_211": {"clean":7000,"jpeg_80":640},
+  "seed_241": {"clean":7000,"jpeg_80":640},
+  "scientific_results_inspected": false,
+  "resume_runner_sha256": "10b17f42d881341bff1b8a4cec86898dd65545673738913ce9d20b399227ab4d"
+}
