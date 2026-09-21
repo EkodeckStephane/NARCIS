@@ -1,0 +1,12 @@
+{
+  "scientific_source_commit": "e1706a8e59aa078b188a4a621590d9c90491de99",
+  "resume_runner_sha256": "10b17f42d881341bff1b8a4cec86898dd65545673738913ce9d20b399227ab4d",
+  "chunk_size_images": 320,
+  "batch_alignment": 16,
+  "clean_embedding_bit_exact": true,
+  "clean_max_abs_difference": 0.0,
+  "gaussian_embedding_bit_exact": true,
+  "gaussian_max_abs_difference": 0.0,
+  "saved_gaussian_rng_state": true,
+  "scientific_parameters_changed": false
+}
