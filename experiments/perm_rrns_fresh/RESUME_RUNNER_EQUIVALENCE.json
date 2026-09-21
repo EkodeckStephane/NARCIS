@@ -1,13 +1,17 @@
 {
   "scientific_source_commit": "e1706a8e59aa078b188a4a621590d9c90491de99",
-  "resume_runner_sha256": "7cd0e6db7fe0513db53867b5c1d53bb3372d7eeca54a11b11a5523419683e230",
+  "resume_runner_sha256": "661af6c360cba8d1a4760804a2472dc44aa4528609b77528514bd8262ad8f49f",
   "chunk_size_images": 320,
-  "batch_alignment": 16,
-  "clean_chunk_embedding_bit_exact": true,
-  "gaussian_chunk_embedding_bit_exact": true,
+  "inference_batch_size": 64,
+  "canonical_batch_size": 16,
+  "batch64_equivalence": {
+    "clean_bit_exact": true,
+    "jpeg_80_bit_exact": true,
+    "gaussian_5_bit_exact": true,
+    "max_abs_difference": 0.0
+  },
   "rgb256_cache_tensor_bit_exact_100_samples": true,
   "rgb256_cache_embedding_bit_exact": true,
-  "max_abs_difference": 0.0,
-  "saved_gaussian_rng_state": true,
-  "scientific_parameters_changed": false
+  "scientific_parameters_changed": false,
+  "scientific_results_inspected": false
 }
